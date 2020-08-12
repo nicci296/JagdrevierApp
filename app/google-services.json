@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "729551179713",
+    "firebase_url": "https://jagdrevierapp-d6448.firebaseio.com",
+    "project_id": "jagdrevierapp-d6448",
+    "storage_bucket": "jagdrevierapp-d6448.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:729551179713:android:d41313241e5ec0a9866940",
+        "android_client_info": {
+          "package_name": "com.example.jagdrevierapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "729551179713-2rgvs0ncn2ptnkqaf9uvq2ct3d9irs6e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.jagdrevierapp",
+            "certificate_hash": "99cca3df8c8ae1418b7c4267f1e19969f5eadc6a"
+          }
+        },
+        {
+          "client_id": "729551179713-ivj8pl47os4aalhtvqhhq9e0h7j7ilqv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIz62nlpV4wmW3qQBs3nBaCEOGGrIZ7cU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "729551179713-ivj8pl47os4aalhtvqhhq9e0h7j7ilqv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
