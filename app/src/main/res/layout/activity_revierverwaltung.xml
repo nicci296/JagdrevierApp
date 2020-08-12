@@ -1,9 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Revierverwaltung">
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   xmlns:tools="http://schemas.android.com/tools"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="match_parent"
+                                                   tools:context=".Revierverwaltung">
 
+    <TextView
+            android:text="@string/Revier_TextView"
+            android:layout_width="297dp"
+            android:layout_height="56dp" android:id="@+id/textView"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:textSize="30sp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="57dp" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="57dp" android:layout_marginTop="36dp" app:layout_constraintTop_toTopOf="parent"/>
+    <TextView
+            android:text="@string/Jaeger"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView2"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:layout_marginTop="26dp"
+            app:layout_constraintTop_toBottomOf="@+id/textView" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="18dp"/>
+    <Button
+            android:text="@string/Add_Jaeger_Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="34dp" app:layout_constraintTop_toBottomOf="@+id/textView2"/>
+    <Button
+            android:text="@string/Delete_Jaeger_Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/button2"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="40dp" app:layout_constraintTop_toBottomOf="@+id/button"
+            android:layout_marginTop="20dp"/>
+    <TextView
+            android:text="@string/RevierMap_TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView3"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:layout_marginTop="40dp"
+            app:layout_constraintTop_toBottomOf="@+id/button2" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="18dp"/>
+    <Button
+            android:text="@string/GoTo_RevierMap_Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/button3"
+            android:focusable="true" android:clickable="true"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="40dp" android:layout_marginTop="34dp"
+            app:layout_constraintTop_toBottomOf="@+id/textView3" android:onClick="onClickRevierkarte"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
