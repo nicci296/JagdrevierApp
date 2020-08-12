@@ -1,3 +1,3 @@
-# JagdrevierApp /r
-IUBH Projektarbeit Mobile Software Engineering /r
+# JagdrevierApp 
+IUBH Projektarbeit Mobile Software Engineering 
 Jagdrevierapp
