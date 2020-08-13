@@ -25,7 +25,7 @@ public class Revierverwaltung extends AppCompatActivity {
     public static final String FIRST_NAME_KEY = "first name";
     public static final String NAME_KEY = "name";
     public static final String ID_KEY = "id";
-    public static final String TAG = "user";
+
 
    //Anlegen einer Instanz der Firebase zur Nutzung in den onClick-Methoden onClickAddJaeger & onClickDeleteJaeger
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -85,7 +85,7 @@ public class Revierverwaltung extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Toast.makeText(Revierverwaltung.this,
-                                "Jaeger wurde angelegt!",
+                                "Jaeger wurde angelegt mit ID: " + documentReference.getId(),
                                 Toast.LENGTH_LONG).show();
                         userFirstName.getText().clear();
                         userName.getText().clear();
@@ -105,6 +105,43 @@ public class Revierverwaltung extends AppCompatActivity {
 
         //Lässt bei Click einen Jäger aus der Datenbank entfernen
     public void onClickDeleteJaeger(View button){
+
+   /*     final EditText userFirstName = findViewById(R.id.userFirstName);
+        final EditText userName = findViewById(R.id.userName);
+        final EditText userID = findViewById(R.id.userID);
+        String firstName = userFirstName.getText().toString();
+        String name = userName.getText().toString();
+        String id = userID.getText().toString();
+
+        Map<String, Object> userJaeger = new HashMap<String,Object>();
+        userJaeger.put(FIRST_NAME_KEY, firstName);
+        userJaeger.put(NAME_KEY, name);
+        userJaeger.put(ID_KEY, id);
+
+        if (userJaeger){
+            db.collection("jaeger").document()
+
+                    .delete()
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(Revierverwaltung.this,
+                                    "Jaeger wurde entfernt!",
+                                    Toast.LENGTH_LONG).show();
+                            userFirstName.getText().clear();
+                            userName.getText().clear();
+                            userID.getText().clear();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener(){
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(Revierverwaltung.this,
+                                    "Jaeger ist nicht bekannt!",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    });
+        }*/
+
 
     }
 }
