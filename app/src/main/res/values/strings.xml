@@ -10,6 +10,7 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="title_activity_revier_karte">Map</string>
+
     <string name="Revier_TextView">Revierverwaltung</string>
     <string name="Jaeger">Jäger verwalten</string>
     <string name="Add_Jaeger_Button">Jäger in das Revier aufnehmen</string>
@@ -19,4 +20,8 @@
     <string name="Jaeger_Vorname"> Vorname: </string>
     <string name="Jaeger_Nachname"> Nachname: </string>
     <string name="Jaeger_Schein"> Jagdscheinr.: </string>
+
+    <string name="LogInBtn">Aufbaumen!</string>
+    <string name="WelcomeMsg">Waidmannsheil!</string>
+
 </resources>
