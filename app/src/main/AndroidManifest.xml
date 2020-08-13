@@ -17,10 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
         <!--
              Der API key für Google Maps-basierte APIs ist als String-Ressource definiert.
@@ -41,6 +38,10 @@
         <activity android:name=".Schussjournal">
         </activity>
         <activity android:name=".Revierverwaltung">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".JagdeinrichtungenVerwalten"/>
 
