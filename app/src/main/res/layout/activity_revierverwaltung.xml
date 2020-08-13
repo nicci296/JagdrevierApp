@@ -7,6 +7,16 @@
                                                    tools:context=".Revierverwaltung">
 
     <TextView
+            android:text="@string/RevierMap_TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView3"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:layout_marginTop="32dp"
+            app:layout_constraintTop_toBottomOf="@+id/button2" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="18dp"/>
+    <TextView
             android:text="@string/Revier_TextView"
             android:layout_width="297dp"
             android:layout_height="56dp" android:id="@+id/textView"
@@ -15,7 +25,8 @@
             android:textSize="30sp"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="57dp" app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="57dp" android:layout_marginTop="36dp" app:layout_constraintTop_toTopOf="parent"/>
+            android:layout_marginEnd="57dp" android:layout_marginTop="16dp" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_bias="0.944"/>
     <TextView
             android:text="@string/Jaeger"
             android:layout_width="wrap_content"
@@ -35,7 +46,7 @@
             android:focusable="true"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="40dp"
-            android:layout_marginTop="34dp" app:layout_constraintTop_toBottomOf="@+id/textView2"/>
+            android:layout_marginTop="33dp" app:layout_constraintTop_toBottomOf="@+id/UserID"/>
     <Button
             android:text="@string/Delete_Jaeger_Button"
             android:layout_width="wrap_content"
@@ -45,22 +56,55 @@
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="40dp" app:layout_constraintTop_toBottomOf="@+id/button"
             android:layout_marginTop="20dp"/>
-    <TextView
-            android:text="@string/RevierMap_TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView3"
-            android:textSize="17sp"
-            android:textStyle="bold"
-            android:layout_marginTop="40dp"
-            app:layout_constraintTop_toBottomOf="@+id/button2" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="18dp"/>
     <Button
             android:text="@string/GoTo_RevierMap_Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:id="@+id/button3"
             android:focusable="true" android:clickable="true"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="40dp" android:layout_marginTop="34dp"
-            app:layout_constraintTop_toBottomOf="@+id/textView3" android:onClick="onClickRevierkarte"/>
+            android:onClick="onClickRevierkarte"
+            android:layout_marginTop="30dp"
+            app:layout_constraintTop_toBottomOf="@+id/textView3" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="40dp"/>
+    <TextView
+            android:text="@string/Jaeger_Vorname"
+            android:layout_width="93dp"
+            android:layout_height="23dp" android:id="@+id/textView4"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="40dp"
+            android:layout_marginTop="28dp" app:layout_constraintTop_toBottomOf="@+id/textView2"
+            android:labelFor="@id/userFirstName"/>
+    <TextView
+            android:text="@string/Jaeger_Nachname"
+            android:layout_width="93dp"
+            android:layout_height="23dp" android:id="@+id/textView5"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="40dp"
+            android:labelFor="@id/UserName" android:layout_marginTop="32dp"
+            app:layout_constraintTop_toBottomOf="@+id/textView4"/>
+    <TextView
+            android:text="@string/Jaeger_Schein"
+            android:layout_width="99dp"
+            android:layout_height="23dp" android:id="@+id/textView6"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="40dp"
+            android:labelFor="@id/UserID" android:layout_marginTop="33dp"
+            app:layout_constraintTop_toBottomOf="@+id/textView5"/>
+    <EditText
+            android:layout_width="180dp"
+            android:layout_height="40dp"
+            android:id="@+id/userFirstName"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="40dp" android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@+id/textView2" android:inputType="textPersonName"
+            android:autofillHints=""/>
+    <EditText
+            android:layout_width="180dp"
+            android:layout_height="40dp"
+            android:id="@+id/UserName"
+            android:layout_marginEnd="40dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginTop="14dp"
+            app:layout_constraintTop_toBottomOf="@+id/userFirstName" android:inputType="textPersonName"
+            android:autofillHints=""/>
+    <EditText
+            android:layout_width="180dp"
+            android:layout_height="40dp"
+            android:id="@+id/UserID"
+            android:layout_marginEnd="40dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginTop="15dp"
+            app:layout_constraintTop_toBottomOf="@+id/UserName" android:inputType="textVisiblePassword"
+            android:autofillHints=""/>
 </androidx.constraintlayout.widget.ConstraintLayout>
