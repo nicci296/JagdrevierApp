@@ -24,4 +24,6 @@
     <string name="LogInBtn">Aufbaumen!</string>
     <string name="WelcomeMsg">Waidmannsheil!</string>
 
+    <string name="Pflichtfelder">Bitte alle Felder ausfüllen!</string>
+
 </resources>

@@ -46,7 +46,8 @@
             android:focusable="true"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="40dp"
-            android:layout_marginTop="33dp" app:layout_constraintTop_toBottomOf="@+id/UserID"/>
+            android:layout_marginTop="33dp" app:layout_constraintTop_toBottomOf="@+id/userID"
+            android:onClick="onClickAddJaeger"/>
     <Button
             android:text="@string/Delete_Jaeger_Button"
             android:layout_width="wrap_content"
@@ -55,7 +56,7 @@
             android:focusable="true"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="40dp" app:layout_constraintTop_toBottomOf="@+id/button"
-            android:layout_marginTop="20dp"/>
+            android:layout_marginTop="20dp" android:onClick="onClickDeleteJaeger"/>
     <Button
             android:text="@string/GoTo_RevierMap_Button"
             android:layout_width="wrap_content"
@@ -77,14 +78,14 @@
             android:layout_width="93dp"
             android:layout_height="23dp" android:id="@+id/textView5"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="40dp"
-            android:labelFor="@id/UserName" android:layout_marginTop="32dp"
+            android:labelFor="@id/userName" android:layout_marginTop="32dp"
             app:layout_constraintTop_toBottomOf="@+id/textView4"/>
     <TextView
             android:text="@string/Jaeger_Schein"
             android:layout_width="99dp"
             android:layout_height="23dp" android:id="@+id/textView6"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="40dp"
-            android:labelFor="@id/UserID" android:layout_marginTop="33dp"
+            android:labelFor="@id/userID" android:layout_marginTop="33dp"
             app:layout_constraintTop_toBottomOf="@+id/textView5"/>
     <EditText
             android:layout_width="180dp"
@@ -96,15 +97,15 @@
     <EditText
             android:layout_width="180dp"
             android:layout_height="40dp"
-            android:id="@+id/UserName"
+            android:id="@+id/userName"
             android:layout_marginEnd="40dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginTop="14dp"
             app:layout_constraintTop_toBottomOf="@+id/userFirstName" android:inputType="textPersonName"
             android:autofillHints=""/>
     <EditText
             android:layout_width="180dp"
             android:layout_height="40dp"
-            android:id="@+id/UserID"
+            android:id="@+id/userID"
             android:layout_marginEnd="40dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginTop="15dp"
-            app:layout_constraintTop_toBottomOf="@+id/UserName" android:inputType="textVisiblePassword"
+            app:layout_constraintTop_toBottomOf="@+id/userName" android:inputType="textVisiblePassword"
             android:autofillHints=""/>
 </androidx.constraintlayout.widget.ConstraintLayout>
