@@ -13,6 +13,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -39,6 +40,8 @@ public class Revierverwaltung extends AppCompatActivity {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference jaegerCol = db.collection("Jaeger");
+    private DocumentReference docRef = db.collection("Jaeger").document();
+
     //-------------------------------------------------------------------------------------------------------------
 
     @Override
@@ -86,7 +89,7 @@ public class Revierverwaltung extends AppCompatActivity {
          * Der addOnFailureListener gibt Toast aus, wenn nicht in die DB geschrieben werden konnte und erstellt eine
          * Log-Message für die Konsole.
          */
-        jaegerCol.document().set(userJaeger)
+        jaegerCol.document(userPass.getText().toString()).set(userJaeger)
                 .addOnSuccessListener(new OnSuccessListener<Void>(){
                     public void onSuccess(Void aVoid) {
                         Toast.makeText(Revierverwaltung.this,
@@ -111,6 +114,7 @@ public class Revierverwaltung extends AppCompatActivity {
 
         //Lässt bei Click einen Jäger aus der Datenbank entfernen
     public void onClickDeleteJaeger(View button){
+
 
     }
 

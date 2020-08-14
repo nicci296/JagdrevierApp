@@ -49,7 +49,7 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback 
         jagdrevierMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng revierMitte = new LatLng(51.766212, 7.083658);
+        LatLng revierMitte = new LatLng(48.849444, 11.241417);
         jagdrevierMap.addMarker(new MarkerOptions().position(revierMitte).title("Revier-Mittelpunkt"));
         jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLng(revierMitte));
     }
