@@ -9,10 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -22,82 +20,90 @@ import java.util.Map;
 
 public class Revierverwaltung extends AppCompatActivity {
 
-    public static final String FIRST_NAME_KEY = "first name";
-    public static final String NAME_KEY = "name";
-    public static final String ID_KEY = "id";
+    private static final String TAG = "Revierverwaltung";
 
+    /**
+     * Benötigte Konstanten für die Firestore Methoden.
+     * Firestore arbeitet mit Key-Value-Pairs, weshalb für die Eingabefelder entsprechende Key-Strings als Konstanten
+     * angelegt werden.
+     * Außerdem wird jeweils eine Instanzvariable der EdiTextViews und der Firestore database benötigt.
+     */
+    //-------------------------------------------------------------------------------------------------------------
+    private static final String FIRST_NAME_KEY = "first name";
+    private static final String NAME_KEY = "name";
+    private static final String PASS_KEY = "password";
 
-   //Anlegen einer Instanz der Firebase zur Nutzung in den onClick-Methoden onClickAddJaeger & onClickDeleteJaeger
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private EditText userFirstName;
+    private EditText userName;
+    private EditText userPass;
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference jaegerCol = db.collection("Jaeger");
+    //-------------------------------------------------------------------------------------------------------------
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_revierverwaltung);
+
+        userFirstName = findViewById(R.id.user_First_Name);
+        userName = findViewById(R.id.user_Name);
+        userPass = findViewById(R.id.user_Pass);
     }
 
-    //Intent zum Wechseln der Activity
-    public void onClickRevierkarte(View button){
-        Intent changeIntent = new Intent(this, RevierKarte.class);
-        startActivity(changeIntent);
-    }
 
     //Lässt bei Click einen Jäger in die Datenbank hinzufügen
-    public void onClickAddJaeger(View button) {
+    public void onClickAddJaeger(View v) {
 
-        /**
-         * Lokalisierung der Views über findViewById() und Aufrufen der eingetragenen Strings über getText().toString().
-         * EditText als final deklariert, um die View später leeren zu können.
-         */
 
-        final EditText userFirstName = findViewById(R.id.userFirstName);
-        final EditText userName = findViewById(R.id.userName);
-        final EditText userID = findViewById(R.id.userID);
+         //Aufrufen der eingetragenen Strings über getText().toString().
         String firstName = userFirstName.getText().toString();
         String name = userName.getText().toString();
-        String id = userID.getText().toString();
+        String pass = userPass.getText().toString();
 
         //Toast, falls nicht alle Felder ausgefüllt wurden
-        if (firstName.isEmpty() || name.isEmpty() || id.isEmpty()) {
+        if (firstName.isEmpty() || name.isEmpty() || pass.isEmpty()) {
             Toast.makeText(Revierverwaltung.this,
                     R.string.Pflichtfelder,
                     Toast.LENGTH_LONG).show();
         }
         /**
-         * Erstellen der zu speichernden Daten als Hashmap, welche als Document in der Collection "jaeger" gespeichert
-         * werden sollen.
-         * Strings firstname, name und id im Parameter als Konstanten definiert.
+         * Erstellen der zu speichernden Daten als Hashmap mit einem Key-Value-Pair aus String und Object,
+         * welche als Document in der Collection "jaeger" gespeichert werden sollen.
+         * Key-Strings firstname, name und id weiter oben als Konstanten definiert.
+         * Als Value-Object wird der im EditText eingetragene String übergeben.
          */
         Map<String, Object> userJaeger = new HashMap<String, Object>();
         userJaeger.put(FIRST_NAME_KEY, firstName);
         userJaeger.put(NAME_KEY, name);
-        userJaeger.put(ID_KEY, id);
+        userJaeger.put(PASS_KEY, pass);
 
         /**
-         * Beim erstmaligen Ausführen der Methode wird automatisch die Collection "jaeger"" angelegt.
-         * .add() fügt das Document userJaeger mit eigener ID der Collection hinzu.
+         * Beim erstmaligen Ausführen der Methode wird automatisch die Collection "Jaeger" über die CollectionRefrence
+         * jaegerCol angelegt.
+         * .set() fügt die HasMap userJaeger als Document mit eigener ID der Collection hinzu.
          * Der addOnSuccessListener() gibt bei Erfolg einen Toast aus und leert die Eingabefelder.
-         * Der addOnFailureListener gibt Toast aus, wenn nicht in die DB geschrieben werden konnte.
+         * Der addOnFailureListener gibt Toast aus, wenn nicht in die DB geschrieben werden konnte und erstellt eine
+         * Log-Message für die Konsole.
          */
-        db.collection("jaeger")
-                .add(userJaeger)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
+        jaegerCol.document().set(userJaeger)
+                .addOnSuccessListener(new OnSuccessListener<Void>(){
+                    public void onSuccess(Void aVoid) {
                         Toast.makeText(Revierverwaltung.this,
-                                "Jaeger wurde angelegt mit ID: " + documentReference.getId(),
+                                "Jäger wurde angelegt!",
                                 Toast.LENGTH_LONG).show();
                         userFirstName.getText().clear();
                         userName.getText().clear();
-                        userID.getText().clear();
+                        userPass.getText().clear();
 
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     public void onFailure(@NonNull Exception e){
                         Toast.makeText(Revierverwaltung.this,
-                                "Jaeger konnte nicht angelegt werden!",
+                                "Jäger konnte nicht angelegt werden!",
                                 Toast.LENGTH_LONG).show();
+                        Log.d(TAG, e.toString());
                     }
                 });
     }
@@ -106,42 +112,14 @@ public class Revierverwaltung extends AppCompatActivity {
         //Lässt bei Click einen Jäger aus der Datenbank entfernen
     public void onClickDeleteJaeger(View button){
 
-   /*     final EditText userFirstName = findViewById(R.id.userFirstName);
-        final EditText userName = findViewById(R.id.userName);
-        final EditText userID = findViewById(R.id.userID);
-        String firstName = userFirstName.getText().toString();
-        String name = userName.getText().toString();
-        String id = userID.getText().toString();
-
-        Map<String, Object> userJaeger = new HashMap<String,Object>();
-        userJaeger.put(FIRST_NAME_KEY, firstName);
-        userJaeger.put(NAME_KEY, name);
-        userJaeger.put(ID_KEY, id);
-
-        if (userJaeger){
-            db.collection("jaeger").document()
-
-                    .delete()
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Toast.makeText(Revierverwaltung.this,
-                                    "Jaeger wurde entfernt!",
-                                    Toast.LENGTH_LONG).show();
-                            userFirstName.getText().clear();
-                            userName.getText().clear();
-                            userID.getText().clear();
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener(){
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(Revierverwaltung.this,
-                                    "Jaeger ist nicht bekannt!",
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    });
-        }*/
-
-
     }
+
+    //Intent zum Wechseln der Activity
+    public void onClickRevierkarte(View button){
+        Intent changeIntent = new Intent(this, RevierKarte.class);
+        startActivity(changeIntent);
+    }
+
+
+
 }
