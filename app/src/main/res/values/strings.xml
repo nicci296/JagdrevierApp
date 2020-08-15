@@ -27,4 +27,6 @@
     <string name="logOutBtnText">Abbaumen</string>
     <string name="registBtn">Registrieren</string>
 
+    <string name="Pflichtfelder">Bitte alle Felder ausfüllen!</string>
+
 </resources>

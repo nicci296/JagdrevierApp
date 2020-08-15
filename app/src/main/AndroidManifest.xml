@@ -16,19 +16,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".JagdeinrichtungenVerwalten">
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-        android:name=".RevierKarte"
-        android:label="@string/title_activity_revier_karte">
-        </activity>
-        <activity android:name=".Schussjournal"/>
-        <activity android:name=".Revierverwaltung"/>
-        <activity android:name=".LoginActivity"/>
         <!--
              Der API key für Google Maps-basierte APIs ist als String-Ressource definiert.
              (Siehe auch "release/res/values/google_maps_api.xml").
@@ -38,5 +31,19 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+
+
+
+        <activity
+                android:name=".RevierKarte"
+                android:label="@string/title_activity_revier_karte">
+        </activity>
+        <activity android:name=".Schussjournal">
+        </activity>
+        <activity android:name=".Revierverwaltung">
+        </activity>
+        <activity android:name=".JagdeinrichtungenVerwalten"/>
+
     </application>
+
 </manifest>
