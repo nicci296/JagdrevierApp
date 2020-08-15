@@ -19,10 +19,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class LoginActivity extends AppCompatActivity implements
-    View.OnClickListener {
+public class RegisterActivity extends AppCompatActivity implements
+        View.OnClickListener {
 
-    private static final String TAG = "LoginActivity";
+    private static final String TAG = "RegisterActivity";
 
     //Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
@@ -31,13 +31,13 @@ public class LoginActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_register);
 
         //Buttons
-        Button logInBtn = findViewById(R.id.LoginBtn);
-        logInBtn.setOnClickListener(this);
-        TextView toRegisterBtn = findViewById(R.id.toRegisterText);
-        toRegisterBtn.setOnClickListener(this);
+        Button registBtn = findViewById(R.id.registBtn);
+        registBtn.setOnClickListener(this);
+        TextView toSignInBtn =  findViewById(R.id.toSignInText);
+        toSignInBtn.setOnClickListener(this);
 
         // Initialize Firebase Auth
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -73,7 +73,7 @@ public class LoginActivity extends AppCompatActivity implements
                         } else {
                             //Failing sign in display the following Message
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                            Toast.makeText(RegisterActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
@@ -83,35 +83,6 @@ public class LoginActivity extends AppCompatActivity implements
                 });
     }
 
-    private void signIn(String email, String password) {
-        Log.d(TAG, "signIn:" + email);
-        if (!validateForm()) {
-            return;
-        }
-        // Für später falls wir ProgressBar noch schaffen beim "hübsch machen"
-        //showProgressBar();
-        mFirebaseAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "singInWithEmail:success");
-                            FirebaseUser user = mFirebaseAuth.getCurrentUser();
-                            updateUI(user);
-                        } else {
-                            Log.w(TAG, "singInWithEmail:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                Toast.LENGTH_SHORT).show();
-                            updateUI(null);
-                        }
-                    }
-                });
-    }
-
-    private void signOut() {
-        mFirebaseAuth.signOut();
-        updateUI(null);
-    }
 
     private boolean validateForm() {
         boolean valid = true;
@@ -133,7 +104,6 @@ public class LoginActivity extends AppCompatActivity implements
         } else {
             mPwd.setError(null);
         }
-
         return valid;
     }
 
@@ -141,13 +111,12 @@ public class LoginActivity extends AppCompatActivity implements
         // Für später falls wir ProgressBar noch schaffen beim "hübsch machen"
         //hideProgressBar();
         if (user != null) {
-             startActivity(new Intent(this, JagdeinrichtungenVerwalten.class));
+            startActivity(new Intent(this, JagdeinrichtungenVerwalten.class));
         } else {
-            Toast.makeText(LoginActivity.this, "Login failed!",
+            Toast.makeText(RegisterActivity.this, "Login failed!",
                     Toast.LENGTH_SHORT).show();
         }
-
-    }
+}
 
     @Override
     public void onClick(View v) {
@@ -157,11 +126,11 @@ public class LoginActivity extends AppCompatActivity implements
         String pwd = mPwd.getText().toString().trim();
 
         int i = v.getId();
-        if (i == R.id.toRegisterText) {
-            startActivity(new Intent(this, RegisterActivity.class));
+        if (i == R.id.registBtn) {
+            createAccount(mail, pwd);
         }
-        if (i == R.id.LoginBtn) {
-            signIn(mail, pwd);
+        if (i == R.id.toSignInText) {
+            startActivity(new Intent(this, LoginActivity.class));
 
         }
     }

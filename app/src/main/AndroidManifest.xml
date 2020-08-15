@@ -16,9 +16,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LoginActivity">
+
+        <activity android:name=".LoginActivity"/>
+        <activity android:name=".RegisterActivity"/>
+        <activity
+            android:name=".RevierKarte"
+            android:label="@string/title_activity_revier_karte"></activity>
+        <activity android:name=".Schussjournal"></activity>
+        <activity android:name=".Revierverwaltung"></activity>
+        <activity android:name=".JagdeinrichtungenVerwalten" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -31,18 +40,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
-
-
-        <activity
-                android:name=".RevierKarte"
-                android:label="@string/title_activity_revier_karte">
-        </activity>
-        <activity android:name=".Schussjournal">
-        </activity>
-        <activity android:name=".Revierverwaltung">
-        </activity>
-        <activity android:name=".JagdeinrichtungenVerwalten"/>
 
     </application>
 

@@ -28,5 +28,11 @@
     <string name="registBtn">Registrieren</string>
 
     <string name="Pflichtfelder">Bitte alle Felder ausfüllen!</string>
+    <string name="menuBtn">Menü</string>
+    <string name="mapBtn">Map</string>
+    <string name="loginMailHint">jaeger@wald.de</string>
+    <string name="passwordHint">Passwort</string>
+    <string name="toSignInText">Bereits registriert? - Klicke hier!</string>
+    <string name="toRegisterText">Noch nicht registriert? - Klicke hier</string>
 
 </resources>

@@ -3,6 +3,7 @@ package com.example.jagdrevierapp;
 import android.content.Intent;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -11,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -19,7 +21,20 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Revierverwaltung extends AppCompatActivity {
+public class Revierverwaltung extends AppCompatActivity implements View.OnClickListener {
+
+    /**
+     * Wilderei durch Michi am 15.08.2020 - 15.56 Uhr
+     *
+     *Ich habe die "Navigation" als ein Constraint-Layout in der Activity_revierverwaltung.xml hinzugefügt
+     * Damit die Navigation klappt, implementiere ich hier die Klasse "View.onClickListener
+     * In den weiteren Steps muss ich die Buttons per findViewByID definieren (passiert in Methode OnCreate)
+     * Nachder Definition der Buttons lege ich auf jeden Button ein .setOnClickListener(this) --> Erkennung, wenn der Button gedrückt wird
+     *
+     * in Der Method onClick(View v) implementiere ich dann die startActivity und rufe per expliziten Intent die jeweilige View auf.
+     */
+
+
 
     private static final String TAG = "Revierverwaltung";
 
@@ -38,6 +53,9 @@ public class Revierverwaltung extends AppCompatActivity {
     private EditText userName;
     private EditText userPass;
 
+    //FirebaseVarible von Michi hinzugefügt
+    private FirebaseAuth mAuth;
+
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference jaegerCol = db.collection("Jaeger");
     private DocumentReference docRef = db.collection("Jaeger").document();
@@ -52,6 +70,17 @@ public class Revierverwaltung extends AppCompatActivity {
         userFirstName = findViewById(R.id.user_First_Name);
         userName = findViewById(R.id.user_Name);
         userPass = findViewById(R.id.user_Pass);
+
+        //von Michi hinzugefügt: Buttons aus Navigation initialisieren
+        Button logoutBtn = findViewById(R.id.logoutBtn);
+        logoutBtn.setOnClickListener(this);
+        Button mapBtn = findViewById(R.id.mapBtn);
+        mapBtn.setOnClickListener(this);
+        Button menuBtn = findViewById(R.id.menuBtn);
+        menuBtn.setOnClickListener(this);
+
+        mAuth = FirebaseAuth.getInstance();
+
     }
 
 
@@ -122,6 +151,27 @@ public class Revierverwaltung extends AppCompatActivity {
     public void onClickRevierkarte(View button){
         Intent changeIntent = new Intent(this, RevierKarte.class);
         startActivity(changeIntent);
+    }
+
+
+
+    /**
+     * Navigation eingerichtet, Menü funktioniert noch nicht
+     */
+    @Override
+    public void onClick(View v) {
+        int i = v.getId();
+        if (i == R.id.logoutBtn) {
+            mAuth.signOut();
+            startActivity(new Intent(this, LoginActivity.class));
+        }
+        if (i == R.id.mapBtn) {
+            startActivity(new Intent(this, RevierKarte.class));
+        }
+        if (i == R.id.menuBtn) {
+            Toast.makeText(this, "Imagine: Menü erscheint", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
 
