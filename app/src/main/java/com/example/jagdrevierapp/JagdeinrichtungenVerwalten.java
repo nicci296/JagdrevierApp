@@ -41,7 +41,10 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity implements Vie
         mapBtn.setOnClickListener(this);
         Button menuBtn = findViewById(R.id.menuBtn);
         menuBtn.setOnClickListener(this);
-
+        Button schussBtn = findViewById(R.id.schussBtn);
+        schussBtn.setOnClickListener(this);
+        Button revierBtn = findViewById(R.id.revierBtn);
+        revierBtn.setOnClickListener(this);
 
         //Initialize Firebase Auth
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -83,6 +86,15 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity implements Vie
         }
         if (i == R.id.mapBtn) {
             startActivity(new Intent(this, RevierKarte.class));
+        }
+        // nur zu testzwecken, da Menübutton etwas mehr in anspruch nehmen wird
+        if (i == R.id.revierBtn) {
+            startActivity(new Intent(this, Revierverwaltung.class));
+            Toast.makeText(this, "Entfällt wenn Menü ok", Toast.LENGTH_SHORT).show();
+        }
+        if (i == R.id.schussBtn) {
+            startActivity(new Intent(this, Schussjournal.class));
+            Toast.makeText(this, "Entfällt wenn Menü ok", Toast.LENGTH_SHORT).show();
         }
         if (i == R.id.menuBtn) {
             Toast.makeText(this, "Imagine: Menü erscheint", Toast.LENGTH_SHORT).show();

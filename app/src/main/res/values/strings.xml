@@ -34,5 +34,8 @@
     <string name="passwordHint">Passwort</string>
     <string name="toSignInText">Bereits registriert? - Klicke hier!</string>
     <string name="toRegisterText">Noch nicht registriert? - Klicke hier</string>
+    <string name="schussBtn">Schussjournal</string>
+    <string name="revierBtn">Revierverwaltung</string>
+    <string name="titleSchussjournal">Schussjournal</string>
 
 </resources>

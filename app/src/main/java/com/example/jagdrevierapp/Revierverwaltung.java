@@ -34,6 +34,12 @@ public class Revierverwaltung extends AppCompatActivity implements View.OnClickL
      * in Der Method onClick(View v) implementiere ich dann die startActivity und rufe per expliziten Intent die jeweilige View auf.
      */
 
+    /**
+     * Wilderei durch Mich am 16.08.2020 - 19:25
+     * Habe 2 Buttons für die Navigtaion zu Revierverwaltung und Schussjournal hinzugefügt.
+     * Bin leider völlig aus dem Ruder gelaufen, da man per Navigation sehr schnell bei Jetpack-Navigation landet und ab da wird es kompliziert.
+     *
+     */
 
 
     private static final String TAG = "Revierverwaltung";
@@ -78,6 +84,10 @@ public class Revierverwaltung extends AppCompatActivity implements View.OnClickL
         mapBtn.setOnClickListener(this);
         Button menuBtn = findViewById(R.id.menuBtn);
         menuBtn.setOnClickListener(this);
+        Button schussBtn = findViewById(R.id.schussBtn);
+        schussBtn.setOnClickListener(this);
+        Button revierBtn = findViewById(R.id.revierBtn);
+        revierBtn.setOnClickListener(this);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -167,6 +177,15 @@ public class Revierverwaltung extends AppCompatActivity implements View.OnClickL
         }
         if (i == R.id.mapBtn) {
             startActivity(new Intent(this, RevierKarte.class));
+        }
+        // nur zu testzwecken, da Menübutton etwas mehr in anspruch nehmen wird
+        if (i == R.id.revierBtn) {
+            startActivity(new Intent(this, Revierverwaltung.class));
+            Toast.makeText(this, "Entfällt wenn Menü ok", Toast.LENGTH_SHORT).show();
+        }
+        if (i == R.id.schussBtn) {
+            startActivity(new Intent(this, Schussjournal.class));
+            Toast.makeText(this, "Entfällt wenn Menü ok", Toast.LENGTH_SHORT).show();
         }
         if (i == R.id.menuBtn) {
             Toast.makeText(this, "Imagine: Menü erscheint", Toast.LENGTH_SHORT).show();
