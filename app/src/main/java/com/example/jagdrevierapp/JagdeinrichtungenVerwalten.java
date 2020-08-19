@@ -52,6 +52,9 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity implements Vie
         private TextView textAuswahlHochsitze;
         private TextView textHochsitzName;
 
+        //Object declaration
+        private Hochsitz obj;
+
 
     //Initialize FireStore
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -83,23 +86,12 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity implements Vie
         revierBtn.setOnClickListener(this);
 
 
-        //onClickListener für Buttons for Jagdeinrichtungen
-        Button btnStatusHochsitz = findViewById(R.id.btnStatusHochsitz);
-        btnStatusHochsitz.setOnClickListener(this);
-        Button btnBook = findViewById(R.id.btnBook);
-        btnBook.setOnClickListener(this);
-        Button btnDamage = findViewById(R.id.btnDamage);
-        btnDamage.setOnClickListener(this);
-        Button btnInsect = findViewById(R.id.btnInsect);
-        btnInsect.setOnClickListener(this);
-        FloatingActionButton addHochsitz = findViewById(R.id.btnAddHochsitz);
-        addHochsitz.setOnClickListener(this);
+
 
         // TextViews to create some texts
         textAuswahlHochsitze = findViewById(R.id.textAuswahlHochsitze);
 
         textHochsitzName = findViewById(R.id.textHochsitzName);
-        textHochsitzName.setText("Hochsitz für den Jäger");
         textAuswahlHochsitze.setText("Alle Hochsitze");
 
         //Initialize Firebase Auth
@@ -121,17 +113,48 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity implements Vie
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()){
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        Hochsitz obj = document.toObject(Hochsitz.class);
+                        obj = document.toObject(Hochsitz.class);
                         textHochsitzName.setText(obj.getHochsitzName());
                     }
                 } else {
                     Log.w(TAG, "Error getting docs: ", task.getException());
                 }
             }
+
+        });
+
+        //onClickListener für Buttons for Jagdeinrichtungen
+        //Status Button mit PopUp
+                Button btnStatusHochsitz = findViewById(R.id.btnStatusHochsitz);
+        btnStatusHochsitz.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(JagdeinrichtungenVerwalten.this, StatusPop.class);
+                Bundle extras = new Bundle();
+                extras.putString("sitzname", obj.getHochsitzName());
+                extras.putString("booker", obj.getBookedBy());
+                extras.putBoolean("booked", obj.isBooked());
+                extras.putBoolean("damage", obj.isDamaged());
+                extras.putBoolean("insect", obj.isInsectious());
+                intent.putExtras(extras);
+                startActivity(intent);
+
+            }
         });
 
 
 
+
+
+
+        Button btnBook = findViewById(R.id.btnBook);
+        btnBook.setOnClickListener(this);
+        Button btnDamage = findViewById(R.id.btnDamage);
+        btnDamage.setOnClickListener(this);
+        Button btnInsect = findViewById(R.id.btnInsect);
+        btnInsect.setOnClickListener(this);
+        FloatingActionButton addHochsitz = findViewById(R.id.btnAddHochsitz);
+        addHochsitz.setOnClickListener(this);
 
     }
 
