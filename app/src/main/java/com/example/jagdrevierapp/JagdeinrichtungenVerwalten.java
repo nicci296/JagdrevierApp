@@ -27,6 +27,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import com.example.jagdrevierapp.data.model.Hochsitz;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 
 public class JagdeinrichtungenVerwalten extends AppCompatActivity implements View.OnClickListener {
@@ -44,6 +46,7 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity implements Vie
     //general variables
     private String mUsername;
     private GoogleSignInClient mSignInClient;
+    private String hochsitzname;
 
         //View declaration
         private TextView textAuswahlHochsitze;
@@ -111,17 +114,22 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity implements Vie
         }
 
         // Read data from firestore
-
-        docRefHochsitze.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        dbHochsitze
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot doc = task.getResult();
-                    Hochsitz hochsitz = doc.toObject(Hochsitz.class);
-                    textAuswahlHochsitze.setText(doc.get("HochsitzName").toString());
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()){
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Hochsitz obj = document.toObject(Hochsitz.class);
+                        textHochsitzName.setText(obj.getHochsitzName());
+                    }
+                } else {
+                    Log.w(TAG, "Error getting docs: ", task.getException());
                 }
             }
         });
+
 
 
 
