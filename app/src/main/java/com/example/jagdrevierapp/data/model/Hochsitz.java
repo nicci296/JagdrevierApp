@@ -1,11 +1,14 @@
 package com.example.jagdrevierapp.data.model;
 
 
+import com.google.android.gms.maps.model.LatLng;
+
 public class Hochsitz {
 
     private String hochsitzName;
     private double lat;
-    private double lon;
+    private double lng;
+    /*private LatLng gps;*/
     private boolean isBooked;
     private String bookedBy;
     private boolean isDamaged;
@@ -13,10 +16,11 @@ public class Hochsitz {
 
     public Hochsitz() {}
 
-    public Hochsitz(String hochsitzName, double lat, double lon, boolean isBooked, String bookedBy, boolean isDamaged, boolean isInsectious) {
+    public Hochsitz(String hochsitzName,double lat, double lng, boolean isBooked, String bookedBy, boolean isDamaged, boolean isInsectious) {
         this.hochsitzName = hochsitzName;
+       /* this.gps = gps;*/
         this.lat = lat;
-        this.lon = lon;
+        this.lng = lng;
         this.isBooked = isBooked;
         this.bookedBy = bookedBy;
         this.isDamaged = isDamaged;
@@ -40,12 +44,12 @@ public class Hochsitz {
         this.lat = lat;
     }
 
-    public double getLon() {
-        return lon;
+    public double getLng() {
+        return lng;
     }
 
-    public void setLon(double lon) {
-        this.lon = lon;
+    public void setLng(double lon) {
+        this.lng = lng;
     }
 
     public boolean isBooked() {
@@ -79,6 +83,10 @@ public class Hochsitz {
     public void setInsectious(boolean insectious) {
         isInsectious = insectious;
     }
+
+    /*public LatLng getGps() {return gps;}
+
+    public void setGps(LatLng gps) { this.gps = gps; }*/
 
 
 

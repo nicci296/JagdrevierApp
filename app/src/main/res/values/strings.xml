@@ -28,7 +28,8 @@
     <string name="logOutBtnText">Abbaumen</string>
     <string name="registBtn">Registrieren</string>
 
-    <string name="Pflichtfelder">Bitte alle Felder ausfüllen!</string>
+    <string name="pflichtfelder">Bitte alle Felder ausfüllen!</string>
+    <string name="nameReq">Bitte benenne die Kanzel.</string>
     <string name="menuBtn">Menü</string>
     <string name="mapBtn">Map</string>
     <string name="loginMailHint">jaeger@wald.de</string>
