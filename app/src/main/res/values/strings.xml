@@ -10,6 +10,7 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="title_activity_revier_karte">Map</string>
+    <string name="google_maps_key">AIzaSyA-JsKSnsobosH8nlqyR3G130M_BKekdzM</string>
 
     <string name="Revier_TextView">Revierverwaltung</string>
     <string name="Jaeger">Jäger verwalten</string>
