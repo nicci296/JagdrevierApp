@@ -106,7 +106,7 @@ public class Revierverwaltung extends AppCompatActivity implements View.OnClickL
         //Toast, falls nicht alle Felder ausgefüllt wurden
         if (firstName.isEmpty() || name.isEmpty() || pass.isEmpty()) {
             Toast.makeText(Revierverwaltung.this,
-                    R.string.Pflichtfelder,
+                    R.string.pflichtfelder,
                     Toast.LENGTH_LONG).show();
         }
         /**
