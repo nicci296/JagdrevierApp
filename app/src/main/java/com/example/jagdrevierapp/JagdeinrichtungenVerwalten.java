@@ -121,7 +121,7 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity implements Vie
                 }
             }
 
-        });
+                } );
 
         //onClickListener für Buttons for Jagdeinrichtungen
         //Status Button mit PopUp

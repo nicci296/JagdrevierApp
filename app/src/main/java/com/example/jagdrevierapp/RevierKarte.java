@@ -2,8 +2,14 @@ package com.example.jagdrevierapp;
 
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -13,13 +19,15 @@ import android.os.Bundle;
 import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback;
 
 
-
-
+import com.example.jagdrevierapp.data.model.Hochsitz;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.*;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.*;
 
 import java.util.List;
 
@@ -38,6 +46,8 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
         GoogleMap.OnMyLocationClickListener,
         ActivityCompat.OnRequestPermissionsResultCallback{
 
+    private static final String TAG = "Revierkarte";
+    private final String COLLECTION_KEY ="HochsitzeMichi";
     /**
      * Request code for location permission request.
      *
@@ -49,9 +59,17 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
      * Flag indicating whether a requested permission has been denied after returning in
      * {@link #onRequestPermissionsResult(int, String[], int[])}.
      */
-    private boolean permissionDenied = false;
 
+    //Initialize FireStore
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference dbHochsitze = db.collection(COLLECTION_KEY);
+    private DocumentReference docRefHochsitze = dbHochsitze.document();
+
+    //Object declaration
+    private Hochsitz obj;
+    private boolean permissionDenied = false;
     private GoogleMap jagdrevierMap;
+    private Marker current;
     LatLng revierMitte = new LatLng(48.849444, 11.241417);
 
     @Override
@@ -63,6 +81,10 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.revier);
         mapFragment.getMapAsync(this);
+
+        Button jgdeinAddBtn = findViewById(R.id.jgdeinAddBtn);
+        Button jgdeinDelBtn = findViewById(R.id.jgdeinDelBtn);
+        Button jgdeinDmgBtn = findViewById(R.id.jgdeinDmgBtn);
     }
 
     //Polygon Styling
@@ -96,6 +118,7 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
     @Override
     public void onMapReady(GoogleMap googleMap) {
         jagdrevierMap = googleMap;
+        jagdrevierMap.setMyLocationEnabled(true);
         jagdrevierMap.setOnMyLocationButtonClickListener(this);
         jagdrevierMap.setOnMyLocationClickListener(this);
         enableMyLocation();
@@ -125,6 +148,19 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
         // Marker in Reviermitte setzen
         jagdrevierMap.addMarker(new MarkerOptions().position(revierMitte).title("Revier-Mittelpunkt"));
         jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLng(revierMitte));
+    }
+
+    public void onClickAddJgdEin (View v){
+
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        String locationProvider = LocationManager.NETWORK_PROVIDER;
+
+        Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
+        LatLng current = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+
+        jagdrevierMap.addMarker(new MarkerOptions().position(current).title(""));
+        jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLng(current));
+
     }
 
 
