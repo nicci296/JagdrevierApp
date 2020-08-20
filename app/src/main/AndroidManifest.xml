@@ -28,6 +28,8 @@
             android:label="@string/title_activity_revier_karte"></activity>
         <activity android:name=".Schussjournal"></activity>
         <activity android:name=".Revierverwaltung"></activity>
+
+        <activity android:name=".StatusPop"></activity>
         <activity android:name=".JagdeinrichtungenVerwalten" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
