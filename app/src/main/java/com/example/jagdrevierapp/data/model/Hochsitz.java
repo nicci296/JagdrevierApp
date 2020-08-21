@@ -2,25 +2,28 @@ package com.example.jagdrevierapp.data.model;
 
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 public class Hochsitz {
 
     private String hochsitzName;
-    private double lat;
-    private double lng;
-    private LatLng gps;
+    /*private double lat;
+    private double lng;*/
+    private MarkerOptions markerOpt;
     private boolean isBooked;
     private String bookedBy;
     private boolean isDamaged;
     private boolean isInsectious;
 
+
+
     public Hochsitz() {}
 
-    public Hochsitz(String hochsitzName,double lat, double lng, boolean isBooked, String bookedBy, boolean isDamaged, boolean isInsectious) {
+    public Hochsitz(String hochsitzName,MarkerOptions markerOpt, boolean isBooked, String bookedBy, boolean isDamaged, boolean isInsectious) {
         this.hochsitzName = hochsitzName;
-        /*this.gps = gps;*/
-        this.lat = lat;
-        this.lng = lng;
+       /* this.lat = lat;
+        this.lng = lng;*/
         this.isBooked = isBooked;
         this.bookedBy = bookedBy;
         this.isDamaged = isDamaged;
@@ -36,7 +39,7 @@ public class Hochsitz {
         this.hochsitzName = hochsitzName;
     }
 
-    public double getLat() {
+   /* public double getLat() {
         return lat;
     }
 
@@ -50,11 +53,15 @@ public class Hochsitz {
 
     public void setLng(double lon) {
         this.lng = lng;
+    }*/
+
+    public MarkerOptions getMarkerOpt() {
+        return markerOpt;
     }
 
-    /*public LatLng getGps() {return gps;}
-
-    public void setGps(LatLng gps) { this.gps = gps; }*/
+    public void setMarkerOpt(MarkerOptions markerOpt) {
+        this.markerOpt = markerOpt;
+    }
 
     public boolean isBooked() {
         return isBooked;
