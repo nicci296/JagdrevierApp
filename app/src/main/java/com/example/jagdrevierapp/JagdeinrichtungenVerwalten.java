@@ -29,18 +29,19 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.example.jagdrevierapp.data.model.Hochsitz;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class JagdeinrichtungenVerwalten extends AppCompatActivity implements View.OnClickListener {
     //Const variables
-
     private static final String TAG = "JagdeinrichtungenVer";
     private static final String GPS_POSITION = "GPS-Position";
     private static final String HOCHSITZ_NAME = "HochsitzName";
     private static final String PASS_KEY = "password";
-
-    private final String COLLECTION_KEY ="HochsitzeMichi";
-
+    private static final String COLLECTION_KEY ="HochsitzeMichi";
     public static final String ANONYMOUS = "anonymous";
 
     //general variables
@@ -66,8 +67,8 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity implements Vie
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
 
+    Map<String, Object> data = new HashMap<>();
 
-    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,7 +126,7 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity implements Vie
 
         //onClickListener für Buttons for Jagdeinrichtungen
         //Status Button mit PopUp
-                Button btnStatusHochsitz = findViewById(R.id.btnStatusHochsitz);
+        Button btnStatusHochsitz = findViewById(R.id.btnStatusHochsitz);
         btnStatusHochsitz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -133,26 +134,53 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity implements Vie
                 Bundle extras = new Bundle();
                 extras.putString("sitzname", obj.getHochsitzName());
                 extras.putString("booker", obj.getBookedBy());
-                extras.putBoolean("booked", obj.isBooked());
+                extras.putBoolean("booked", obj.isIsBooked());
                 extras.putBoolean("damage", obj.isDamaged());
                 extras.putBoolean("insect", obj.isInsectious());
                 intent.putExtras(extras);
                 startActivity(intent);
-
             }
         });
 
-
-
-
-
-
         Button btnBook = findViewById(R.id.btnBook);
-        btnBook.setOnClickListener(this);
+        btnBook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(obj.isIsBooked()) {
+                    data.put("isBooked", false);
+                } else {
+                    data.put("isBooked", true);
+                }
+                db.collection(COLLECTION_KEY).document("QkSyOmlxmoGwp03WHUT3")
+                        .set(data, SetOptions.merge());
+            }
+        });
         Button btnDamage = findViewById(R.id.btnDamage);
-        btnDamage.setOnClickListener(this);
+        btnDamage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(obj.isIsBooked()) {
+                    data.put("isDamaged", false);
+                } else {
+                    data.put("isDamaged", true);
+                }
+                db.collection(COLLECTION_KEY).document("QkSyOmlxmoGwp03WHUT3")
+                        .set(data, SetOptions.merge());
+            }
+        });
         Button btnInsect = findViewById(R.id.btnInsect);
-        btnInsect.setOnClickListener(this);
+        btnInsect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(obj.isIsBooked()) {
+                    data.put("isInsectious", false);
+                } else {
+                    data.put("isInsectious", true);
+                }
+                db.collection(COLLECTION_KEY).document("QkSyOmlxmoGwp03WHUT3")
+                        .set(data, SetOptions.merge());
+            }
+        });
         FloatingActionButton addHochsitz = findViewById(R.id.btnAddHochsitz);
         addHochsitz.setOnClickListener(this);
 

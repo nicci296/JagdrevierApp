@@ -52,7 +52,7 @@ public class Hochsitz {
         this.lng = lng;
     }
 
-    public boolean isBooked() {
+    public boolean isIsBooked() {
         return isBooked;
     }
 

@@ -44,8 +44,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
-        android:text="@string/statusHochsitzGebucht"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/statusHochsitzName" />
 
@@ -53,7 +53,19 @@
         android:id="@+id/statusBtnBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="124dp"
+        android:layout_marginTop="100dp"
         android:text="zruck zum Revier"
-        tools:layout_editor_absoluteX="43dp"
-        tools:layout_editor_absoluteY="629dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textHochsitzgesperrt" />
+
+    <TextView
+        android:id="@+id/textHochsitzgesperrt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/statusHochsitzgebucht" />
 </androidx.constraintlayout.widget.ConstraintLayout>
