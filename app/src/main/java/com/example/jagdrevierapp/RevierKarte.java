@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -51,6 +52,9 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
 
     private static final String TAG = "Revierkarte";
     private final String COLLECTION_KEY ="HochsitzeMichi";
+    private static final int COLOR_WHITE_ARGB = 0xffffffff;
+    private static final int COLOR_GREEN_ARGB = 0xff388E3C;
+    private static final int POLYGON_STROKE_WIDTH_PX = 8;
     private EditText jgdeinNmIn;
     /**
      * Request code for location permission request.
@@ -90,7 +94,7 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
         Button jgdeinDmgBtn = findViewById(R.id.jgdeinDmgBtn);
         EditText jgdeinNmIn = findViewById(R.id.jgdeinNameInput);
 
-       /* // Read data from firestore
+        /*// Read data from firestore
         dbHochsitze
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -106,15 +110,10 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
                             Log.w(TAG, "Error getting docs: ", task.getException());
                         }
                     }
-
                 } );*/
     }
 
     //Polygon Styling
-    private static final int COLOR_WHITE_ARGB = 0xffffffff;
-    private static final int COLOR_GREEN_ARGB = 0xff388E3C;
-    private static final int POLYGON_STROKE_WIDTH_PX = 8;
-
     private void stylePolygon(Polygon revierGrenze){
         String type = "";
         if(revierGrenze.getTag() != null){
@@ -163,7 +162,6 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
         revierGrenze.setTag("Revier");
         stylePolygon(revierGrenze);
 
-
         //Kamera zur RevierMitte bewegen und mit Faktor 12 reinzoomen
         /*jagdrevierMap.animateCamera(CameraUpdateFactory.zoomTo(12),2000,null);*/
         jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLngZoom(revierMitte, 14));
@@ -171,6 +169,7 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
         // Marker in Reviermitte setzen
         jagdrevierMap.addMarker(new MarkerOptions().position(revierMitte).title("Revier-Mittelpunkt"));
         jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLng(revierMitte));
+
     }
 
     public void onClickAddJgdEin (View v){
@@ -192,7 +191,7 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
         final MarkerOptions currentLoc = new MarkerOptions().position(current).title("");
 
         Hochsitz kanzel = new Hochsitz
-                ("jgdeinNmIn.getText().toString()",current.latitude, current.longitude, false,"TBA",false,
+                ("Test",current.latitude, current.longitude, false,"TBA",false,
                         false);
 
         dbHochsitze.add(kanzel)
@@ -201,7 +200,7 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
                     public void onSuccess(DocumentReference documentReference) {
                         Toast.makeText(RevierKarte.this, "Jagdeinrichtung hinzugefügt",
                                 Toast.LENGTH_LONG).show();
-                        jgdeinNmIn.getText().clear();
+                        /*jgdeinNmIn.getText().clear();*/
 
                     }
                 })
