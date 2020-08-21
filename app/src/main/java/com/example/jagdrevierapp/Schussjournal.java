@@ -9,8 +9,9 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
-public class Schussjournal extends AppCompatActivity implements View.OnClickListener {
+public class Schussjournal extends AppCompatActivity  {
 
     /**
      * Wilderei durch Michi am 16.08.2020 - 19:22 Uhr
@@ -31,48 +32,59 @@ public class Schussjournal extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schussjournal);
 
-        //von Michi hinzugefügt: Buttons aus Navigation initialisieren
-        Button logoutBtn = findViewById(R.id.logoutBtn);
-        logoutBtn.setOnClickListener(this);
-        Button mapBtn = findViewById(R.id.mapBtn);
-        mapBtn.setOnClickListener(this);
-        Button menuBtn = findViewById(R.id.menuBtn);
-        menuBtn.setOnClickListener(this);
-        Button schussBtn = findViewById(R.id.schussBtn);
-        schussBtn.setOnClickListener(this);
-        Button revierBtn = findViewById(R.id.revierBtn);
-        revierBtn.setOnClickListener(this);
-
-        mAuth = FirebaseAuth.getInstance();
-    }
-
-
-    /**
-     * Navigation eingerichtet, Menü funktioniert noch nicht
-     */
-    @Override
-    public void onClick(View v) {
-        int i = v.getId();
-        if (i == R.id.logoutBtn) {
-            mAuth.signOut();
+        //##########################################################
+        //###    Firebase - Authentication
+        //##########################################################
+        //Initialize Firebase Auth
+        //Firebase instance variables
+        final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser mFirebaseUser = mAuth.getCurrentUser();
+        if (mFirebaseUser == null) {
+            //Nicht eingeloggt, SignIn-Activity wird gestartet
             startActivity(new Intent(this, LoginActivity.class));
-        }
-        if (i == R.id.mapBtn) {
-            startActivity(new Intent(this, RevierKarte.class));
-        }
-        // nur zu testzwecken, da Menübutton etwas mehr in anspruch nehmen wird
-        if (i == R.id.revierBtn) {
-            startActivity(new Intent(this, Revierverwaltung.class));
-            Toast.makeText(this, "Entfällt wenn Menü ok", Toast.LENGTH_SHORT).show();
-        }
-        if (i == R.id.schussBtn) {
-            startActivity(new Intent(this, Schussjournal.class));
-            Toast.makeText(this, "Entfällt wenn Menü ok", Toast.LENGTH_SHORT).show();
-        }
-        if (i == R.id.menuBtn) {
-            Toast.makeText(this, "Imagine: Menü erscheint", Toast.LENGTH_SHORT).show();
+            finish();
+        } else {
+            //general variables
+            String mUsername = mFirebaseUser.getDisplayName();
         }
 
+
+
+        //##########################################################
+        //###    Buttons from Nav-Header
+        //##########################################################
+        //LogOut Button
+        Button logoutBtn = findViewById(R.id.logoutBtn);
+        logoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAuth.signOut();
+                startActivity(new Intent(Schussjournal.this, LoginActivity.class));
+            }
+        });
+
+        //zu Map Button
+        Button mapBtn = findViewById(R.id.mapBtn);
+        mapBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Schussjournal.this, RevierKarte.class));
+            }
+        });
+
+        //zu Schussjournal Button
+        Button schussBtn = findViewById(R.id.schussBtn);
+        schussBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Schussjournal.this, JagdeinrichtungenVerwalten.class));
+            }
+        });
+
+
     }
+
+
+
 
 }

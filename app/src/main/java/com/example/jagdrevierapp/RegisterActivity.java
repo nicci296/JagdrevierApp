@@ -18,30 +18,17 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-public class RegisterActivity extends AppCompatActivity implements
-        View.OnClickListener {
+public class RegisterActivity extends AppCompatActivity {
 
     private static final String TAG = "RegisterActivity";
+    private static final String COLLECTION_KEY = "User";
+
 
     //Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
-
-        //Buttons
-        Button registBtn = findViewById(R.id.registBtn);
-        registBtn.setOnClickListener(this);
-        TextView toSignInBtn =  findViewById(R.id.toSignInText);
-        toSignInBtn.setOnClickListener(this);
-
-        // Initialize Firebase Auth
-        mFirebaseAuth = FirebaseAuth.getInstance();
-    }
 
     //Check if user is already signed in
     @Override
@@ -52,9 +39,57 @@ public class RegisterActivity extends AppCompatActivity implements
         updateUI(currentUser);
     }
 
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_register);
+
+        //##########################################################
+        //###    Firebase - Firestore
+        //##########################################################
+        //Initialize FireStore - Collection Hochsitze
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference colUser = db.collection(COLLECTION_KEY);
+
+        //##########################################################
+        //###    Buttons - Handling Main Functions
+        //##########################################################
+        //Button to complete registration
+        Button registBtn = findViewById(R.id.registBtn);
+        registBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                    EditText email = findViewById(R.id.userMail);
+                    EditText mPwd = findViewById(R.id.userPassword);
+                    EditText mUser = findViewById(R.id.txtNick);
+                    String mail = email.getText().toString().trim();
+                    String pwd = mPwd.getText().toString().trim();
+                    createAccount(mail, pwd);
+
+
+            }
+        });
+
+        // Button to get to SignIn-Activity
+        TextView toSignInBtn =  findViewById(R.id.toSignInText);
+        toSignInBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+            }
+        });
+
+
+    }
+
+    //##########################################################
+    //###    Methods - General
+    //##########################################################
+    // Method to create Account in Firebase-Authentication
     private void createAccount (String mail, String pwd) {
         Log.d(TAG, "createAccount:" + mail);
-        if (!validateForm()) {
+        if (!validateForm(mail, pwd)) {
             return;
         }
         // Für später falls wir ProgressBar noch schaffen beim "hübsch machen"
@@ -82,14 +117,11 @@ public class RegisterActivity extends AppCompatActivity implements
                     }
                 });
     }
-
-
-    private boolean validateForm() {
+    // Method to validate the Views on Layout
+    private boolean validateForm(String mail, String pwd) {
         boolean valid = true;
         EditText email = findViewById(R.id.userMail);
         EditText mPwd = findViewById(R.id.userPassword);
-        String mail = email.getText().toString().trim();
-        String pwd = mPwd.getText().toString().trim();
 
         if (TextUtils.isEmpty(mail)) {
             email.setError("Required.");
@@ -106,7 +138,7 @@ public class RegisterActivity extends AppCompatActivity implements
         }
         return valid;
     }
-
+    // Methode to handle User
     private void updateUI(FirebaseUser user) {
         // Für später falls wir ProgressBar noch schaffen beim "hübsch machen"
         //hideProgressBar();
@@ -117,22 +149,4 @@ public class RegisterActivity extends AppCompatActivity implements
                     Toast.LENGTH_SHORT).show();
         }
 }
-
-    @Override
-    public void onClick(View v) {
-        EditText email = findViewById(R.id.userMail);
-        EditText mPwd = findViewById(R.id.userPassword);
-        String mail = email.getText().toString().trim();
-        String pwd = mPwd.getText().toString().trim();
-
-        int i = v.getId();
-        if (i == R.id.registBtn) {
-            createAccount(mail, pwd);
-        }
-        if (i == R.id.toSignInText) {
-            startActivity(new Intent(this, LoginActivity.class));
-
-        }
-    }
-
 }

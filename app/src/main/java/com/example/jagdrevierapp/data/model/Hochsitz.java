@@ -52,7 +52,7 @@ public class Hochsitz {
         this.lng = lng;
     }
 
-    public boolean isBooked() {
+    public boolean isIsBooked() {
         return isBooked;
     }
 
@@ -68,7 +68,7 @@ public class Hochsitz {
         this.bookedBy = bookedBy;
     }
 
-    public boolean isDamaged() {
+    public boolean isIsDamaged() {
         return isDamaged;
     }
 
@@ -76,7 +76,7 @@ public class Hochsitz {
         isDamaged = damaged;
     }
 
-    public boolean isInsectious() {
+    public boolean isIsInsectious() {
         return isInsectious;
     }
 

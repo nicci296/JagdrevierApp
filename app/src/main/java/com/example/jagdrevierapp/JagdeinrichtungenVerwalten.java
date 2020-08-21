@@ -35,19 +35,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class JagdeinrichtungenVerwalten extends AppCompatActivity implements View.OnClickListener {
+public class JagdeinrichtungenVerwalten extends AppCompatActivity {
     //Const variables
     private static final String TAG = "JagdeinrichtungenVer";
-    private static final String GPS_POSITION = "GPS-Position";
-    private static final String HOCHSITZ_NAME = "HochsitzName";
-    private static final String PASS_KEY = "password";
     private static final String COLLECTION_KEY ="HochsitzeMichi";
-    public static final String ANONYMOUS = "anonymous";
 
-    //general variables
-    private String mUsername;
-    private GoogleSignInClient mSignInClient;
-    private String hochsitzname;
+    private String docname;
 
         //View declaration
         private TextView textAuswahlHochsitze;
@@ -57,15 +50,8 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity implements Vie
         private Hochsitz obj;
 
 
-    //Initialize FireStore
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference dbHochsitze = db.collection(COLLECTION_KEY);
-    private DocumentReference docRefHochsitze = dbHochsitze.document();
 
 
-    //Firebase instance variables
-    private FirebaseAuth mFirebaseAuth;
-    private FirebaseUser mFirebaseUser;
 
     Map<String, Object> data = new HashMap<>();
 
@@ -74,37 +60,69 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity implements Vie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_jagdeinrichtungen_verwalten);
 
-        //onClickListener für Buttons for Nav
-        Button logoutBtn = findViewById(R.id.logoutBtn);
-        logoutBtn.setOnClickListener(this);
-        Button mapBtn = findViewById(R.id.mapBtn);
-        mapBtn.setOnClickListener(this);
-        Button menuBtn = findViewById(R.id.menuBtn);
-        menuBtn.setOnClickListener(this);
-        Button schussBtn = findViewById(R.id.schussBtn);
-        schussBtn.setOnClickListener(this);
-        Button revierBtn = findViewById(R.id.revierBtn);
-        revierBtn.setOnClickListener(this);
-
-
-
-
-        // TextViews to create some texts
-        textAuswahlHochsitze = findViewById(R.id.textAuswahlHochsitze);
-
-        textHochsitzName = findViewById(R.id.textHochsitzName);
-        textAuswahlHochsitze.setText("Alle Hochsitze");
-
+        //##########################################################
+        //###    Firebase - Authentication
+        //##########################################################
         //Initialize Firebase Auth
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        mFirebaseUser = mFirebaseAuth.getCurrentUser();
+        //Firebase instance variables
+        final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser mFirebaseUser = mAuth.getCurrentUser();
         if (mFirebaseUser == null) {
             //Nicht eingeloggt, SignIn-Activity wird gestartet
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         } else {
-            mUsername = mFirebaseUser.getDisplayName();
+            //general variables
+            String mUsername = mFirebaseUser.getDisplayName();
         }
+
+
+
+        //##########################################################
+        //###    Buttons from Nav-Header
+        //##########################################################
+        //LogOut Button
+        Button logoutBtn = findViewById(R.id.logoutBtn);
+        logoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAuth.signOut();
+                startActivity(new Intent(JagdeinrichtungenVerwalten.this, LoginActivity.class));
+                }
+        });
+
+        //zu Map Button
+        Button mapBtn = findViewById(R.id.mapBtn);
+        mapBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(JagdeinrichtungenVerwalten.this, RevierKarte.class));
+            }
+        });
+
+        //zu Schussjournal Button
+        Button schussBtn = findViewById(R.id.schussBtn);
+        schussBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(JagdeinrichtungenVerwalten.this, Schussjournal.class));
+            }
+        });
+
+
+        //##########################################################
+        //###    Firebase - Firestore
+        //##########################################################
+        //Initialize FireStore - Collection Hochsitze
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference dbHochsitze = db.collection(COLLECTION_KEY);
+
+        // TextViews to create some texts
+        textAuswahlHochsitze = findViewById(R.id.textAuswahlHochsitze);
+        textHochsitzName = findViewById(R.id.textHochsitzName);
+        textAuswahlHochsitze.setText("Alle Hochsitze");
+
+
 
         // Read data from firestore
         dbHochsitze
@@ -116,6 +134,8 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity implements Vie
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         obj = document.toObject(Hochsitz.class);
                         textHochsitzName.setText(obj.getHochsitzName());
+                        textHochsitzName.setTextSize(20);
+                        docname = document.toString();
                     }
                 } else {
                     Log.w(TAG, "Error getting docs: ", task.getException());
@@ -124,7 +144,9 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity implements Vie
 
                 } );
 
-        //onClickListener für Buttons for Jagdeinrichtungen
+        //##########################################################
+        //###    Buttons - for HochsitzNotes
+        //##########################################################
         //Status Button mit PopUp
         Button btnStatusHochsitz = findViewById(R.id.btnStatusHochsitz);
         btnStatusHochsitz.setOnClickListener(new View.OnClickListener() {
@@ -135,31 +157,41 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity implements Vie
                 extras.putString("sitzname", obj.getHochsitzName());
                 extras.putString("booker", obj.getBookedBy());
                 extras.putBoolean("booked", obj.isIsBooked());
-                extras.putBoolean("damage", obj.isDamaged());
-                extras.putBoolean("insect", obj.isInsectious());
+                extras.putBoolean("damage", obj.isIsDamaged());
+                extras.putBoolean("insect", obj.isIsInsectious());
                 intent.putExtras(extras);
                 startActivity(intent);
             }
         });
 
+        //Button to book hochsitz
         Button btnBook = findViewById(R.id.btnBook);
         btnBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(obj.isIsBooked()) {
                     data.put("isBooked", false);
+                    // Nutzer auslesen --> Name bekommen
+                    // Daten an firestore --> value "Name" für variable "booked by"
+                    // Toast Nachricht: "WMH" + name + "der Ansitz ist für Dich gebucht!"
                 } else {
                     data.put("isBooked", true);
+                    // Nutzer auslesen --> Name bekommen
+                    // Daten von firestore --> value "name" von variable "bookedBy"
+                    // Toast Nachricht: "Sorry " + name + "hier sitzt heute Nacht schon " + "bookedBy"
                 }
                 db.collection(COLLECTION_KEY).document("QkSyOmlxmoGwp03WHUT3")
                         .set(data, SetOptions.merge());
             }
         });
+
+
+        // Button to announce a damaged hochsitz
         Button btnDamage = findViewById(R.id.btnDamage);
         btnDamage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(obj.isIsBooked()) {
+                if(obj.isIsDamaged()) {
                     data.put("isDamaged", false);
                 } else {
                     data.put("isDamaged", true);
@@ -168,66 +200,31 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity implements Vie
                         .set(data, SetOptions.merge());
             }
         });
+
+        // Button to announce insects inside hochsitz
         Button btnInsect = findViewById(R.id.btnInsect);
         btnInsect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(obj.isIsBooked()) {
+                if(obj.isIsInsectious()) {
                     data.put("isInsectious", false);
+                    obj.setInsectious(true);
                 } else {
                     data.put("isInsectious", true);
                 }
-                db.collection(COLLECTION_KEY).document("QkSyOmlxmoGwp03WHUT3")
+                db.collection(COLLECTION_KEY).document(docname)
                         .set(data, SetOptions.merge());
             }
         });
+
+        // Button to add new Hochsitz
         FloatingActionButton addHochsitz = findViewById(R.id.btnAddHochsitz);
-        addHochsitz.setOnClickListener(this);
+        addHochsitz.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                textAuswahlHochsitze.setText("Hi there I am using WhatsApp!");
+            }
+        });
 
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.logoutBtn:
-                mFirebaseAuth.signOut();
-                mSignInClient.signOut();
-
-                mUsername = ANONYMOUS;
-                startActivity(new Intent(this, LoginActivity.class));
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    /**
-     * Navigation eingerichtet, Menü funktioniert noch nicht
-     */
-    @Override
-    public void onClick(View v) {
-        int i = v.getId();
-        if (i == R.id.logoutBtn) {
-            mFirebaseAuth.signOut();
-            startActivity(new Intent(this, LoginActivity.class));
-        }
-        if (i == R.id.mapBtn) {
-            startActivity(new Intent(this, RevierKarte.class));
-
-        }
-        // nur zu testzwecken, da Menübutton etwas mehr in anspruch nehmen wird
-        if (i == R.id.revierBtn) {
-            startActivity(new Intent(this, Revierverwaltung.class));
-            Log.d(TAG, "Entfällt wenn Menü funktioniert");
-        }
-        if (i == R.id.schussBtn) {
-            startActivity(new Intent(this, Schussjournal.class));
-            Toast.makeText(this, "Entfällt wenn Menü ok", Toast.LENGTH_SHORT).show();
-        }
-        if (i == R.id.menuBtn) {
-            Toast.makeText(this, "Imagine: Menü erscheint", Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "Entfällt wenn Menü funktioniert");
-        }
     }
 }
