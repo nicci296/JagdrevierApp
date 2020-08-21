@@ -8,7 +8,7 @@ public class Hochsitz {
     private String hochsitzName;
     private double lat;
     private double lng;
-    /*private LatLng gps;*/
+    private LatLng gps;
     private boolean isBooked;
     private String bookedBy;
     private boolean isDamaged;
@@ -18,7 +18,7 @@ public class Hochsitz {
 
     public Hochsitz(String hochsitzName,double lat, double lng, boolean isBooked, String bookedBy, boolean isDamaged, boolean isInsectious) {
         this.hochsitzName = hochsitzName;
-       /* this.gps = gps;*/
+        /*this.gps = gps;*/
         this.lat = lat;
         this.lng = lng;
         this.isBooked = isBooked;
@@ -52,6 +52,10 @@ public class Hochsitz {
         this.lng = lng;
     }
 
+    /*public LatLng getGps() {return gps;}
+
+    public void setGps(LatLng gps) { this.gps = gps; }*/
+
     public boolean isBooked() {
         return isBooked;
     }
@@ -84,9 +88,7 @@ public class Hochsitz {
         isInsectious = insectious;
     }
 
-    /*public LatLng getGps() {return gps;}
 
-    public void setGps(LatLng gps) { this.gps = gps; }*/
 
 
 
