@@ -24,17 +24,18 @@
             android:text="@string/add_Jagdeinrichtung_Btn"
             android:background="#2196F3" android:onClick="onClickAddJgdEin"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="16dp" android:layout_marginTop="26dp"
-            app:layout_constraintTop_toBottomOf="@+id/revier"/>
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="28dp" app:layout_constraintTop_toBottomOf="@+id/jgdeinShow"/>
+
     <Button android:id="@+id/jgdeinDelBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
             android:focusable="true"
             android:text="@string/del_Jagdeinrichtung_Btn"
-            android:layout_marginTop="104dp" app:layout_constraintTop_toBottomOf="@+id/revier"
+            android:layout_marginTop="180dp" app:layout_constraintTop_toBottomOf="@+id/revier"
             android:background="#F44336" app:layout_constraintStart_toEndOf="@+id/jgdeinDmgBtn"
-            android:layout_marginStart="30dp"/>
+            android:layout_marginStart="24dp"/>
     <Button android:id="@+id/jgdeinDmgBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -51,9 +52,18 @@
               android:hint="@string/kanzel_Name"
               android:autofillHints=""
               android:inputType="text"
-              android:layout_marginBottom="33dp"
+              android:layout_marginBottom="28dp"
               app:layout_constraintBottom_toTopOf="@+id/jgdeinDelBtn"
               app:layout_constraintStart_toEndOf="@+id/jgdeinAddBtn"
-              android:layout_marginStart="30dp"/>
+              android:layout_marginStart="32dp"/>
+    <Button android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/jgdeinShow"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="@string/shw_Jagdeinrichtung_Btn"
+            android:layout_marginTop="28dp"
+            app:layout_constraintTop_toBottomOf="@+id/revier" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="16dp" android:background="#9CE844" android:onClick="onClickShowAll"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
