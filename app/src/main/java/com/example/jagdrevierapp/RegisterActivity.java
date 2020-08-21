@@ -2,6 +2,7 @@ package com.example.jagdrevierapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,10 +11,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,36 +25,38 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+
 public class RegisterActivity extends AppCompatActivity {
 
     private static final String TAG = "RegisterActivity";
     private static final String COLLECTION_KEY = "User";
+    private static final String NICK = "Nick";
+    private static final String PAECHTER = "Paechter";
+    private static final String REGISTERED = "registered";
+    private static final String MAIL = "Mail";
 
-
+    //##########################################################
+    //###    Firebase - Authentication
+    //##########################################################
     //Firebase instance variables
     private FirebaseAuth mFirebaseAuth;
 
-    //Check if user is already signed in
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mFirebaseAuth.getCurrentUser();
-        updateUI(currentUser);
-    }
+    //##########################################################
+    //###    Firebase - Firestore
+    //##########################################################
+    //Initialize FireStore - Collection Hochsitze
+    final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    final CollectionReference colUser = db.collection(COLLECTION_KEY);
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
-        //##########################################################
-        //###    Firebase - Firestore
-        //##########################################################
-        //Initialize FireStore - Collection Hochsitze
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference colUser = db.collection(COLLECTION_KEY);
 
         //##########################################################
         //###    Buttons - Handling Main Functions
@@ -63,11 +69,12 @@ public class RegisterActivity extends AppCompatActivity {
                     EditText email = findViewById(R.id.userMail);
                     EditText mPwd = findViewById(R.id.userPassword);
                     EditText mUser = findViewById(R.id.txtNick);
+                    SwitchCompat pachter = findViewById(R.id.switchPaechter);
                     String mail = email.getText().toString().trim();
                     String pwd = mPwd.getText().toString().trim();
-                    createAccount(mail, pwd);
-
-
+                    String user = mUser.getText().toString().trim();
+                    boolean paechter = pachter.isChecked();
+                    createAccount(mail, pwd, user, paechter);
             }
         });
 
@@ -86,10 +93,11 @@ public class RegisterActivity extends AppCompatActivity {
     //##########################################################
     //###    Methods - General
     //##########################################################
+
     // Method to create Account in Firebase-Authentication
-    private void createAccount (String mail, String pwd) {
+    private void createAccount (String mail, String pwd, String user, boolean paechter) {
         Log.d(TAG, "createAccount:" + mail);
-        if (!validateForm(mail, pwd)) {
+        if (!validateForm(mail, pwd, user)) {
             return;
         }
         // Für später falls wir ProgressBar noch schaffen beim "hübsch machen"
@@ -116,12 +124,39 @@ public class RegisterActivity extends AppCompatActivity {
                         //hideProgressBar();
                     }
                 });
+
+        Calendar c = Calendar.getInstance();
+        Map<String, Object> userJaeger = new HashMap<String, Object>();
+        userJaeger.put(NICK, user);
+        userJaeger.put(PAECHTER, paechter);
+        userJaeger.put(REGISTERED, c);
+        userJaeger.put(MAIL, mail);
+
+
+        colUser.document(user).set(userJaeger)
+                .addOnSuccessListener(new OnSuccessListener<Void>(){
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(RegisterActivity.this,
+                                "Jäger wurde angelegt!",
+                                Toast.LENGTH_LONG).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    public void onFailure(@NonNull Exception e){
+                        Toast.makeText(RegisterActivity.this,
+                                "Jäger konnte nicht angelegt werden!",
+                                Toast.LENGTH_LONG).show();
+                        Log.d(TAG, e.toString());
+                    }
+                });
     }
+
     // Method to validate the Views on Layout
-    private boolean validateForm(String mail, String pwd) {
+    private boolean validateForm(String mail, String pwd, String user) {
         boolean valid = true;
         EditText email = findViewById(R.id.userMail);
         EditText mPwd = findViewById(R.id.userPassword);
+        EditText mUser = findViewById(R.id.txtNick);
 
         if (TextUtils.isEmpty(mail)) {
             email.setError("Required.");
@@ -136,8 +171,15 @@ public class RegisterActivity extends AppCompatActivity {
         } else {
             mPwd.setError(null);
         }
+        if (TextUtils.isEmpty(user)) {
+            mUser.setError("Required.");
+            valid = false;
+        } else {
+            mUser.setError(null);
+        }
         return valid;
     }
+
     // Methode to handle User
     private void updateUI(FirebaseUser user) {
         // Für später falls wir ProgressBar noch schaffen beim "hübsch machen"

@@ -19,8 +19,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class LoginActivity extends AppCompatActivity implements
-    View.OnClickListener {
+public class LoginActivity extends AppCompatActivity{
 
     private static final String TAG = "LoginActivity";
 
@@ -33,14 +32,34 @@ public class LoginActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //Buttons
-        Button logInBtn = findViewById(R.id.LoginBtn);
-        logInBtn.setOnClickListener(this);
-        TextView toRegisterBtn = findViewById(R.id.toRegisterText);
-        toRegisterBtn.setOnClickListener(this);
-
         // Initialize Firebase Auth
         mFirebaseAuth = FirebaseAuth.getInstance();
+
+        final EditText email = findViewById(R.id.userMail);
+        final EditText mPwd = findViewById(R.id.userPassword);
+
+        final String mail = email.getText().toString().trim();
+        final String pwd = mPwd.getText().toString().trim();
+
+        //Buttons
+
+        // Button to start the login-prozedure
+        Button logInBtn = findViewById(R.id.LoginBtn);
+        logInBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                signIn(mail, pwd);
+            }
+        });
+
+        // Text as Button to get to Register
+        TextView toRegisterBtn = findViewById(R.id.toRegisterText);
+        toRegisterBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+            }
+        });
     }
 
     //Check if user is already signed in
@@ -52,45 +71,14 @@ public class LoginActivity extends AppCompatActivity implements
         updateUI(currentUser);
     }
 
-    private void createAccount (String mail, String pwd) {
-        Log.d(TAG, "createAccount:" + mail);
-        if (!validateForm()) {
+    private void signIn(String mail, String pwd) {
+        Log.d(TAG, "signIn:" + mail);
+        if (!validateForm(mail, pwd)) {
             return;
         }
         // Für später falls wir ProgressBar noch schaffen beim "hübsch machen"
         //showProgressBar();
-
-        // Create User with Mail
-        mFirebaseAuth.createUserWithEmailAndPassword(mail, pwd)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            //User gets signed in by updating UI
-                            Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = mFirebaseAuth.getCurrentUser();
-                            updateUI(user);
-                        } else {
-                            //Failing sign in display the following Message
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            updateUI(null);
-                        }
-                        // Für später falls wir ProgressBar noch schaffen beim "hübsch machen"
-                        //hideProgressBar();
-                    }
-                });
-    }
-
-    private void signIn(String email, String password) {
-        Log.d(TAG, "signIn:" + email);
-        if (!validateForm()) {
-            return;
-        }
-        // Für später falls wir ProgressBar noch schaffen beim "hübsch machen"
-        //showProgressBar();
-        mFirebaseAuth.signInWithEmailAndPassword(email, password)
+        mFirebaseAuth.signInWithEmailAndPassword(mail, pwd)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -108,17 +96,10 @@ public class LoginActivity extends AppCompatActivity implements
                 });
     }
 
-    private void signOut() {
-        mFirebaseAuth.signOut();
-        updateUI(null);
-    }
-
-    private boolean validateForm() {
+    private boolean validateForm(String mail, String pwd) {
         boolean valid = true;
         EditText email = findViewById(R.id.userMail);
         EditText mPwd = findViewById(R.id.userPassword);
-        String mail = email.getText().toString().trim();
-        String pwd = mPwd.getText().toString().trim();
 
         if (TextUtils.isEmpty(mail)) {
             email.setError("Required.");
@@ -148,22 +129,4 @@ public class LoginActivity extends AppCompatActivity implements
         }
 
     }
-
-    @Override
-    public void onClick(View v) {
-        EditText email = findViewById(R.id.userMail);
-        EditText mPwd = findViewById(R.id.userPassword);
-        String mail = email.getText().toString().trim();
-        String pwd = mPwd.getText().toString().trim();
-
-        int i = v.getId();
-        if (i == R.id.toRegisterText) {
-            startActivity(new Intent(this, RegisterActivity.class));
-        }
-        if (i == R.id.LoginBtn) {
-            signIn(mail, pwd);
-
-        }
-    }
-
 }
