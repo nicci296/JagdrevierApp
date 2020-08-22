@@ -54,9 +54,9 @@ public class RegisterActivity extends AppCompatActivity {
                     EditText email = findViewById(R.id.userMail);
                     EditText mPwd = findViewById(R.id.userPassword);
                     EditText mUser = findViewById(R.id.txtNick);
-                    //Switch pachter = findViewById(R.id.switch1);
+                    Switch pachter = findViewById(R.id.switch1);
                     if (validateForm(email.getText().toString().trim(), mPwd.getText().toString().trim(), mUser.getText().toString().trim())) {
-                        createAccount(email.getText().toString().trim(), mPwd.getText().toString().trim(), mUser.getText().toString().trim(), true);
+                        createAccount(email.getText().toString().trim(), mPwd.getText().toString().trim(), mUser.getText().toString().trim(), pachter.isChecked());
                     } else {
                         Toast.makeText(RegisterActivity.this, "Bitte alle Felder ausfüllen.", Toast.LENGTH_SHORT).show();
                     }

@@ -63,5 +63,10 @@
     <string name="statusHochsitzGebucht">Hochsitz ist gebucht:</string>
     <string name="switchPächter">Pächter</string>
     <string name="nickName">Nickname</string>
+    <string name="btnStat">Status</string>
+    <string name="btnBook">book</string>
+    <string name="btnDamn">damn</string>
+    <string name="btnInsect">Inst</string>
+    <string name="txtHochsitzname">Hier könnte ihre Werbung stehen</string>
 
 </resources>
