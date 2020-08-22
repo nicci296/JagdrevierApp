@@ -55,8 +55,8 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
     //Keys
     private static final String TAG = "Revierkarte";
     private final String COLLECTION_KEY = "HochsitzeMichi";
-    /*private static final int COLOR_WHITE_ARGB = 0xffffffff;*/
-    private static final int COLOR_GREEN_ARGB = 0xff388E3C;
+    private static final int COLOR_WHITE_ARGB = 0xffffffff;
+    /*private static final int COLOR_GREEN_ARGB = 0xff388E3C;*/
     private static final int POLYGON_STROKE_WIDTH_PX = 8;
     /**
      * Request code for location permission request.
@@ -126,7 +126,7 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
         /*int fillColor = COLOR_WHITE_ARGB;*/
 
         revierGrenze.setStrokeWidth(POLYGON_STROKE_WIDTH_PX);
-        revierGrenze.setStrokeColor(COLOR_GREEN_ARGB);
+        revierGrenze.setStrokeColor(COLOR_WHITE_ARGB);
         /*revierGrenze.setFillColor(COLOR_WHITE_ARGB);*/
     }
 
@@ -220,7 +220,10 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
          * Damit hinterher ein Marker mit diesen Koordinaten gesetzt werden kann, wird zusätzlich ein LatLng-Objekt
          * definiert, welches die Koordinaten aus dem GeoPoint bezieht.
          */
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager
+        .PERMISSION_GRANTED && ActivityCompat
+                .checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -249,48 +252,76 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
          *Initialisierung des in der Firebase zu speichernden Objekts vom Typ Hochsitz mit denen im Klassen-Constructor
          *festgelegten Attributen.
          */
-        Hochsitz kanzel = new Hochsitz
+        final Hochsitz kanzel = new Hochsitz
                 (currentLoc.getTitle(),current, false,"TBA",false,
                         false);
 
         /**
+         * ****************20.08.20 Nico********************************************************************
+         * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
          * Speichern des Hochsitzobjects in der Collection dbHochsitz.
          * Über .document(inputText).set(kanzel) wird die ID in der DB mit dem Text aus dem EditText gefüllt.
          * Soll Firebase eine eigene ID generieren, müsste auf dbHochsitz.add(kanzel) geändert werden.
          * Wenn das Objekt erfolgreich gespeichert werden konnte, wird ein Marker an der aktuellen Position
          * (currentLoc) auf der Karte gesetzt und die Kamera schwenkt zum neuen Marker rüber.
          * Abschließend wird die EditText-View wieder geleert.
+         * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+         * ***************UPDATE 22.08.20 Nico**************************************************************
+         * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+         * Bevor der Datensatz gespeichert wird, wird über einen Datenabruf (.get()) mittels einer Query getestest,
+         * ob bereits ein Revier mit dem eingegebenen Namen in der Firebase existiert.
+         * @see #dbHochsitze.whereEqualTo(String field, Object value)
+         * Ist ein solches Document bereits vorhanden, wird ein Toast ausgegeben und return ausgelöst.
+         * Im Anschluss erfolgt das oben beschriebene Speichern.
          */
-        dbHochsitze.document(inputText).set(kanzel)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(RevierKarte.this, "Jagdeinrichtung hinzugefügt",
+        Query query = dbHochsitze.whereEqualTo("hochsitzName", inputText);
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Toast.makeText(RevierKarte.this, R.string.jagdeinrichtung_exists,
                                 Toast.LENGTH_LONG).show();
-                        jagdrevierMap.addMarker(currentLoc);
-                        jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                        Log.d(TAG, document.getId() + " => " + document.getData());
                         jgdeinName.getText().clear();
+                        return;
+                    }
+                }
+                dbHochsitze.document(inputText).set(kanzel)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Toast.makeText(RevierKarte.this, R.string.jagdeinrichtung_saved,
+                                            Toast.LENGTH_LONG).show();
+                                    jagdrevierMap.addMarker(currentLoc);
+                                    jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                                    jgdeinName.getText().clear();
 
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(RevierKarte.this, "Jagdeinrichtung konnte nicht hinzugefügt werden",
-                                Toast.LENGTH_LONG).show();
-                    }
-                });
+                                }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(RevierKarte.this, "Jagdeinrichtung konnte nicht hinzugefügt werden",
+                                            Toast.LENGTH_LONG).show();
+                                }
+                        });
+            }
+        });
     }
 
     //Zeigt alle in der Firebase gespeicherten Objekte vom Typ Hochsitz auf der Karte als Marker
     public void onClickShowAll(View v){
 
         /**
+         * **************************22.08.20 Nico*****************************************************************
+         * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
          * dbHochsitze.get() ruft die gesamte Collection auf.
          * der onCompleteListener löst eine for-Schleife aus, welche jedes hinterlegte document der collection wieder
          * in ein Objekt vom Typ Hochsitz umwandelt.
          * Enthalten die Objekte einen nicht-leeren GeoPoint (getGPS) wird der Geopoint in ein LatLng Objekt übergeben,
          * um einen Marker an dieser Position zu setzen.
+         * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
          */
         dbHochsitze.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -336,28 +367,50 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
             return;
         }
 
-        //Löschen funktioniert, allerdings kommt auch Success-Toast, wenn der eingegebene Name nicht existiert
-        dbHochsitze.document(inputText)
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
-                        Toast.makeText
-                                (RevierKarte.this, R.string.data_Del_Success,
-                                        Toast.LENGTH_LONG).show();
-                        jgdeinOut.getText().clear();
+        /**
+         * *******************22.08.20 Nico************************************************************
+         * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+         * Wie beim Hinzufügen in der onClickAddJgdEin-Methode wird im onComplete-Callback zuerst über eine Query ein
+         * document aus der firebase geholt, welches im field hochsitzName den Wert aus dem EditText hat.
+         * Liegt ein solches Document in der Firebase, wird es per .delete() gelöscht und ein return
+         * ausgelöst.
+         * Wird der Task aus dem Callback nicht erfolgreich beendet, wird ein Toast augerufen, welcher auf ein
+         * nicht existentes Document hinweist.
+         * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+         */
+        Query query = dbHochsitze.whereEqualTo("hochsitzName", inputText);
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        dbHochsitze.document(inputText)
+                                .delete()
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                                        Toast.makeText
+                                                (RevierKarte.this, R.string.data_Del_Success,
+                                                        Toast.LENGTH_LONG).show();
+                                        jgdeinOut.getText().clear();
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Error deleting document", e);
+                                    }
+                                });
+                                return;
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error deleting document", e);
-                        Toast.makeText
-                                (RevierKarte.this, R.string.data_Del_Fail,
-                                        Toast.LENGTH_LONG).show();
-                    }
-                });
+                }
+                Toast.makeText
+                        (RevierKarte.this, R.string.data_Del_Fail,
+                                Toast.LENGTH_LONG).show();
+                jgdeinOut.getText().clear();
+            }
+        });
 
     }
 
@@ -365,10 +418,13 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
     //---------------------copy pasta der Permissions aus der Google API-----------------------------------------------
 
     /**
+     * *******************************18.08.20 Nico****************************************************************
+     * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
      * Damit die folgenden Methoden genutzt werden können, wird die PermissionUtils-Class benötigt.
      * Diese kann selbst implementiert werden.
      * Für den Projektumfang wurde der Klassen-Code aus der Google API von GitHub übernommen
      * https://github.com/googlemaps/android-samples/blob/master/ApiDemos/java/app/src/gms/java/com/example/mapdemo/PermissionUtils.java
+     * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
      */
 
     /**
