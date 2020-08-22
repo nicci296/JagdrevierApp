@@ -10,13 +10,13 @@
         android:id="@+id/btnAddHochsitz"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="60dp"
-        android:layout_marginBottom="60dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="30dp"
         android:clickable="true"
+        android:focusable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_input_add"
-        android:focusable="true" />
+        app:srcCompat="@android:drawable/ic_input_add" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/navHeader"
@@ -105,69 +105,21 @@
             android:textAlignment="center" />
     </LinearLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/HochsitzLayout"
+    <ScrollView
+        android:id="@+id/scrollHochsitz"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="90dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
-        <Button
-            android:id="@+id/btnStatusHochsitz"
-            android:layout_width="58dp"
-            android:layout_height="49dp"
-            android:layout_marginStart="8dp"
-            android:text="@string/btnStat"
-            app:layout_constraintEnd_toStartOf="@+id/textHochsitzName"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textHochsitzName" />
-
-        <TextView
-            android:id="@+id/textHochsitzName"
-            android:layout_width="102dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="16dp"
-            android:text="@string/txtHochsitzname"
-            android:textAlignment="center"
-            app:layout_constraintEnd_toStartOf="@+id/btnBook"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/btnStatusHochsitz"
-            app:layout_constraintTop_toTopOf="@+id/btnBook" />
-
-        <Button
-            android:id="@+id/btnDamage"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="8dp"
-            android:text="@string/btnDamn"
-            app:layout_constraintEnd_toStartOf="@+id/btnInsect"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/btnBook"
-            app:layout_constraintTop_toTopOf="@+id/btnInsect" />
-
-        <Button
-            android:id="@+id/btnInsect"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="8dp"
-            android:text="@string/btnInsect"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/btnDamage"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/btnBook"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="16dp"
-            android:text="@string/btnBook"
-            app:layout_constraintEnd_toStartOf="@+id/btnDamage"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/textHochsitzName"
-            app:layout_constraintTop_toTopOf="@+id/btnDamage" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:id="@+id/orderLayoutHochsitze"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"/>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

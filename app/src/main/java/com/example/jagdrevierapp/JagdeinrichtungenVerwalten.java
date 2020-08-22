@@ -2,15 +2,19 @@ package com.example.jagdrevierapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Layout;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,9 +31,12 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import com.example.jagdrevierapp.data.model.Hochsitz;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
+
+import org.xmlpull.v1.XmlPullParser;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,16 +49,9 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
 
     private String docname;
 
-        //View declaration
-        private TextView textAuswahlHochsitze;
-        private TextView textHochsitzName;
 
         //Object declaration
         private Hochsitz obj;
-
-
-
-
 
     Map<String, Object> data = new HashMap<>();
 
@@ -115,13 +115,11 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
         //##########################################################
         //Initialize FireStore - Collection Hochsitze
         final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference dbHochsitze = db.collection(COLLECTION_KEY);
+        final CollectionReference dbHochsitze = db.collection(COLLECTION_KEY);
 
         // TextViews to create some texts
-        textAuswahlHochsitze = findViewById(R.id.textAuswahlHochsitze);
-        textHochsitzName = findViewById(R.id.textHochsitzName);
+        final TextView textAuswahlHochsitze = findViewById(R.id.textAuswahlHochsitze);
         textAuswahlHochsitze.setText("Alle Hochsitze");
-
 
 
         // Read data from firestore
@@ -130,12 +128,92 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                final LinearLayout orderLayout = findViewById(R.id.orderLayoutHochsitze);
                 if (task.isSuccessful()){
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         obj = document.toObject(Hochsitz.class);
-                        textHochsitzName.setText(obj.getHochsitzName());
-                        textHochsitzName.setTextSize(20);
-                        docname = document.toString();
+
+                        //Anlegen jedes Layouts pro Schleifendurchlauf
+                        View viewHochsitze = getLayoutInflater().inflate(R.layout.hochsitz_layout, orderLayout, false );
+                        orderLayout.addView(viewHochsitze);
+
+                        // Vergeben des Hochsitznamens
+                        TextView txtHochsitzName = viewHochsitze.findViewById(R.id.textHochsitzName);
+                        txtHochsitzName.setText(obj.getHochsitzName());
+                        txtHochsitzName.setTextSize(20);
+
+                        // Status Button initialisieren
+                        Button btnStatHochsitz = viewHochsitze.findViewById(R.id.btnStatusHochsitz);
+                        btnStatHochsitz.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(JagdeinrichtungenVerwalten.this, StatusPop.class);
+                                Bundle extras = new Bundle();
+                                extras.putString("sitzname", obj.getHochsitzName());
+                                extras.putString("booker", obj.getBookedBy());
+                                extras.putBoolean("booked", obj.isIsBooked());
+                                extras.putBoolean("damage", obj.isIsDamaged());
+                                extras.putBoolean("insect", obj.isIsInsectious());
+                                intent.putExtras(extras);
+                                startActivity(intent);
+                            }
+                        });
+
+                        docname = document.getId();
+                        textAuswahlHochsitze.setText(docname);
+
+                        //Button to book hochsitz
+                        Button btnBook = findViewById(R.id.btnBook);
+                        btnBook.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if(obj.isIsBooked()) {
+                                    data.put("IsBooked", false);
+                                    // Nutzer auslesen --> Name bekommen
+                                    // Daten an firestore --> value "Name" für variable "booked by"
+                                    // Toast Nachricht: "WMH" + name + "der Ansitz ist für Dich gebucht!"
+                                } else {
+                                    data.put("IsBooked", true);
+                                    // Nutzer auslesen --> Name bekommen
+                                    // Daten von firestore --> value "name" von variable "bookedBy"
+                                    // Toast Nachricht: "Sorry " + name + "hier sitzt heute Nacht schon " + "bookedBy"
+                                }
+                                dbHochsitze.document(docname)
+                                        .set(data, SetOptions.merge());
+                            }
+                        });
+
+
+                        // Button to announce a damaged hochsitz
+                        Button btnDamage = findViewById(R.id.btnDamage);
+                        btnDamage.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if(obj.isIsDamaged()) {
+                                    data.put("isDamaged", false);
+                                } else {
+                                    data.put("isDamaged", true);
+                                }
+                                db.collection(COLLECTION_KEY).document(docname)
+                                        .set(data, SetOptions.merge());
+                            }
+                        });
+
+                        // Button to announce insects inside hochsitz
+                        Button btnInsect = findViewById(R.id.btnInsect);
+                        btnInsect.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if(obj.isIsInsectious()) {
+                                    data.put("isInsectious", false);
+                                } else {
+                                    data.put("isInsectious", true);
+                                }
+                                db.collection(COLLECTION_KEY).document(docname)
+                                        .set(data, SetOptions.merge());
+                            }
+                        });
                     }
                 } else {
                     Log.w(TAG, "Error getting docs: ", task.getException());
@@ -144,78 +222,8 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
 
                 } );
 
-        //##########################################################
-        //###    Buttons - for HochsitzNotes
-        //##########################################################
-        //Status Button mit PopUp
-        Button btnStatusHochsitz = findViewById(R.id.btnStatusHochsitz);
-        btnStatusHochsitz.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(JagdeinrichtungenVerwalten.this, StatusPop.class);
-                Bundle extras = new Bundle();
-                extras.putString("sitzname", obj.getHochsitzName());
-                extras.putString("booker", obj.getBookedBy());
-                extras.putBoolean("booked", obj.isIsBooked());
-                extras.putBoolean("damage", obj.isIsDamaged());
-                extras.putBoolean("insect", obj.isIsInsectious());
-                intent.putExtras(extras);
-                startActivity(intent);
-            }
-        });
-
-        //Button to book hochsitz
-        Button btnBook = findViewById(R.id.btnBook);
-        btnBook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(obj.isIsBooked()) {
-                    data.put("isBooked", false);
-                    // Nutzer auslesen --> Name bekommen
-                    // Daten an firestore --> value "Name" für variable "booked by"
-                    // Toast Nachricht: "WMH" + name + "der Ansitz ist für Dich gebucht!"
-                } else {
-                    data.put("isBooked", true);
-                    // Nutzer auslesen --> Name bekommen
-                    // Daten von firestore --> value "name" von variable "bookedBy"
-                    // Toast Nachricht: "Sorry " + name + "hier sitzt heute Nacht schon " + "bookedBy"
-                }
-                db.collection(COLLECTION_KEY).document("QkSyOmlxmoGwp03WHUT3")
-                        .set(data, SetOptions.merge());
-            }
-        });
 
 
-        // Button to announce a damaged hochsitz
-        Button btnDamage = findViewById(R.id.btnDamage);
-        btnDamage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(obj.isIsDamaged()) {
-                    data.put("isDamaged", false);
-                } else {
-                    data.put("isDamaged", true);
-                }
-                db.collection(COLLECTION_KEY).document("QkSyOmlxmoGwp03WHUT3")
-                        .set(data, SetOptions.merge());
-            }
-        });
-
-        // Button to announce insects inside hochsitz
-        Button btnInsect = findViewById(R.id.btnInsect);
-        btnInsect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(obj.isIsInsectious()) {
-                    data.put("isInsectious", false);
-                    obj.setInsectious(true);
-                } else {
-                    data.put("isInsectious", true);
-                }
-                db.collection(COLLECTION_KEY).document(docname)
-                        .set(data, SetOptions.merge());
-            }
-        });
 
         // Button to add new Hochsitz
         FloatingActionButton addHochsitz = findViewById(R.id.btnAddHochsitz);
