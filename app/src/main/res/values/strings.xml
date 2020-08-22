@@ -48,6 +48,8 @@
     <string name="nameReq">Bitte benenne die Kanzel.</string>
     <string name="data_Get_Fail">Kanzeln konnten nicht abgerufen werden.</string>
     <string name="data_Get_Success">Tada</string>
+    <string name="data_Del_Fail">Kanzel existiert nicht.</string>
+    <string name="data_Del_Success">Kanzel erfolgreich aus Revier entfernt.</string>
 
     <!-- Permissions -->
     <string name="permission_rationale_location">Access to the location service is required to demonstrate the

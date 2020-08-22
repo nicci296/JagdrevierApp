@@ -73,7 +73,7 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
     private GoogleMap jagdrevierMap;
 
     //Attributes
-    LatLng revierMitte = new LatLng(48.849444, 11.241417);
+    LatLng revierMitte = new LatLng(48.854296, 11.239171);
     /**
      * Flag indicating whether a requested permission has been denied after returning in
      * {@link #onRequestPermissionsResult(int, String[], int[])}.
@@ -142,7 +142,10 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
     public void onMapReady(GoogleMap googleMap) {
         //Initialisierung der Map und Standortbestimmung
         jagdrevierMap = googleMap;
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager
+                .PERMISSION_GRANTED && ActivityCompat
+                .checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -167,16 +170,29 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
         Polygon revierGrenze = googleMap.addPolygon(new PolygonOptions()
                 .clickable(true)
                 .add(
-                        new LatLng(48.854938, 11.241890),
-                        new LatLng(48.849355, 11.255418),
-                        new LatLng(48.844572, 11.240600),
-                        new LatLng(48.850002, 11.225756)));
+                        new LatLng(48.859032, 11.226044),
+                        new LatLng(48.858333, 11.224939),
+                        new LatLng(48.854138, 11.209016),
+                        new LatLng(48.851124, 11.213823),
+                        new LatLng(48.851378, 11.225354),
+                        new LatLng(48.852430, 11.225279),
+                        new LatLng(48.848818, 11.237079),
+                        new LatLng(48.850018, 11.238710),
+                        new LatLng(48.849418, 11.241746),
+                        new LatLng(48.846440, 11.243671),
+                        new LatLng(48.848883, 11.251535),
+                        new LatLng(48.848353, 11.256588),
+                        new LatLng(48.847216, 11.261137),
+                        new LatLng(48.854172, 11.263825),
+                        new LatLng(48.859956, 11.248311),
+                        new LatLng(48.858900, 11.239956)
+                ));
         revierGrenze.setTag("Revier");
         stylePolygon(revierGrenze);
 
         //Kamera zur RevierMitte bewegen und mit Faktor 14 reinzoomen
         /*jagdrevierMap.animateCamera(CameraUpdateFactory.zoomTo(12),2000,null);*/
-        jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLngZoom(revierMitte, 14));
+        jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLngZoom(revierMitte, 13));
 
         // Marker in Reviermitte zur Orientierung setzen
         jagdrevierMap.addMarker(new MarkerOptions().position(revierMitte).title("Revier-Mittelpunkt"));
@@ -303,6 +319,44 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
                         }
                     }
 
+                });
+
+    }
+
+    //Löscht eine Kanzel aus der DB
+    public void onClickDelJgdEin(View v) {
+
+        //Bekanntmachen der View zur Texteingabe und Abruf der Eingabe als String
+        final EditText jgdeinOut = findViewById(R.id.jgdeinNameInputOut);
+        final String inputText = jgdeinOut.getText().toString();
+
+        //Toast, falls kein Name im Feld, und return, damit keine Einrichtung ohne Namen gelöscht wird
+        if (inputText.isEmpty()) {
+            Toast.makeText(RevierKarte.this, R.string.nameReq, Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        //Löschen funktioniert, allerdings kommt auch Success-Toast, wenn der eingegebene Name nicht existiert
+        dbHochsitze.document(inputText)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                        Toast.makeText
+                                (RevierKarte.this, R.string.data_Del_Success,
+                                        Toast.LENGTH_LONG).show();
+                        jgdeinOut.getText().clear();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting document", e);
+                        Toast.makeText
+                                (RevierKarte.this, R.string.data_Del_Fail,
+                                        Toast.LENGTH_LONG).show();
+                    }
                 });
 
     }
