@@ -38,21 +38,6 @@ public class RegisterActivity extends AppCompatActivity {
     private static final String REGISTERED = "registered";
     private static final String MAIL = "Mail";
 
-    //##########################################################
-    //###    Firebase - Authentication
-    //##########################################################
-    //Firebase instance variables
-    private FirebaseAuth mFirebaseAuth;
-
-    //##########################################################
-    //###    Firebase - Firestore
-    //##########################################################
-    //Initialize FireStore - Collection Hochsitze
-    final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    final CollectionReference colUser = db.collection(COLLECTION_KEY);
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,12 +54,12 @@ public class RegisterActivity extends AppCompatActivity {
                     EditText email = findViewById(R.id.userMail);
                     EditText mPwd = findViewById(R.id.userPassword);
                     EditText mUser = findViewById(R.id.txtNick);
-                    SwitchCompat pachter = findViewById(R.id.switchPaechter);
-                    String mail = email.getText().toString().trim();
-                    String pwd = mPwd.getText().toString().trim();
-                    String user = mUser.getText().toString().trim();
-                    boolean paechter = pachter.isChecked();
-                    createAccount(mail, pwd, user, paechter);
+                    //Switch pachter = findViewById(R.id.switch1);
+                    if (validateForm(email.getText().toString().trim(), mPwd.getText().toString().trim(), mUser.getText().toString().trim())) {
+                        createAccount(email.getText().toString().trim(), mPwd.getText().toString().trim(), mUser.getText().toString().trim(), true);
+                    } else {
+                        Toast.makeText(RegisterActivity.this, "Bitte alle Felder ausfüllen.", Toast.LENGTH_SHORT).show();
+                    }
             }
         });
 
@@ -96,12 +81,48 @@ public class RegisterActivity extends AppCompatActivity {
 
     // Method to create Account in Firebase-Authentication
     private void createAccount (String mail, String pwd, String user, boolean paechter) {
-        Log.d(TAG, "createAccount:" + mail);
-        if (!validateForm(mail, pwd, user)) {
-            return;
-        }
+
         // Für später falls wir ProgressBar noch schaffen beim "hübsch machen"
         //showProgressBar();
+
+
+        //##########################################################
+        //###    Firebase - Firestore
+        //##########################################################
+        //Initialize FireStore - Collection Hochsitze
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference colUser = db.collection(COLLECTION_KEY);
+
+        //Calendar c = Calendar.getInstance();
+        Map<String, Object> userJaeger = new HashMap<String, Object>();
+        userJaeger.put(NICK, user);
+        userJaeger.put(PAECHTER, paechter);
+        //userJaeger.put(REGISTERED, c);
+        userJaeger.put(MAIL, mail);
+
+
+        colUser.document(mail).set(userJaeger)
+                .addOnSuccessListener(new OnSuccessListener<Void>(){
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(RegisterActivity.this,
+                                "Jäger wurde angelegt!",
+                                Toast.LENGTH_LONG).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    public void onFailure(@NonNull Exception e){
+                        Toast.makeText(RegisterActivity.this,
+                                "Jäger konnte nicht angelegt werden!",
+                                Toast.LENGTH_LONG).show();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+
+        //##########################################################
+        //###    Firebase - Authentication
+        //##########################################################
+        //Firebase instance variables
+        final FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
 
         // Create User with Mail
         mFirebaseAuth.createUserWithEmailAndPassword(mail, pwd)
@@ -122,31 +143,6 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                         // Für später falls wir ProgressBar noch schaffen beim "hübsch machen"
                         //hideProgressBar();
-                    }
-                });
-
-        Calendar c = Calendar.getInstance();
-        Map<String, Object> userJaeger = new HashMap<String, Object>();
-        userJaeger.put(NICK, user);
-        userJaeger.put(PAECHTER, paechter);
-        userJaeger.put(REGISTERED, c);
-        userJaeger.put(MAIL, mail);
-
-
-        colUser.document(user).set(userJaeger)
-                .addOnSuccessListener(new OnSuccessListener<Void>(){
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(RegisterActivity.this,
-                                "Jäger wurde angelegt!",
-                                Toast.LENGTH_LONG).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    public void onFailure(@NonNull Exception e){
-                        Toast.makeText(RegisterActivity.this,
-                                "Jäger konnte nicht angelegt werden!",
-                                Toast.LENGTH_LONG).show();
-                        Log.d(TAG, e.toString());
                     }
                 });
     }
