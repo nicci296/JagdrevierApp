@@ -42,7 +42,7 @@
     <!-- Revier verwalten -->
     <string name="add_Jagdeinrichtung_Btn">Neue Kanzel</string>
     <string name="del_Jagdeinrichtung_Btn">Kanzel entfernen</string>
-    <string name="dmg_Jagdeinrichtung_Btn">Schaden melden</string>
+    <string name="dmg_Jagdeinrichtung_Btn">Schaden/Befall</string>
     <string name="kanzel_Name">Name der Kanzel</string>
     <string name="shw_Jagdeinrichtung_Btn">Zeige alle Kanzeln</string>
     <string name="nameReq">Bitte benenne die Kanzel.</string>
