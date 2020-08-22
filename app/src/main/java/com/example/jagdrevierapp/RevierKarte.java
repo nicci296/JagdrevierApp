@@ -16,10 +16,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import android.os.Bundle;
-import androidx.core.app.ActivityCompat.OnRequestPermissionsResultCallback;
 
 import com.example.jagdrevierapp.data.model.Hochsitz;
-
 
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -33,7 +31,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.*;
 
-
+import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -50,12 +49,22 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
         GoogleMap.OnMyLocationClickListener,
         ActivityCompat.OnRequestPermissionsResultCallback{
 
+    //Keys
     private static final String TAG = "Revierkarte";
     private final String COLLECTION_KEY ="HochsitzeMichi";
     private static final int COLOR_WHITE_ARGB = 0xffffffff;
     private static final int COLOR_GREEN_ARGB = 0xff388E3C;
     private static final int POLYGON_STROKE_WIDTH_PX = 8;
-    private EditText jgdeinNmIn;
+
+    //Initialize FireStore
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference dbHochsitze = db.collection(COLLECTION_KEY);
+
+    //Object declaration
+    private GoogleMap jagdrevierMap;
+
+    //Attributes
+    LatLng revierMitte = new LatLng(48.849444, 11.241417);
     /**
      * Request code for location permission request.
      *
@@ -68,15 +77,6 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
      * {@link #onRequestPermissionsResult(int, String[], int[])}.
      */
     private boolean permissionDenied = false;
-
-    //Initialize FireStore
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference dbHochsitze = db.collection(COLLECTION_KEY);
-
-    //Object declaration
-    private Hochsitz obj;
-    private GoogleMap jagdrevierMap;
-    LatLng revierMitte = new LatLng(48.849444, 11.241417);
 
 
     @Override
@@ -92,25 +92,7 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
         Button jgdeinAddBtn = findViewById(R.id.jgdeinAddBtn);
         Button jgdeinDelBtn = findViewById(R.id.jgdeinDelBtn);
         Button jgdeinDmgBtn = findViewById(R.id.jgdeinDmgBtn);
-        EditText jgdeinNmIn = findViewById(R.id.jgdeinNameInput);
-
-        /*// Read data from firestore
-        dbHochsitze
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()){
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                obj = document.toObject(Hochsitz.class);
-                                jagdrevierMap.addMarker
-                                        (new MarkerOptions().position(obj.getGps()).title(obj.getHochsitzName()));
-                            }
-                        } else {
-                            Log.w(TAG, "Error getting docs: ", task.getException());
-                        }
-                    }
-                } );*/
+        Button showAll = (Button) findViewById(R.id.jgdeinShow);
     }
 
     //Polygon Styling
@@ -125,9 +107,7 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
         revierGrenze.setStrokeWidth(POLYGON_STROKE_WIDTH_PX);
         revierGrenze.setStrokeColor(strokeColor);
         /*revierGrenze.setFillColor(fillColor);*/
-
-    };
-
+    }
 
     /**
      * WICHTIG: Das Endgerät muss Google Play Services installiert haben, damit die Activity genutzt werden kann.
@@ -146,7 +126,7 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
         enableMyLocation();
 
         //Config der Karte - Typ, Zoom swipe&click, Compass
-        jagdrevierMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        jagdrevierMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
         jagdrevierMap.getUiSettings().setZoomControlsEnabled(true);
         jagdrevierMap.getUiSettings().setZoomGesturesEnabled(true);
         jagdrevierMap.getUiSettings().setCompassEnabled(true);
@@ -174,33 +154,48 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
 
     public void onClickAddJgdEin (View v){
 
-        /*final String jdgeinName = jgdeinNmIn.getText().toString();*/
-        //Toast, falls nicht alle Felder ausgefüllt wurden
-        /*if (jdgeinName.isEmpty()) {
-            Toast.makeText(RevierKarte.this,
-                    R.string.nameReq,
-                    Toast.LENGTH_LONG).show();
-        }*/
+        final EditText jgdeinName = (EditText) findViewById(R.id.jgdeinNameInput);
+        final String inputText = jgdeinName.getText().toString();
+
+        //Toast, falls kein Name im Feld
+        if(inputText.isEmpty()){
+            Toast.makeText(RevierKarte.this, R.string.nameReq,Toast.LENGTH_LONG).show();
+            return;
+        }
 
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         String locationProvider = LocationManager.NETWORK_PROVIDER;
 
         Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-        final LatLng current = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+        final GeoPoint current = new GeoPoint(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+        final double lat = current.getLatitude();
+        final double lng = current.getLongitude();
+        final LatLng latLng = new LatLng(lat,lng);
 
-        final MarkerOptions currentLoc = new MarkerOptions().position(current).title("");
+        /*final MarkerOptions currentLoc = new MarkerOptions()
+                .position(current).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
+                .title(inputText);*/
+
+        final MarkerOptions currentLoc = new MarkerOptions()
+                .position(latLng)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
+                .title(inputText);
+
 
         Hochsitz kanzel = new Hochsitz
-                ("Test",current.latitude, current.longitude, false,"TBA",false,
+                (currentLoc.getTitle(),current, false,"TBA",false,
                         false);
 
-        dbHochsitze.add(kanzel)
+
+        /*dbHochsitze.add(kanzel)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Toast.makeText(RevierKarte.this, "Jagdeinrichtung hinzugefügt",
                                 Toast.LENGTH_LONG).show();
-                        /*jgdeinNmIn.getText().clear();*/
+                        jagdrevierMap.addMarker(currentLoc);
+                        jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                        jgdeinName.getText().clear();
 
                     }
                 })
@@ -210,18 +205,62 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
                       Toast.makeText(RevierKarte.this, "Jagdeinrichtung konnte nicht hinzugefügt werden",
                               Toast.LENGTH_LONG).show();
                     }
+                });*/
+
+        dbHochsitze.document(inputText).set(kanzel)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(RevierKarte.this, "Jagdeinrichtung hinzugefügt",
+                                Toast.LENGTH_LONG).show();
+                        jagdrevierMap.addMarker(currentLoc);
+                        jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                        jgdeinName.getText().clear();
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(RevierKarte.this, "Jagdeinrichtung konnte nicht hinzugefügt werden",
+                                Toast.LENGTH_LONG).show();
+                    }
                 });
-
-        jagdrevierMap.addMarker(currentLoc);
-        jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLng(current));
-
-
     }
 
+    public void onClickShowAll(View v){
 
 
+        dbHochsitze.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                Hochsitz kanzel = document.toObject(Hochsitz.class);
+                                if(kanzel.getGps() != null ){
+                                    double lat = kanzel.getGps().getLatitude();
+                                    double lng = kanzel.getGps().getLongitude();
+                                    LatLng latLng = new LatLng(lat,lng);
+                                    jagdrevierMap.addMarker(new MarkerOptions()
+                                            .position(latLng)
+                                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
+                                            .title(kanzel.getHochsitzName()));
+                                }
+                            }
+                            Toast.makeText
+                                    (RevierKarte.this,R.string.data_Get_Success,Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText
+                                    (RevierKarte.this,R.string.data_Get_Fail,Toast.LENGTH_LONG).show();
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
 
+                });
 
+    }
 
 
     //---------------------copy pasta der Permissions aus der Google API-----------------------------------------------
