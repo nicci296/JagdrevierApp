@@ -1,14 +1,23 @@
 package com.example.jagdrevierapp.data.model;
 
 
-import com.google.android.gms.maps.model.LatLng;
+
+
+import com.google.firebase.firestore.GeoPoint;
 
 public class Hochsitz {
-
+    /**
+     * Nico - 22.08.20
+     *
+     *Damit eine Hochsitz-Objekt korrekt in der DB mit Standort gespeichert und hinter effizient wieder abgerufen
+     * werden kann, habe ich die doubles lat und lng durch einen GeoPoint ersetzt.
+     * Ausporbiert habe ich auch die Datentypen LatLng, Marker sowie MarkerOptions, weil man mit diesen weniger Code
+     * zum Speichern und Abrufen gebraucht hätte.
+     * Problem bei diesen ist aber, dass diese Android-Klassen keinen leeren Constructor definieren, welcher aber von
+     * Firebase gefordert wird, sonst gibt es einen Crash.
+     */
     private String hochsitzName;
-    private double lat;
-    private double lng;
-    private LatLng gps;
+    private GeoPoint gps;
     private boolean isBooked;
     private String bookedBy;
     private boolean isDamaged;
@@ -16,11 +25,9 @@ public class Hochsitz {
 
     public Hochsitz() {}
 
-    public Hochsitz(String hochsitzName,double lat, double lng, boolean isBooked, String bookedBy, boolean isDamaged, boolean isInsectious) {
+    public Hochsitz(String hochsitzName,GeoPoint gps, boolean isBooked, String bookedBy, boolean isDamaged, boolean isInsectious) {
         this.hochsitzName = hochsitzName;
-        /*this.gps = gps;*/
-        this.lat = lat;
-        this.lng = lng;
+        this.gps = gps;
         this.isBooked = isBooked;
         this.bookedBy = bookedBy;
         this.isDamaged = isDamaged;
@@ -36,25 +43,9 @@ public class Hochsitz {
         this.hochsitzName = hochsitzName;
     }
 
-    public double getLat() {
-        return lat;
-    }
+    public GeoPoint getGps() { return gps; }
 
-    public void setLat(double lat) {
-        this.lat = lat;
-    }
-
-    public double getLng() {
-        return lng;
-    }
-
-    public void setLng(double lon) {
-        this.lng = lng;
-    }
-
-    /*public LatLng getGps() {return gps;}
-
-    public void setGps(LatLng gps) { this.gps = gps; }*/
+    public void setGps(GeoPoint gps) { this.gps = gps;}
 
     public boolean isBooked() {
         return isBooked;

@@ -8,7 +8,6 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -31,7 +30,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.*;
 
-import java.util.List;
 import java.util.Objects;
 
 
@@ -52,19 +50,9 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
     //Keys
     private static final String TAG = "Revierkarte";
     private final String COLLECTION_KEY ="HochsitzeMichi";
-    private static final int COLOR_WHITE_ARGB = 0xffffffff;
+    /*private static final int COLOR_WHITE_ARGB = 0xffffffff;*/
     private static final int COLOR_GREEN_ARGB = 0xff388E3C;
     private static final int POLYGON_STROKE_WIDTH_PX = 8;
-
-    //Initialize FireStore
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference dbHochsitze = db.collection(COLLECTION_KEY);
-
-    //Object declaration
-    private GoogleMap jagdrevierMap;
-
-    //Attributes
-    LatLng revierMitte = new LatLng(48.849444, 11.241417);
     /**
      * Request code for location permission request.
      *
@@ -72,6 +60,15 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
      */
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
+    //Initialize FireStore
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final CollectionReference dbHochsitze = db.collection(COLLECTION_KEY);
+
+    //Map-Object declaration
+    private GoogleMap jagdrevierMap;
+
+    //Attributes
+    LatLng revierMitte = new LatLng(48.849444, 11.241417);
     /**
      * Flag indicating whether a requested permission has been denied after returning in
      * {@link #onRequestPermissionsResult(int, String[], int[])}.
@@ -82,36 +79,32 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Aufrufen der Mapview.
+        // Festlegen der Mapview.
         setContentView(R.layout.activity_revier_karte);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.revier);
-        mapFragment.getMapAsync(this);
-
-        Button jgdeinAddBtn = findViewById(R.id.jgdeinAddBtn);
-        Button jgdeinDelBtn = findViewById(R.id.jgdeinDelBtn);
-        Button jgdeinDmgBtn = findViewById(R.id.jgdeinDmgBtn);
-        Button showAll = (Button) findViewById(R.id.jgdeinShow);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+        }
     }
 
-    //Polygon Styling
+    //Polygon Styling zur Erstellung eine Polygon im der onMapReady-Callback
     private void stylePolygon(Polygon revierGrenze){
-        String type = "";
-        if(revierGrenze.getTag() != null){
+        /*String type = "";*/
+        /*if(revierGrenze.getTag() != null){
             type = revierGrenze.getTag().toString();
-        }
-        int strokeColor = COLOR_GREEN_ARGB;
+        }*/
         /*int fillColor = COLOR_WHITE_ARGB;*/
 
         revierGrenze.setStrokeWidth(POLYGON_STROKE_WIDTH_PX);
-        revierGrenze.setStrokeColor(strokeColor);
-        /*revierGrenze.setFillColor(fillColor);*/
+        revierGrenze.setStrokeColor(COLOR_GREEN_ARGB);
+        /*revierGrenze.setFillColor(COLOR_WHITE_ARGB);*/
     }
 
     /**
      * WICHTIG: Das Endgerät muss Google Play Services installiert haben, damit die Activity genutzt werden kann.
-     * Dieser Callback wird also ausgelöst, wenn die Map bereit zur Nutzung ist..
+     * Dieser Callback wird nur ausgelöst, wenn die Map bereit zur Nutzung ist..
      *
      * If Google Play services is not installed on the device, the user will be prompted to install
      * it inside the SupportMapFragment. This method will only be triggered once the user has
@@ -119,19 +112,20 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        //Initialisierung der Map und Standortbestimmung
         jagdrevierMap = googleMap;
         jagdrevierMap.setMyLocationEnabled(true);
         jagdrevierMap.setOnMyLocationButtonClickListener(this);
         jagdrevierMap.setOnMyLocationClickListener(this);
         enableMyLocation();
 
-        //Config der Karte - Typ, Zoom swipe&click, Compass
+        //Config der Karte - Typ Satellit, Zoom per Click&Touch, Compass auf Karte
         jagdrevierMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
         jagdrevierMap.getUiSettings().setZoomControlsEnabled(true);
         jagdrevierMap.getUiSettings().setZoomGesturesEnabled(true);
         jagdrevierMap.getUiSettings().setCompassEnabled(true);
 
-        //Polygon zum Abstecken des Reviers
+        //Polygon zum Abstecken des Reviers mit vier Eckpunkten(kann erweitert werden)
         Polygon revierGrenze = googleMap.addPolygon(new PolygonOptions()
                 .clickable(true)
                 .add(
@@ -142,71 +136,67 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
         revierGrenze.setTag("Revier");
         stylePolygon(revierGrenze);
 
-        //Kamera zur RevierMitte bewegen und mit Faktor 12 reinzoomen
+        //Kamera zur RevierMitte bewegen und mit Faktor 14 reinzoomen
         /*jagdrevierMap.animateCamera(CameraUpdateFactory.zoomTo(12),2000,null);*/
         jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLngZoom(revierMitte, 14));
 
-        // Marker in Reviermitte setzen
+        // Marker in Reviermitte zur Orientierung setzen
         jagdrevierMap.addMarker(new MarkerOptions().position(revierMitte).title("Revier-Mittelpunkt"));
         jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLng(revierMitte));
 
     }
 
+    //Fügt der Firebase eine Jagdeinrichtung hinzu und zeigt diese auf der Map
     public void onClickAddJgdEin (View v){
-
-        final EditText jgdeinName = (EditText) findViewById(R.id.jgdeinNameInput);
+        //Bekanntmachen der View zur Texteingabe und Abruf der Eingabe als String
+        final EditText jgdeinName = findViewById(R.id.jgdeinNameInput);
         final String inputText = jgdeinName.getText().toString();
 
-        //Toast, falls kein Name im Feld
+        //Toast, falls kein Name im Feld, und return, damit keine Einrichtung namenlos gespeichert wird
         if(inputText.isEmpty()){
             Toast.makeText(RevierKarte.this, R.string.nameReq,Toast.LENGTH_LONG).show();
             return;
         }
 
+        //Initialisierung eines LocationManagers zur aktuellen Standortbestimmung
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         String locationProvider = LocationManager.NETWORK_PROVIDER;
-
+        /**
+         * In einem GeoPoint wird der aktuelle Standort gespeichert, welcher in der Firebase gespeichert werden kann.
+         * Damit hinterher ein Marker mit diesen Koordinaten gesetzt werden kann, wird zusätzlich ein LatLng-Objekt
+         * definiert, welches die Koordinaten aus dem GeoPoint bezieht.
+         */
         Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
         final GeoPoint current = new GeoPoint(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
-        final double lat = current.getLatitude();
-        final double lng = current.getLongitude();
-        final LatLng latLng = new LatLng(lat,lng);
+        final LatLng latLng = new LatLng(current.getLatitude(),current.getLongitude());
 
-        /*final MarkerOptions currentLoc = new MarkerOptions()
-                .position(current).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
-                .title(inputText);*/
-
+        /**
+         * Festlegung der Eigenschaften des anzuzeigenden Markers.
+         * .position zieht die Koordinaten aus dem LatLng-Objekt latLng.
+         * .icon legt das Farbschema des Markers fest und greift dazu auf ein vordefiniertes Farbschema aus der
+         * BitMapDescriptionFactory zurück.
+         */
         final MarkerOptions currentLoc = new MarkerOptions()
                 .position(latLng)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
                 .title(inputText);
 
-
+        /**
+         *Initialisierung des in der Firebase zu speichernden Objekts vom Typ Hochsitz mit denen im Klassen-Constructor
+         *festgelegten Attributen.
+         */
         Hochsitz kanzel = new Hochsitz
                 (currentLoc.getTitle(),current, false,"TBA",false,
                         false);
 
-
-        /*dbHochsitze.add(kanzel)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Toast.makeText(RevierKarte.this, "Jagdeinrichtung hinzugefügt",
-                                Toast.LENGTH_LONG).show();
-                        jagdrevierMap.addMarker(currentLoc);
-                        jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                        jgdeinName.getText().clear();
-
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                      Toast.makeText(RevierKarte.this, "Jagdeinrichtung konnte nicht hinzugefügt werden",
-                              Toast.LENGTH_LONG).show();
-                    }
-                });*/
-
+        /**
+         * Speichern des Hochsitzobjects in der Collection dbHochsitz.
+         * Über .document(inputText).set(kanzel) wird die ID in der DB mit dem Text aus dem EditText gefüllt.
+         * Soll Firebase eine eigene ID generieren, müsste auf dbHochsitz.add(kanzel) geändert werden.
+         * Wenn das Objekt erfolgreich gespeichert werden konnte, wird ein Marker an der aktuellen Position
+         * (currentLoc) auf der Karte gesetzt und die Kamera schwenkt zum neuen Marker rüber.
+         * Abschließend wird die EditText-View wieder geleert.
+         */
         dbHochsitze.document(inputText).set(kanzel)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -228,9 +218,16 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
                 });
     }
 
+    //Zeigt alle in der Firebase gespeicherten Objekte vom Typ Hochsitz auf der Karte als Marker
     public void onClickShowAll(View v){
 
-
+        /**
+         * dbHochsitze.get() ruft die gesamte Collection auf.
+         * der onCompleteListener löst eine for-Schleife aus, welche jedes hinterlegte document der collection wieder
+         * in ein Objekt vom Typ Hochsitz umwandelt.
+         * Enthalten die Objekte einen nicht-leeren GeoPoint (getGPS) wird der Geopoint in ein LatLng Objekt übergeben,
+         * um einen Marker an dieser Position zu setzen.
+         */
         dbHochsitze.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
