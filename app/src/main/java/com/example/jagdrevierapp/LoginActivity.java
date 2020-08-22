@@ -38,9 +38,6 @@ public class LoginActivity extends AppCompatActivity{
         final EditText email = findViewById(R.id.userMail);
         final EditText mPwd = findViewById(R.id.userPassword);
 
-        final String mail = email.getText().toString().trim();
-        final String pwd = mPwd.getText().toString().trim();
-
         //Buttons
 
         // Button to start the login-prozedure
@@ -48,7 +45,8 @@ public class LoginActivity extends AppCompatActivity{
         logInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                signIn(mail, pwd);
+
+                signIn(email.getText().toString().trim(), mPwd.getText().toString().trim());
             }
         });
 

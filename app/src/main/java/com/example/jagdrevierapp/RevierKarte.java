@@ -3,6 +3,7 @@ package com.example.jagdrevierapp;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -95,14 +96,14 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
 
         //Auskommentiert, damit Login-Funktion nicht stört --> Login funktioniert momentan nicht
 
-        /*if (mFirebaseUser == null) {
+        if (mFirebaseUser == null) {
             //Nicht eingeloggt, SignIn-Activity wird gestartet
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         } else {
             //general variables
             String mUsername = mFirebaseUser.getDisplayName();
-        }*/
+        }
 
 
 

@@ -42,14 +42,14 @@ public class Schussjournal extends AppCompatActivity  {
 
         //Auskommentiert, damit Login-Funktion nicht stört --> Login funktioniert momentan nicht
 
-        /*if (mFirebaseUser == null) {
+        if (mFirebaseUser == null) {
             //Nicht eingeloggt, SignIn-Activity wird gestartet
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         } else {
             //general variables
             String mUsername = mFirebaseUser.getDisplayName();
-        }*/
+        }
 
 
 
