@@ -32,6 +32,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.*;
 
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -166,26 +167,34 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
         String locationProvider = LocationManager.NETWORK_PROVIDER;
 
         Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-        final LatLng current = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+        final GeoPoint current = new GeoPoint(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+        final double lat = current.getLatitude();
+        final double lng = current.getLongitude();
+        final LatLng latLng = new LatLng(lat,lng);
+
+        /*final MarkerOptions currentLoc = new MarkerOptions()
+                .position(current).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
+                .title(inputText);*/
 
         final MarkerOptions currentLoc = new MarkerOptions()
-                .position(current).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
+                .position(latLng)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
                 .title(inputText);
 
 
         Hochsitz kanzel = new Hochsitz
-                (currentLoc.getTitle(),currentLoc, false,"TBA",false,
+                (currentLoc.getTitle(),current, false,"TBA",false,
                         false);
 
 
-        dbHochsitze.add(kanzel)
+        /*dbHochsitze.add(kanzel)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Toast.makeText(RevierKarte.this, "Jagdeinrichtung hinzugefügt",
                                 Toast.LENGTH_LONG).show();
                         jagdrevierMap.addMarker(currentLoc);
-                        jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLng(current));
+                        jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                         jgdeinName.getText().clear();
 
                     }
@@ -195,6 +204,26 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
                     public void onFailure(@NonNull Exception e) {
                       Toast.makeText(RevierKarte.this, "Jagdeinrichtung konnte nicht hinzugefügt werden",
                               Toast.LENGTH_LONG).show();
+                    }
+                });*/
+
+        dbHochsitze.document(inputText).set(kanzel)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(RevierKarte.this, "Jagdeinrichtung hinzugefügt",
+                                Toast.LENGTH_LONG).show();
+                        jagdrevierMap.addMarker(currentLoc);
+                        jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                        jgdeinName.getText().clear();
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(RevierKarte.this, "Jagdeinrichtung konnte nicht hinzugefügt werden",
+                                Toast.LENGTH_LONG).show();
                     }
                 });
     }
@@ -207,14 +236,21 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Toast.makeText
-                                        (RevierKarte.this,R.string.data_Get_Success,Toast.LENGTH_LONG).show();
+                            for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 Hochsitz kanzel = document.toObject(Hochsitz.class);
-                                //--------Bis hier funktioniert es -------------------
-
+                                if(kanzel.getGps() != null ){
+                                    double lat = kanzel.getGps().getLatitude();
+                                    double lng = kanzel.getGps().getLongitude();
+                                    LatLng latLng = new LatLng(lat,lng);
+                                    jagdrevierMap.addMarker(new MarkerOptions()
+                                            .position(latLng)
+                                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
+                                            .title(kanzel.getHochsitzName()));
+                                }
                             }
+                            Toast.makeText
+                                    (RevierKarte.this,R.string.data_Get_Success,Toast.LENGTH_LONG).show();
                         } else {
                             Toast.makeText
                                     (RevierKarte.this,R.string.data_Get_Fail,Toast.LENGTH_LONG).show();
@@ -224,14 +260,7 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
 
                 });
 
-
-
     }
-
-
-
-
-
 
 
     //---------------------copy pasta der Permissions aus der Google API-----------------------------------------------
