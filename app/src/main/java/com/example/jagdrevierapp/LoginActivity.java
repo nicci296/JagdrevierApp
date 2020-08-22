@@ -62,15 +62,6 @@ public class LoginActivity extends AppCompatActivity{
         });
     }
 
-    //Check if user is already signed in
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mFirebaseAuth.getCurrentUser();
-        updateUI(currentUser);
-    }
-
     private void signIn(String mail, String pwd) {
         Log.d(TAG, "signIn:" + mail);
         if (!validateForm(mail, pwd)) {

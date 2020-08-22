@@ -18,20 +18,20 @@ public class Hochsitz {
      */
     private String hochsitzName;
     private GeoPoint gps;
-    private boolean isBooked;
+    private boolean isIsBooked;
     private String bookedBy;
-    private boolean isDamaged;
-    private boolean isInsectious;
+    private boolean isIsDamaged;
+    private boolean isIsInsectious;
 
     public Hochsitz() {}
 
-    public Hochsitz(String hochsitzName,GeoPoint gps, boolean isBooked, String bookedBy, boolean isDamaged, boolean isInsectious) {
+    public Hochsitz(String hochsitzName,GeoPoint gps, boolean isIsBooked, String bookedBy, boolean isIsDamaged, boolean isIsInsectious) {
         this.hochsitzName = hochsitzName;
         this.gps = gps;
-        this.isBooked = isBooked;
+        this.isIsBooked = isIsBooked;
         this.bookedBy = bookedBy;
-        this.isDamaged = isDamaged;
-        this.isInsectious = isInsectious;
+        this.isIsDamaged = isIsDamaged;
+        this.isIsInsectious = isIsInsectious;
     }
 
 
@@ -47,12 +47,12 @@ public class Hochsitz {
 
     public void setGps(GeoPoint gps) { this.gps = gps;}
 
-    public boolean isBooked() {
-        return isBooked;
+    public boolean isIsBooked() {
+        return isIsBooked;
     }
 
     public void setBooked(boolean booked) {
-        isBooked = booked;
+        isIsBooked = booked;
     }
 
     public String getBookedBy() {
@@ -63,20 +63,20 @@ public class Hochsitz {
         this.bookedBy = bookedBy;
     }
 
-    public boolean isDamaged() {
-        return isDamaged;
+    public boolean isIsDamaged() {
+        return isIsDamaged;
     }
 
     public void setDamaged(boolean damaged) {
-        isDamaged = damaged;
+        isIsDamaged = damaged;
     }
 
-    public boolean isInsectious() {
-        return isInsectious;
+    public boolean isIsInsectious() {
+        return isIsInsectious;
     }
 
     public void setInsectious(boolean insectious) {
-        isInsectious = insectious;
+        isIsInsectious = insectious;
     }
 
 

@@ -67,14 +67,14 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
         //Firebase instance variables
         final FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser mFirebaseUser = mAuth.getCurrentUser();
-        if (mFirebaseUser == null) {
+        /*if (mFirebaseUser == null) {
             //Nicht eingeloggt, SignIn-Activity wird gestartet
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         } else {
             //general variables
             String mUsername = mFirebaseUser.getDisplayName();
-        }
+        }*/
 
 
 

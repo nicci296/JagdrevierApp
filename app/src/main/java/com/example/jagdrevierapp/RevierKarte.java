@@ -10,10 +10,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
+
 import android.os.Bundle;
 
 import com.example.jagdrevierapp.data.model.Hochsitz;
@@ -28,6 +30,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.*;
 
 import java.util.Objects;
@@ -45,11 +49,11 @@ import java.util.Objects;
 public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
         GoogleMap.OnMyLocationButtonClickListener,
         GoogleMap.OnMyLocationClickListener,
-        ActivityCompat.OnRequestPermissionsResultCallback{
+        ActivityCompat.OnRequestPermissionsResultCallback {
 
     //Keys
     private static final String TAG = "Revierkarte";
-    private final String COLLECTION_KEY ="HochsitzeMichi";
+    private final String COLLECTION_KEY = "HochsitzeMichi";
     /*private static final int COLOR_WHITE_ARGB = 0xffffffff;*/
     private static final int COLOR_GREEN_ARGB = 0xff388E3C;
     private static final int POLYGON_STROKE_WIDTH_PX = 8;
@@ -79,6 +83,29 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        //##########################################################
+        //###    Firebase - Authentication
+        //##########################################################
+        //Initialize Firebase Auth
+        //Firebase instance variables
+        final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser mFirebaseUser = mAuth.getCurrentUser();
+
+        //Auskommentiert, damit Login-Funktion nicht stört --> Login funktioniert momentan nicht
+
+        /*if (mFirebaseUser == null) {
+            //Nicht eingeloggt, SignIn-Activity wird gestartet
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+        } else {
+            //general variables
+            String mUsername = mFirebaseUser.getDisplayName();
+        }*/
+
+
+
         // Festlegen der Mapview.
         setContentView(R.layout.activity_revier_karte);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -90,7 +117,7 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
     }
 
     //Polygon Styling zur Erstellung eine Polygon im der onMapReady-Callback
-    private void stylePolygon(Polygon revierGrenze){
+    private void stylePolygon(Polygon revierGrenze) {
         /*String type = "";*/
         /*if(revierGrenze.getTag() != null){
             type = revierGrenze.getTag().toString();
@@ -114,6 +141,16 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
     public void onMapReady(GoogleMap googleMap) {
         //Initialisierung der Map und Standortbestimmung
         jagdrevierMap = googleMap;
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         jagdrevierMap.setMyLocationEnabled(true);
         jagdrevierMap.setOnMyLocationButtonClickListener(this);
         jagdrevierMap.setOnMyLocationClickListener(this);
@@ -147,14 +184,14 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
     }
 
     //Fügt der Firebase eine Jagdeinrichtung hinzu und zeigt diese auf der Map
-    public void onClickAddJgdEin (View v){
+    public void onClickAddJgdEin(View v) {
         //Bekanntmachen der View zur Texteingabe und Abruf der Eingabe als String
         final EditText jgdeinName = findViewById(R.id.jgdeinNameInput);
         final String inputText = jgdeinName.getText().toString();
 
         //Toast, falls kein Name im Feld, und return, damit keine Einrichtung namenlos gespeichert wird
-        if(inputText.isEmpty()){
-            Toast.makeText(RevierKarte.this, R.string.nameReq,Toast.LENGTH_LONG).show();
+        if (inputText.isEmpty()) {
+            Toast.makeText(RevierKarte.this, R.string.nameReq, Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -166,6 +203,16 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
          * Damit hinterher ein Marker mit diesen Koordinaten gesetzt werden kann, wird zusätzlich ein LatLng-Objekt
          * definiert, welches die Koordinaten aus dem GeoPoint bezieht.
          */
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
         Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
         final GeoPoint current = new GeoPoint(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
         final LatLng latLng = new LatLng(current.getLatitude(),current.getLongitude());
