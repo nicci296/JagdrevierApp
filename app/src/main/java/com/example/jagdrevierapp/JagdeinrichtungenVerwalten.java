@@ -6,6 +6,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Layout;
 import android.util.Log;
@@ -145,6 +146,7 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
 
                         // Status Button initialisieren
                         Button btnStatHochsitz = viewHochsitze.findViewById(R.id.btnStatusHochsitz);
+                        btnStatHochsitz.setBackgroundResource(R.drawable.hochsitz_frei);
                         btnStatHochsitz.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {

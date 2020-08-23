@@ -18,7 +18,7 @@
         android:layout_width="100dp"
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="4dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="13dp"
         android:layout_toEndOf="@+id/btnStatusHochsitz"
         android:text="@string/txtHochsitzname"
@@ -30,7 +30,7 @@
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="11dp"
         android:layout_toEndOf="@+id/textHochsitzName"
         android:text="@string/btnBook" />
@@ -40,7 +40,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="17dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="11dp"
         android:layout_toEndOf="@+id/btnBook"
         android:text="@string/btnDamn" />
@@ -50,7 +50,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="11dp"
         android:layout_toEndOf="@+id/btnDamage"
         android:text="@string/btnInsect" />
