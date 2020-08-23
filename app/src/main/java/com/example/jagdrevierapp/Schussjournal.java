@@ -12,11 +12,15 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.jagdrevierapp.data.model.Hochsitz;
+import com.example.jagdrevierapp.data.model.Journal;
 import com.example.jagdrevierapp.data.model.User;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -42,6 +46,7 @@ public class Schussjournal extends AppCompatActivity  {
 
     private final String TAG = "Schussjournal";
     private final String COLLECTION_KEY = "User";
+    private final String JOURNAL_COLLECTION_KEY = "Schussjournal";
 
     //Initialize FireStore
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -108,16 +113,40 @@ public class Schussjournal extends AppCompatActivity  {
          * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
          * TextView soll den aktuellen Nick vom User anzeigen.
          * Fürs erste wird die Mail-Adresse vom angemeldeten User genommen.
-         *
+         * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
          */
-        final TextView userText = findViewById(R.id.user_Name_Jrnl);
-        String showText = mFirebaseUser.getEmail().toUpperCase();
-        int index = showText.indexOf("@");
-        userText.setText(showText.substring(0,index)+"s'");
 
+        final TextView userText = findViewById(R.id.user_Name_Jrnl);
+        Query query = dbUser.whereEqualTo("mail",mFirebaseUser.getEmail());
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                        Log.d(TAG, document.getId() + " => " + document.getData());
+                        User currentUser = document.toObject(User.class);
+                        if(currentUser.getMail() != null ){
+
+                            userText.setText(currentUser.getNick().toUpperCase()+"s'");
+                        }
+                    }
+                } else {
+                    Log.d(TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        });
+    }
+       /* String showText = mFirebaseUser.getEmail().toUpperCase();
+        int index = showText.indexOf("@");
+        userText.setText(showText.substring(0,index)+"s'");*/
+
+
+    public void onClickAddLine(View v){
+
+        Intent changeIntent = new Intent(this,JournalPop.class);
+        startActivity(changeIntent);
 
     }
-
 
 
 }
