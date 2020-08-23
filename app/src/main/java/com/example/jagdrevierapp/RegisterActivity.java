@@ -15,6 +15,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jagdrevierapp.data.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -31,12 +32,18 @@ import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity {
 
+    /** *******************23.08.20 Nico ****************
+     * ++++++++++++++++++++++++++++++++++++++++++++++++++
+     * Habe die keys user, nick und paechter an die Atrribute aus der User-Klasse angepasst.
+     * Also von Grpß- auf Kleinbuchstabe geändert.
+     * ++++++++++++++++++++++++++++++++++++++++++++++++++
+     */
     private static final String TAG = "RegisterActivity";
     private static final String COLLECTION_KEY = "User";
-    private static final String NICK = "Nick";
-    private static final String PAECHTER = "Paechter";
+    private static final String NICK = "nick";
+    private static final String PAECHTER = "paechter";
     private static final String REGISTERED = "registered";
-    private static final String MAIL = "Mail";
+    private static final String MAIL = "mail";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
