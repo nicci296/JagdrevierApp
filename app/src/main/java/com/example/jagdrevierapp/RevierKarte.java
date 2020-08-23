@@ -198,6 +198,35 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
         jagdrevierMap.addMarker(new MarkerOptions().position(revierMitte).title("Revier-Mittelpunkt"));
         jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLng(revierMitte));
 
+        dbHochsitze.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                Hochsitz kanzel = document.toObject(Hochsitz.class);
+                                if(kanzel.getGps() != null ){
+                                    double lat = kanzel.getGps().getLatitude();
+                                    double lng = kanzel.getGps().getLongitude();
+                                    LatLng latLng = new LatLng(lat,lng);
+                                    jagdrevierMap.addMarker(new MarkerOptions()
+                                            .position(latLng)
+                                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
+                                            .title(kanzel.getHochsitzName()));
+                                }
+                            }
+                            Toast.makeText
+                                    (RevierKarte.this,R.string.data_Get_Success,Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText
+                                    (RevierKarte.this,R.string.data_Get_Fail,Toast.LENGTH_LONG).show();
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+
+                });
+
     }
 
     //Fügt der Firebase eine Jagdeinrichtung hinzu und zeigt diese auf der Map
@@ -220,10 +249,7 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
          * Damit hinterher ein Marker mit diesen Koordinaten gesetzt werden kann, wird zusätzlich ein LatLng-Objekt
          * definiert, welches die Koordinaten aus dem GeoPoint bezieht.
          */
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager
-        .PERMISSION_GRANTED && ActivityCompat
-                .checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -280,7 +306,7 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
-                        Toast.makeText(RevierKarte.this, R.string.jagdeinrichtung_exists,
+                        Toast.makeText(RevierKarte.this, "Jagdeinrichtung existiert bereits",
                                 Toast.LENGTH_LONG).show();
                         Log.d(TAG, document.getId() + " => " + document.getData());
                         jgdeinName.getText().clear();
@@ -291,7 +317,7 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
-                                    Toast.makeText(RevierKarte.this, R.string.jagdeinrichtung_saved,
+                                    Toast.makeText(RevierKarte.this, "Jagdeinrichtung hinzugefügt",
                                             Toast.LENGTH_LONG).show();
                                     jagdrevierMap.addMarker(currentLoc);
                                     jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
@@ -310,20 +336,24 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
         });
     }
 
+    /**
+     * **************************22.08.20 Nico*****************************************************************
+     * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     * dbHochsitze.get() ruft die gesamte Collection auf.
+     * der onCompleteListener löst eine for-Schleife aus, welche jedes hinterlegte document der collection wieder
+     * in ein Objekt vom Typ Hochsitz umwandelt.
+     * Enthalten die Objekte einen nicht-leeren GeoPoint (getGPS) wird der Geopoint in ein LatLng Objekt übergeben,
+     * um einen Marker an dieser Position zu setzen.
+     * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     * *************************UPDATE 23.08.20 Nico ***********************************************************
+     * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     * Aus Platz- und Nutzungsgründen wird Inhalt der onClickShowAll-Methode im onMapReady-Callback ausgelöst.
+     * Alternaiv wird ein Refreshbutton implementiert.
+     */
     //Zeigt alle in der Firebase gespeicherten Objekte vom Typ Hochsitz auf der Karte als Marker
-    public void onClickShowAll(View v){
+    /*public void onClickShowAll(View v){
 
-        /**
-         * **************************22.08.20 Nico*****************************************************************
-         * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-         * dbHochsitze.get() ruft die gesamte Collection auf.
-         * der onCompleteListener löst eine for-Schleife aus, welche jedes hinterlegte document der collection wieder
-         * in ein Objekt vom Typ Hochsitz umwandelt.
-         * Enthalten die Objekte einen nicht-leeren GeoPoint (getGPS) wird der Geopoint in ein LatLng Objekt übergeben,
-         * um einen Marker an dieser Position zu setzen.
-         * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-         */
-        dbHochsitze.get()
+          dbHochsitze.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -349,10 +379,8 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                     }
-
                 });
-
-    }
+           }*/
 
     //Löscht eine Kanzel aus der DB
     public void onClickDelJgdEin(View v) {
@@ -411,6 +439,48 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
                 jgdeinOut.getText().clear();
             }
         });
+
+    }
+
+    /**
+     * **********************23.08.20 Nico ***************************************************
+     * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     * Erneuter Abruf der Ddocuments aus der Hochsitze-Collection.
+     * Kamera bewegt sich zurück zum Revier.
+     * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     */
+    public void onClickRefresh(View v){
+
+        dbHochsitze.get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                Hochsitz kanzel = document.toObject(Hochsitz.class);
+                                if(kanzel.getGps() != null ){
+                                    double lat = kanzel.getGps().getLatitude();
+                                    double lng = kanzel.getGps().getLongitude();
+                                    LatLng latLng = new LatLng(lat,lng);
+                                    jagdrevierMap.addMarker(new MarkerOptions()
+                                            .position(latLng)
+                                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
+                                            .title(kanzel.getHochsitzName()));
+                                    jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLngZoom(revierMitte, 13));
+                                }
+                            }
+                            Toast.makeText
+                                    (RevierKarte.this,R.string.refresh_Success,Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText
+                                    (RevierKarte.this,R.string.refresh_Fail,Toast.LENGTH_LONG).show();
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+
 
     }
 

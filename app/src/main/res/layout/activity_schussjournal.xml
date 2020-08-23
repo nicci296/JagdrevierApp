@@ -74,4 +74,40 @@
             app:layout_constraintVertical_bias="1.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+            android:text="@string/bang_Jrnl_Head"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/bang_Jrnl_Head"
+            android:layout_marginEnd="50dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/navHeader" android:textAlignment="center"
+            android:textAllCaps="true" android:textSize="14sp"
+            android:textStyle="bold"/>
+    <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="281dp"
+            android:layout_height="302dp"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="46dp"
+            android:layout_marginEnd="46dp" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="60dp"
+            android:scrollbars="vertical" android:background="#4CAF50" android:id="@+id/recyclerView"/>
+    <TextView
+            android:id="@+id/user_Name_Jrnl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/bang_Jrnl_Head"
+            android:layout_marginEnd="10dp" android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/navHeader"/>
+
+    <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_input_add"
+            android:id="@+id/add_Line_Btn"
+            android:background="#2196F3"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="40dp"
+            android:layout_marginBottom="10dp" app:layout_constraintBottom_toTopOf="@+id/recyclerView"
+            android:contentDescription="@string/bang_Add_Line" android:onClick="onClickAddLine"/>
+    app:layout_constraintEnd_toStartOf="@+id/bang_Jrnl_Head" android:layout_marginEnd="15dp"
+            android:layout_marginTop="16dp" app:layout_constraintTop_toBottomOf="@+id/navHeader"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

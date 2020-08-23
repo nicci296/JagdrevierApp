@@ -18,9 +18,9 @@
     <string name="Delete_Jaeger_Button">Jäger aus dem Revier entfernen</string>
     <string name="RevierMap_TextView">Hier geht´s zum aktuellen Revier</string>
     <string name="GoTo_RevierMap_Button">Aktuelle Revierkarte anzeigen</string>
-    <string name="Jaeger_Vorname"> Vorname: </string>
-    <string name="Jaeger_Nachname"> Nachname: </string>
-    <string name="Jaeger_Schein"> Jagdscheinr.: </string>
+    <string name="Jaeger_Vorname">Vorname:</string>
+    <string name="Jaeger_Nachname">Nachname:</string>
+    <string name="Jaeger_Schein">Jagdscheinr.:</string>
 
     <string name="LogInBtn">Aufbaumen!</string>
     <string name="WelcomeMsg">Waidmannsheil!</string>
@@ -40,26 +40,48 @@
     <string name="titleSchussjournal">Schussjournal</string>
 
     <!-- Revier verwalten -->
-    <string name="add_Jagdeinrichtung_Btn">Neue Kanzel</string>
-    <string name="del_Jagdeinrichtung_Btn">Kanzel entfernen</string>
-    <string name="dmg_Jagdeinrichtung_Btn">Schaden/Befall</string>
+    <string name="add_Jagdeinrichtung">Neue Kanzel</string>
+    <string name="del_Jagdeinrichtung">Kanzel entfernen</string>
     <string name="kanzel_Name">Name der Kanzel</string>
-    <string name="shw_Jagdeinrichtung_Btn">Zeige alle Kanzeln</string>
+    <string name="refresh_Btn">Refresh</string>
     <string name="nameReq">Bitte benenne die Kanzel.</string>
     <string name="data_Get_Fail">Kanzeln konnten nicht abgerufen werden.</string>
-    <string name="data_Get_Success">Tada</string>
+    <string name="data_Get_Success">Aktuelles Revier geladen.</string>
     <string name="data_Del_Fail">Kanzel existiert nicht.</string>
     <string name="data_Del_Success">Kanzel erfolgreich aus Revier entfernt.</string>
     <string name="jagdeinrichtung_exists">Jagdeinrichtung existiert bereits!</string>
     <string name="jagdeinrichtung_saved">Jagdeinrichtung hinzugefügt!</string>
+    <string name="refresh_Fail">Aktualisieren fehlgeschlagen.</string>
+    <string name="refresh_Success">Revier aktualisiert.</string>
+
+    <!-- Schussjournal -->
+    <string name="bang_Jrnl_Head">Schussjournal</string>
+    <string name="bang_Add_Line">Neuer Eintrag</string>
+
+    <!-- JournalPop -->
+    <string name="shots">Anzahl Schüsse:</string>
+    <string name="hits">Treffer:</string>
+    <string name="caliber">Kaliber:</string>
+    <string name="target">Ziel:</string>
+    <string name="means">Zweck:</string>
+    <string name="hint_Shots">z.B. 1</string>
+    <string name="hint_Hits">Na, getroffen?</string>
+    <string name="hint_Caliber">Wasn Ballermann!</string>
+    <string name="hint_Target">z.B. Bambi </string>
+    <string name="hint_Means">Nur ein Warnschuss?</string>
+
+
 
     <!-- Permissions -->
     <string name="permission_rationale_location">Access to the location service is required to demonstrate the
-        \'my location\' feature, which shows your current location on the map.</string>
+        \'my location\' feature, which shows your current location on the map.
+    </string>
     <string name="location_permission_denied">This sample requires location permission to enable the \'my location\'
         layer. Please try again and grant access to use the location.\nIf the permission has been permanently denied,
-        it can be enabled from the System Settings &gt; Apps &gt; \'Google Maps API Demos\'.</string>
+        it can be enabled from the System Settings &gt; Apps &gt; \'Google Maps API Demos\'.
+    </string>
     <string name="permission_required_toast">Location permission is required for this demo.</string>
+
     <string name="allHochsitze">Alle Hochsitze</string>
     <string name="statusHochsitzName">Hochsitz</string>
     <string name="statusHochsitzGebucht">Hochsitz ist gebucht:</string>
