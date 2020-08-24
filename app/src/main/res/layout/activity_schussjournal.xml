@@ -1,113 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/background"
-    tools:context=".Schussjournal">
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   xmlns:tools="http://schemas.android.com/tools"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="match_parent"
+                                                   android:background="@drawable/background"
+                                                   tools:context=".Schussjournal" android:id="@+id/first_Lvl_Layout">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/navHeader"
-        android:layout_width="0dp"
-        android:layout_height="142dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+            android:id="@+id/navHeader"
+            android:layout_width="0dp"
+            android:layout_height="142dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/titelJagdeinrichtung"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/titleJagdeinrichtungen"
-            android:textSize="30sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+                android:id="@+id/titelJagdeinrichtung"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/titleJagdeinrichtungen"
+                android:textSize="30sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
         <Button
-            android:id="@+id/schussBtn"
-            android:layout_width="82dp"
-            android:layout_height="53dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="12dp"
-            android:text="Jagdeinrichtungen"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/mapBtn"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
+                android:id="@+id/schussBtn"
+                android:layout_width="82dp"
+                android:layout_height="53dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="12dp"
+                android:text="@string/jagdein_Btn"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/mapBtn"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0"/>
 
         <Button
-            android:id="@+id/mapBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginBottom="12dp"
-            android:text="@string/mapBtn"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/schussBtn"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/logoutBtn"
-            app:layout_constraintTop_toBottomOf="@+id/titelJagdeinrichtung"
-            app:layout_constraintVertical_bias="1.0" />
+                android:id="@+id/mapBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginBottom="12dp"
+                android:text="@string/mapBtn"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/schussBtn"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/logoutBtn"
+                app:layout_constraintTop_toBottomOf="@+id/titelJagdeinrichtung"
+                app:layout_constraintVertical_bias="1.0"/>
 
         <Button
-            android:id="@+id/logoutBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginBottom="12dp"
-            android:text="@string/logOutBtnText"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/mapBtn"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/titelJagdeinrichtung"
-            app:layout_constraintVertical_bias="1.0" />
+                android:id="@+id/logoutBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginBottom="12dp"
+                android:text="@string/logOutBtnText"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/mapBtn"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/titelJagdeinrichtung"
+                app:layout_constraintVertical_bias="0.8"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-    <TextView
-            android:text="@string/bang_Jrnl_Head"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/bang_Jrnl_Head"
-            android:layout_marginEnd="50dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@+id/navHeader" android:textAlignment="center"
-            android:textAllCaps="true" android:textSize="14sp"
-            android:textStyle="bold" android:textColor="#FFFFFF"/>
-    <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="281dp"
-            android:layout_height="302dp"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="46dp"
-            android:layout_marginEnd="46dp" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="60dp"
-            android:scrollbars="vertical" android:background="#4CAF50" android:id="@+id/recyclerView"/>
-    <TextView
-            android:id="@+id/user_Name_Jrnl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/bang_Jrnl_Head"
-            android:layout_marginEnd="10dp" android:layout_marginTop="16dp"
-            app:layout_constraintTop_toBottomOf="@+id/navHeader" android:textColor="#FFFFFF"/>
 
-    <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_input_add"
-            android:id="@+id/add_Line_Btn"
-            android:background="#2196F3"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="40dp"
-            android:layout_marginBottom="10dp" app:layout_constraintBottom_toTopOf="@+id/recyclerView"
-            android:contentDescription="@string/bang_Add_Line" android:onClick="onClickAddLine"/>
-    app:layout_constraintEnd_toStartOf="@+id/bang_Jrnl_Head" android:layout_marginEnd="15dp"
-            android:layout_marginTop="16dp" app:layout_constraintTop_toBottomOf="@+id/navHeader"/>
+    <RelativeLayout
+            android:layout_width="391dp"
+            android:layout_height="787dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" android:id="@+id/second_Lvl_Layout">
+        <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="159dp" android:src="@drawable/hiclipart_com"
+                android:id="@+id/wood_Board" android:contentDescription="@string/wood_Board"
+                android:layout_marginTop="120dp" android:layout_marginStart="10dp"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout android:layout_height="606dp"
+                                                           android:layout_width="match_parent"
+                                                           android:layout_marginTop="190dp"
+                                                           android:id="@+id/third_Lvl_Layout">
+            <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/ic_input_add"
+                    android:id="@+id/add_Line_Btn"
+                    android:background="#2196F3"
+                    android:contentDescription="@string/bang_Add_Line" android:onClick="onClickAddLine"
+                    android:layout_marginBottom="4dp"
+                    app:layout_constraintBottom_toTopOf="@+id/recyclerView"
+                    app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="80dp"/>
+            <TextView
+                    android:id="@+id/user_Name_Jrnl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="32dp" app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="68dp"/>
+            <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="281dp"
+                    android:layout_height="302dp"
+                    android:scrollbars="vertical" android:background="#4CAF50" android:id="@+id/recyclerView"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginBottom="164dp"
+                    app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="70dp"/>
+            <TextView
+                    android:text="@string/bang_Jrnl_Head"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/bang_Jrnl_Head"
+                    android:textAlignment="center"
+                    android:textAllCaps="true" android:textSize="14sp"
+                    android:textStyle="bold" android:textColor="#FFFFFF"
+                    app:layout_constraintStart_toEndOf="@+id/user_Name_Jrnl" android:layout_marginStart="10dp"
+                    app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="32dp"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
