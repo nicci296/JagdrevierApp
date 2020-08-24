@@ -41,16 +41,23 @@ public class Schussjournal extends AppCompatActivity  {
      * in Der Method onClick(View v) implementiere ich dann die startActivity und rufe per expliziten Intent die jeweilige View auf.
      */
 
-    //FirebaseVarible von Michi hinzugefügt
-    private FirebaseAuth mAuth;
 
     private final String TAG = "Schussjournal";
     private final String COLLECTION_KEY = "User";
     private final String JOURNAL_COLLECTION_KEY = "Schussjournal";
 
+    //##########################################################
+    //###    Firebase - Authentication
+    //##########################################################
+    //Initialize Firebase Auth
+    //Firebase instance variables
+    final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    final FirebaseUser mFirebaseUser = mAuth.getCurrentUser();
+
     //Initialize FireStore
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference dbUser = db.collection(COLLECTION_KEY);
+    private final CollectionReference dbJournal = dbUser.document(mFirebaseUser.getEmail()).collection(JOURNAL_COLLECTION_KEY);
 
 
     @Override
@@ -58,15 +65,6 @@ public class Schussjournal extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schussjournal);
 
-        //##########################################################
-        //###    Firebase - Authentication
-        //##########################################################
-        //Initialize Firebase Auth
-        //Firebase instance variables
-        final FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        final FirebaseUser mFirebaseUser = mAuth.getCurrentUser();
-
-        //Auskommentiert, damit Login-Funktion nicht stört --> Login funktioniert momentan nicht
 
         if (mFirebaseUser == null) {
             //Nicht eingeloggt, SignIn-Activity wird gestartet
@@ -111,8 +109,7 @@ public class Schussjournal extends AppCompatActivity  {
         /**
          * ******************23.08.20 Nico ***************************************************
          * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-         * TextView soll den aktuellen Nick vom User anzeigen.
-         * Fürs erste wird die Mail-Adresse vom angemeldeten User genommen.
+         * TextView soll den aktuellen Nick vom User in Überschrift anzeigen.
          * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
          */
 
@@ -135,12 +132,19 @@ public class Schussjournal extends AppCompatActivity  {
                 }
             }
         });
+
+        /**
+         * **************24.08.20. Nico*****************************************
+         * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+         * Abruf aller docs aus dem Schussjournal und Darstellung in RecyclerView
+         * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+         */
+
+
+
     }
-       /* String showText = mFirebaseUser.getEmail().toUpperCase();
-        int index = showText.indexOf("@");
-        userText.setText(showText.substring(0,index)+"s'");*/
 
-
+    //Weiterleitung zur JournalPop, um einen neuen Eintrag anzulegen.
     public void onClickAddLine(View v){
 
         Intent changeIntent = new Intent(this,JournalPop.class);

@@ -5,99 +5,162 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/background"
         tools:context=".JournalPop">
 
-    <TextView
-            android:text="@string/bang_Jrnl_Head"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/bang_Jrnl_Head"
-            android:textAlignment="center"
-            android:textAllCaps="true" android:textSize="14sp"
-            android:textStyle="bold" app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="20dp" android:layout_marginEnd="50dp" app:layout_constraintEnd_toEndOf="parent"/>
-    <TextView
-            android:id="@+id/user_Name_Jrnl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textStyle="bold" app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="20dp" app:layout_constraintEnd_toStartOf="@+id/bang_Jrnl_Head"
-            android:layout_marginEnd="10dp"/>
-    <TextView
-            android:text="@string/shots"
-            android:labelFor="@id/input_Shots"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/shots"
-            app:layout_constraintEnd_toStartOf="@+id/input_Shots" android:layout_marginEnd="10dp"
-            app:layout_constraintTop_toBottomOf="@+id/user_Name_Jrnl" android:layout_marginTop="45dp"/>
-    <TextView
-            android:text="@string/hits"
-            android:labelFor="@id/input_Hits"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/hits"
-            app:layout_constraintEnd_toStartOf="@+id/input_Hits" android:layout_marginEnd="10dp"
-            android:layout_marginTop="24dp" app:layout_constraintTop_toBottomOf="@+id/shots"/>
-    <TextView
-            android:text="@string/caliber"
-            android:labelFor="@id/input_Caliber"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/caliber"
-            app:layout_constraintEnd_toStartOf="@+id/input_Caliber" android:layout_marginEnd="10dp"
-            android:layout_marginTop="24dp" app:layout_constraintTop_toBottomOf="@+id/hits"/>
-    <TextView
-            android:text="@string/target"
-            android:labelFor="@id/input_Target"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/target"
-            app:layout_constraintEnd_toStartOf="@+id/input_Target" android:layout_marginEnd="10dp"
-            android:layout_marginTop="28dp" app:layout_constraintTop_toBottomOf="@+id/caliber"/>
-    <TextView
-            android:text="@string/means"
-            android:labelFor="@id/input_Means"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/menas"
-            app:layout_constraintEnd_toStartOf="@+id/input_Means" android:layout_marginEnd="10dp"
-            android:layout_marginTop="24dp" app:layout_constraintTop_toBottomOf="@+id/target"/>
-    <EditText
-            android:hint="@string/hint_Shots"
-            android:inputType="number"
-            android:textSize="12sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/input_Shots"
-            android:layout_marginEnd="187dp" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/user_Name_Jrnl" android:layout_marginTop="35dp"/>
-    <EditText
-            android:hint="@string/hint_Hits"
-            android:inputType="number"
-            android:textSize="12sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/input_Hits"
-            android:layout_marginEnd="140dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/input_Shots"/>
-    <EditText
-            android:hint="@string/hint_Caliber"
-            android:inputType="text"
-            android:textSize="12sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/input_Caliber"
-            android:layout_marginEnd="118dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/input_Hits"/>
-    <EditText
-            android:hint="@string/hint_Target"
-            android:inputType="text"
-            android:textSize="12sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/input_Target"
-            android:layout_marginEnd="158dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/input_Caliber"/>
-    <EditText
-            android:hint="@string/hint_Means"
-            android:inputType="text"
-            android:textSize="12sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/input_Means"
-            android:layout_marginEnd="102dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/input_Target"/>
+    <RelativeLayout
+            android:layout_width="393dp"
+            android:layout_height="786dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+                android:text="@string/bang_Jrnl_Head"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/bang_Jrnl_Head"
+                android:textAlignment="center"
+                android:textAllCaps="true" android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginTop="30dp"
+                android:textColor="#000000" android:layout_marginStart="220dp"/>
+        <TextView
+                android:id="@+id/user_Name_Jrnl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginTop="30dp"
+                android:textColor="#000000" android:layout_marginStart="100dp"/>
+        <ImageView
+                android:src="@drawable/tan_open_book_cover_texture_1"
+                android:id="@+id/imageView"
+                android:scaleType="fitCenter"
+                android:layout_width="352dp" android:layout_height="425dp"
+                android:contentDescription="@string/book_Description" android:layout_marginStart="35dp"
+                android:layout_marginTop="125dp"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="274dp"
+                android:gravity="bottom" android:layout_marginTop="200dp">
+
+            <TextView
+                    android:text="@string/shots"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp" android:id="@+id/shots"
+                    android:textColor="#FFFFFF" android:textStyle="bold"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="44dp"
+                    app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="215dp"/>
+            <TextView
+                    android:text="@string/hits"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp" android:id="@+id/hits"
+                    android:textColor="#FFFFFF" android:textStyle="bold"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintTop_toBottomOf="@+id/shots" app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginEnd="215dp"/>
+            <TextView
+                    android:text="@string/caliber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp" android:id="@+id/caliber"
+                    android:textColor="#FFFFFF" android:textStyle="bold"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintTop_toBottomOf="@+id/hits" app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginEnd="215dp"/>
+            <TextView
+                    android:text="@string/target"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp" android:id="@+id/target"
+                    android:textColor="#FFFFFF" android:textStyle="bold"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintTop_toBottomOf="@+id/menas" app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginEnd="215dp"/>
+            <TextView
+                    android:gravity="center"
+                    android:text="@string/means"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp" android:id="@+id/menas"
+                    android:textColor="#FFFFFF" android:textStyle="bold"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintTop_toBottomOf="@+id/caliber" app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginEnd="215dp"/>
+
+            <EditText
+                    android:hint="@string/hint_Shots"
+                    android:textColorHint="#FFFFFF"
+                    android:inputType="number"
+                    android:textSize="12sp"
+                    android:autofillHints=""
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/input_Shots"
+                    android:textColor="#FFFFFF" android:textStyle="bold"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="32dp" android:layout_marginStart="60dp"
+                    app:layout_constraintStart_toEndOf="@+id/shots"/>
+            <EditText
+                    android:hint="@string/hint_Hits"
+                    android:textColorHint="#FFFFFF"
+                    android:inputType="number"
+                    android:textSize="12sp"
+                    android:autofillHints=""
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/input_Hits"
+                    android:textColor="#FFFFFF" android:textStyle="bold"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintTop_toBottomOf="@+id/input_Shots" android:layout_marginStart="60dp"
+                    app:layout_constraintStart_toEndOf="@+id/hits"/>
+            <EditText
+                    android:hint="@string/hint_Caliber"
+                    android:textColorHint="#FFFFFF"
+                    android:inputType="text"
+                    android:textSize="12sp"
+                    android:autofillHints=""
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/input_Caliber"
+                    android:textColor="#FFFFFF" android:textStyle="bold"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintTop_toBottomOf="@+id/input_Hits" android:layout_marginStart="60dp"
+                    app:layout_constraintStart_toEndOf="@+id/caliber"/>
+            <EditText
+                    android:hint="@string/hint_Target"
+                    android:textColorHint="#FFFFFF"
+                    android:inputType="text"
+                    android:textSize="12sp"
+                    android:autofillHints=""
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/input_Target"
+                    android:textColor="#FFFFFF" android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@+id/input_Means" android:layout_marginStart="60dp"
+                    app:layout_constraintStart_toEndOf="@+id/target"/>
+            <EditText
+                    android:hint="@string/hint_Means"
+                    android:textColorHint="#FFFFFF"
+                    android:inputType="text"
+                    android:textSize="12sp"
+                    android:autofillHints=""
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:id="@+id/input_Means"
+                    android:textColor="#FFFFFF" android:textStyle="bold"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintTop_toBottomOf="@+id/input_Caliber" android:layout_marginStart="60dp"
+                    app:layout_constraintStart_toEndOf="@+id/menas"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@android:drawable/ic_input_add"
+                android:id="@+id/save_Line_Btn"
+                android:background="#2196F3"
+                android:contentDescription="@string/bang_Add_Line"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="480dp" android:onClick="onClickSaveLine" android:clickable="true"
+                android:focusable="true" android:layout_marginStart="330dp"/>
+
+
+    </RelativeLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

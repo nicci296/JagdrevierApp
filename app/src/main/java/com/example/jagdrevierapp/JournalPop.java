@@ -1,18 +1,35 @@
 package com.example.jagdrevierapp;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.icu.text.SimpleDateFormat;
+import android.location.Location;
+import android.location.LocationManager;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import androidx.core.app.ActivityCompat;
+import com.example.jagdrevierapp.data.model.Journal;
 import com.example.jagdrevierapp.data.model.User;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.*;
 
+
+import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -25,7 +42,6 @@ public class JournalPop extends AppCompatActivity {
 
     private final String TAG = "JournalPop";
     private final String COLLECTION_KEY = "User";
-    private final String JOURNAL_COLLECTION_KEY = "Schussjournal";
 
     //##########################################################
     //###    Firebase - Authentication
@@ -38,7 +54,13 @@ public class JournalPop extends AppCompatActivity {
     //Initialize FireStore
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference dbUser = db.collection(COLLECTION_KEY);
-    private final CollectionReference dbJournal = dbUser.document(mFirebaseUser.getEmail()).collection(JOURNAL_COLLECTION_KEY);
+    private final CollectionReference dbJournal;
+
+    {
+        assert mFirebaseUser != null;
+        String JOURNAL_COLLECTION_KEY = "Schussjournal";
+        dbJournal = dbUser.document(Objects.requireNonNull(mFirebaseUser.getEmail())).collection(JOURNAL_COLLECTION_KEY);
+    }
 
 
     @Override
@@ -58,13 +80,12 @@ public class JournalPop extends AppCompatActivity {
         /**
          * ******************23.08.20 Nico ***************************************************
          * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-         * TextView soll den aktuellen Nick vom User anzeigen.
-         * Fürs erste wird die Mail-Adresse vom angemeldeten User genommen.
+         * TextView soll den aktuellen Nick vom User in der Überschrift anzeigen.
          * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
          */
 
         final TextView userText = findViewById(R.id.user_Name_Jrnl);
-        Query query = dbUser.whereEqualTo("mail",mFirebaseUser.getEmail());
+        Query query = dbUser.whereEqualTo("mail", Objects.requireNonNull(mFirebaseUser).getEmail());
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -72,9 +93,9 @@ public class JournalPop extends AppCompatActivity {
                     for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
                         Log.d(TAG, document.getId() + " => " + document.getData());
                         User currentUser = document.toObject(User.class);
-                        if(currentUser.getMail() != null ){
+                        if (currentUser.getMail() != null) {
 
-                            userText.setText(currentUser.getNick().toUpperCase()+"s'");
+                            userText.setText(currentUser.getNick().toUpperCase() + "s'");
                         }
                     }
                 } else {
@@ -84,9 +105,81 @@ public class JournalPop extends AppCompatActivity {
         });
     }
 
+    //Speichern der View-Eingaben in der User-bezogenen Schussjournal-Collection
+    public void onClickSaveLine(View v) {
+        final EditText shots = findViewById(R.id.input_Shots);
+        final EditText hits = findViewById(R.id.input_Hits);
+        final EditText caliber = findViewById(R.id.input_Caliber);
+        final EditText target = findViewById(R.id.input_Target);
+        final EditText means = findViewById(R.id.input_Means);
+        final int shotsTaken = Integer.parseInt(shots.getText().toString());
+        final int hitsLanded = Integer.parseInt(hits.getText().toString());
+        final Double caliberUsed = Double.parseDouble(caliber.getText().toString());
+        final String aimedTarget = target.getText().toString();
+        final String meansForShot = means.getText().toString();
 
+        //aktuelles Datum mit Uhrzeit
+        final String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
 
+        //Initialisierung eines LocationManagers zur Standortbestimmung für den Geopoint im Journal-Constructor
+        LocationManager locManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        String locationProvider = LocationManager.NETWORK_PROVIDER;
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager
+                .PERMISSION_GRANTED && ActivityCompat
+                .checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager
+                .PERMISSION_GRANTED) {
+            return;
+        }
+        Location lastKnownLocation = locManager.getLastKnownLocation(locationProvider);
+        final GeoPoint current = new GeoPoint(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
 
+        //neues Journal Object zur Übergabe an die Firebase mit View-Eingaben, GeoPoint und Datum
+        Journal journal = new Journal(shotsTaken, hitsLanded, caliberUsed, meansForShot,
+                aimedTarget, date, current);
 
+        dbJournal.document(journal.getDate()).set(journal)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(JournalPop.this, R.string.line_Add_Success, Toast.LENGTH_LONG)
+                                .show();
+                        shots.getText().clear();
+                        hits.getText().clear();
+                        caliber.getText().clear();
+                        target.getText().clear();
+                        means.getText().clear();
+                        Intent changeIntent = new Intent(JournalPop.this,Schussjournal.class);
+                        startActivity(changeIntent);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(JournalPop.this, R.string.line_Add_Fail,
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }/*else{
+
+                            for(int i = 2 ; journal.getIndex() == i++ ; i++ ){
+
+                               journal = new Journal(i,shotsTaken,hitsLanded,caliberUsed,meansForShot,
+                                       aimedTarget,date,current);
+
+                                dbJournal.add(journal).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    @Override
+                                    public void onSuccess(DocumentReference documentReference) {
+                                        Toast.makeText(JournalPop.this,"Eintrag angelegt!",Toast.LENGTH_LONG)
+                                                .show();
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(JournalPop.this,"Eintrag konnte nicht angelegt werden!",
+                                                Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
+                        }*/
 
 }
