@@ -7,39 +7,23 @@
     android:background="@drawable/background"
     tools:context=".JagdeinrichtungenVerwalten">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btnAddHochsitz"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="30dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_input_add" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/navHeader"
         android:layout_width="0dp"
         android:layout_height="142dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/titelJagdeinrichtung"
-            android:layout_width="wrap_content"
+        <ImageView
+            android:id="@+id/wood_Board"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/titleJagdeinrichtungen"
-            android:textColor="@color/common_google_signin_btn_text_light_default"
-            android:textSize="30sp"
+            android:contentDescription="@string/wood_Board"
+            android:src="@drawable/hiclipart_com"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -48,45 +32,71 @@
             android:layout_width="82dp"
             android:layout_height="53dp"
             android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="24dp"
-            android:layout_marginBottom="12dp"
-            android:text="@string/schussBtn"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="@string/jagdein_Btn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/mapBtn"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/mapBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginBottom="12dp"
+            android:layout_marginTop="8dp"
             android:text="@string/mapBtn"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/schussBtn"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/logoutBtn"
-            app:layout_constraintTop_toBottomOf="@+id/titelJagdeinrichtung"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/logoutBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginBottom="12dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="sans-serif-thin"
             android:text="@string/logOutBtnText"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="10sp"
             app:layout_constraintEnd_toStartOf="@+id/mapBtn"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/titelJagdeinrichtung"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/bang_Jrnl_Head"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:text="@string/titleJagdeinrichtungen"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnAddHochsitz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="30dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:backgroundTint="#955E3B3B"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:rippleColor="#F40000"
+        app:srcCompat="@android:drawable/ic_input_add" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -104,7 +114,8 @@
             android:layout_height="match_parent"
             android:layout_gravity="center|center_horizontal"
             android:text="@string/allHochsitze"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:textColor="#7CD679" />
     </LinearLayout>
 
     <ScrollView
