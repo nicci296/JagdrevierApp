@@ -81,42 +81,55 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <RelativeLayout
-            android:layout_width="391dp"
-            android:layout_height="787dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" android:id="@+id/second_Lvl_Layout">
+        android:id="@+id/second_Lvl_Layout"
+        android:layout_width="391dp"
+        android:layout_height="787dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/navHeader">
 
-        <androidx.constraintlayout.widget.ConstraintLayout android:layout_height="606dp"
-                                                           android:layout_width="match_parent"
-                                                           android:layout_marginTop="190dp"
-                                                           android:id="@+id/third_Lvl_Layout">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/third_Lvl_Layout"
+            android:layout_width="match_parent"
+            android:layout_height="606dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="-2dp">
+
             <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@android:drawable/ic_input_add"
-                    android:id="@+id/add_Line_Btn"
-                    android:background="#2196F3"
-                    android:contentDescription="@string/bang_Add_Line" android:onClick="onClickAddLine"
-                    android:layout_marginBottom="4dp"
-                    app:layout_constraintBottom_toTopOf="@+id/recyclerView"
-                    app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="80dp"/>
+                android:id="@+id/add_Line_Btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="80dp"
+                android:layout_marginBottom="4dp"
+                android:background="#2196F3"
+                android:contentDescription="@string/bang_Add_Line"
+                android:onClick="onClickAddLine"
+                android:src="@android:drawable/ic_input_add"
+                app:layout_constraintBottom_toTopOf="@+id/journal_View"
+                app:layout_constraintStart_toStartOf="parent" />
+
             <TextView
-                    android:id="@+id/user_Name_Jrnl"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textColor="#FFFFFF"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginTop="32dp" app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginStart="68dp"/>
+                android:id="@+id/user_Name_Jrnl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="68dp"
+                android:layout_marginTop="32dp"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <androidx.recyclerview.widget.RecyclerView
-                    android:layout_width="281dp"
-                    android:layout_height="302dp"
-                    android:scrollbars="vertical" android:background="#4CAF50" android:id="@+id/recyclerView"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginBottom="164dp"
-                    app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="70dp"/>
+                android:id="@+id/journal_View"
+                android:layout_width="281dp"
+                android:layout_height="302dp"
+                android:layout_marginTop="56dp"
+                android:background="#4CAF50"
+                android:scrollbars="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
