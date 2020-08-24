@@ -1,5 +1,9 @@
 package com.example.jagdrevierapp.data.model;
 
+import android.view.View;
+import android.widget.TextView;
+import androidx.recyclerview.widget.RecyclerView;
+import com.example.jagdrevierapp.R;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.Date;
@@ -28,6 +32,8 @@ public class Journal {
         this.date = date;
         this.location = location;
     }
+
+
 
    /* public int getIndex() {
         return index;

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                                   android:layout_width="match_parent"
+                                   android:layout_height="wrap_content"
+                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                   android:layout_marginStart="8dp" android:layout_marginTop="8dp"
+                                   android:layout_marginEnd="8dp"
+                                   app:cardBackgroundColor="#FFFFF8" >
+
+    <RelativeLayout
+            android:layout_width="match_parent" android:layout_height="match_parent"
+            android:padding="8dp">
+        
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:id="@+id/date_View" android:text="yyyy-MM-dd HH:mm:ss"
+                  android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                  android:layout_alignParentTop="true"
+                  android:layout_alignParentStart="true" android:maxLines="1"
+                   />
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:id="@+id/location_View" android:text="Location"
+                  android:textAlignment="viewEnd"
+                  android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                  android:layout_alignParentTop="true"
+                  android:maxLines="1" android:layout_toEndOf="@+id/date_View"
+                  android:layout_alignParentEnd="true" android:ellipsize="end"/>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:id="@+id/shot_View" android:text="Schüsse: 3"
+                  android:maxLines="1"
+                  android:layout_alignParentStart="true" android:layout_below="@+id/date_View"/>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:id="@+id/hit_View" android:text="Treffer: 1"
+                  android:layout_below="@+id/date_View" android:maxLines="1"
+                  android:layout_toEndOf="@+id/shot_View" android:layout_marginStart="10dp"/>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:id="@+id/caliber_View" android:text="Kaliber: 0.9"
+                  android:maxLines="1" android:layout_marginStart="10dp"
+                  android:layout_toEndOf="@+id/hit_View" android:layout_below="@+id/date_View"/>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:id="@+id/target_View" android:text="Ziel: Wildschwein"
+                  android:layout_below="@+id/shot_View" android:maxLines="1" />
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                  android:id="@+id/mean_View" android:text="Zweck: Warnschuss"
+                  android:layout_marginStart="10dp"
+                  android:layout_below="@+id/shot_View"
+                  android:layout_toEndOf="@+id/target_View" android:maxLines="1"  />
+
+
+
+
+    </RelativeLayout>
+
+
+
+
+</androidx.cardview.widget.CardView>

@@ -48,12 +48,12 @@ dependencies {
 
     // Firebase
     implementation 'com.google.firebase:firebase-auth:19.3.2'
-    //implementation 'com.google.firebase:firebase-database'
-    //implementation 'com.google.firebase:firebase-storage'
 
     //Einbindung Cloud Firestore von Google als Datenbank für die Anwendung.
     implementation 'com.google.firebase:firebase-analytics:17.5.0'
     implementation 'com.google.firebase:firebase-firestore:21.5.0'
+    implementation "com.firebaseui:firebase-ui-firestore:6.0.2"
+    implementation "com.firebaseui:firebase-ui-auth:6.0.2"
 
 
     //Sonstiges

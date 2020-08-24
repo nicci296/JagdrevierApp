@@ -9,24 +9,24 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
-import com.example.jagdrevierapp.data.model.Hochsitz;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.jagdrevierapp.data.model.Journal;
 import com.example.jagdrevierapp.data.model.User;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.*;
+import com.google.firebase.firestore.Query;
 
+import java.util.Date;
 import java.util.Objects;
+
 
 public class Schussjournal extends AppCompatActivity  {
 
@@ -58,7 +58,7 @@ public class Schussjournal extends AppCompatActivity  {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference dbUser = db.collection(COLLECTION_KEY);
     private final CollectionReference dbJournal = dbUser.document(mFirebaseUser.getEmail()).collection(JOURNAL_COLLECTION_KEY);
-
+    private JournalAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,8 +114,9 @@ public class Schussjournal extends AppCompatActivity  {
          */
 
         final TextView userText = findViewById(R.id.user_Name_Jrnl);
-        Query query = dbUser.whereEqualTo("mail",mFirebaseUser.getEmail());
-        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+
+        Query userQuery = dbUser.whereEqualTo("mail",mFirebaseUser.getEmail());
+        userQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -123,8 +124,8 @@ public class Schussjournal extends AppCompatActivity  {
                         Log.d(TAG, document.getId() + " => " + document.getData());
                         User currentUser = document.toObject(User.class);
                         if(currentUser.getMail() != null ){
-
                             userText.setText(currentUser.getNick().toUpperCase()+"s'");
+
                         }
                     }
                 } else {
@@ -136,12 +137,56 @@ public class Schussjournal extends AppCompatActivity  {
         /**
          * **************24.08.20. Nico*****************************************
          * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-         * Abruf aller docs aus dem Schussjournal und Darstellung in RecyclerView
+         * Abruf aller docs aus dem Schussjournal und Darstellung in RecyclerView.
+         * Implementierung der Methode weiter unten.
          * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
          */
+        //Query sortiert die Docs aus User-bezogenen Schussjournal nach Datum
+        Query journalUser = dbJournal.orderBy("date", Query.Direction.DESCENDING);
+        //RecyclerView gibt Journal aus
+        RecyclerView journalView = findViewById(R.id.journal_View);
+        journalView.setHasFixedSize(true);
+        journalView.setLayoutManager(new LinearLayoutManager(this));
+        journalView.setAdapter(adapter);
+
+        FirestoreRecyclerOptions<Journal> options = new FirestoreRecyclerOptions.Builder<Journal>()
+                .setQuery(journalUser,Journal.class)
+                .build();
+
+        //Instanzierung des Adapters
+        adapter = new JournalAdapter(options);
+
+        journalView.setAdapter(adapter);
 
 
+    }
 
+    /*private void setUpRecyclerView(){
+        //Query sortiert die Docs aus User-bezogenen Schussjournal nach Datum
+        Query journalUser = dbJournal.orderBy("date", Query.Direction.DESCENDING);
+
+        FirestoreRecyclerOptions<Journal> options = new FirestoreRecyclerOptions.Builder<Journal>()
+                .setQuery(journalUser,Journal.class)
+                .build();
+
+        adapter = new JournalAdapter(options);
+        //RecyclerView gibt Journal aus
+        RecyclerView journalView = findViewById(R.id.journal_View);
+        journalView.setHasFixedSize(true);
+        journalView.setLayoutManager(new LinearLayoutManager(this));
+        journalView.setAdapter(adapter);
+    }*/
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
     }
 
     //Weiterleitung zur JournalPop, um einen neuen Eintrag anzulegen.
