@@ -69,6 +69,11 @@
     <string name="hint_Caliber">Wasn Ballermann!</string>
     <string name="hint_Target">z.B. Bambi </string>
     <string name="hint_Means">Nur ein Warnschuss?</string>
+    <string name="save_Line_Text">Eintrag speichern</string>
+    <string name="return_Journal_Btn">Return to Journal.</string>
+    <string name="line_Add_Success">Journaleintrag angelegt!</string>
+    <string name="line_Add_Fail">Journaleintrag konnte nicht angelegt werden!</string>
+    <string name="book_Description">Eingaben für Journaleintrag</string>
 
 
 

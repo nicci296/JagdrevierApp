@@ -6,20 +6,20 @@ import java.util.Date;
 
 public class Journal {
 
-    private int index;
+    /*private int index;*/
     private int shots;
     private int hits;
     private double caliber;
     private String mean;
     private String target;
-    private Date date;
+    private String date;
     private GeoPoint location;
 
     public Journal() {
     }
 
-    public Journal(int index,int shots, int hits, double caliber, String mean, String target, Date date, GeoPoint location) {
-        this.index = index;
+    public Journal(int shots, int hits, double caliber, String mean, String target, String date, GeoPoint location) {
+        /*this.index = index;*/
         this.shots = shots;
         this.hits = hits;
         this.caliber = caliber;
@@ -29,13 +29,13 @@ public class Journal {
         this.location = location;
     }
 
-    public int getIndex() {
+   /* public int getIndex() {
         return index;
     }
 
     public void setIndex(int index) {
         this.index = index;
-    }
+    }*/
 
     public int getShots() {
         return shots;
@@ -77,11 +77,11 @@ public class Journal {
         this.target = target;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
