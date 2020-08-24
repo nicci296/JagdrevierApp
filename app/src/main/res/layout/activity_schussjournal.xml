@@ -97,7 +97,7 @@
                     android:background="#2196F3"
                     android:contentDescription="@string/bang_Add_Line" android:onClick="onClickAddLine"
                     android:layout_marginBottom="4dp"
-                    app:layout_constraintBottom_toTopOf="@+id/recyclerView"
+                    app:layout_constraintBottom_toTopOf="@+id/journal_View"
                     app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="80dp"/>
             <TextView
                     android:id="@+id/user_Name_Jrnl"
@@ -110,12 +110,14 @@
                     android:layout_marginTop="32dp" app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginStart="68dp"/>
             <androidx.recyclerview.widget.RecyclerView
-                    android:layout_width="281dp"
-                    android:layout_height="302dp"
-                    android:scrollbars="vertical" android:background="#4CAF50" android:id="@+id/recyclerView"
+                    android:layout_width="375dp"
+                    android:layout_height="293dp"
+                    android:scrollbars="vertical" android:background="#4CAF50" android:id="@+id/journal_View"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_marginBottom="164dp"
-                    app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="70dp"/>
+                    android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp">
+            </androidx.recyclerview.widget.RecyclerView>
             <TextView
                     android:text="@string/bang_Jrnl_Head"
                     android:layout_width="wrap_content"
