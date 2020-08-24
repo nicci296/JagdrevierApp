@@ -37,6 +37,7 @@
     <string name="toRegisterText">Noch nicht registriert? - Klicke hier</string>
     <string name="schussBtn">Schussjournal</string>
     <string name="revierBtn">Revierverwaltung</string>
+    <string name="jagdein_Btn">Jagdeinrichtunge</string>
     <string name="titleSchussjournal">Schussjournal</string>
 
     <!-- Revier verwalten -->
@@ -74,6 +75,7 @@
     <string name="line_Add_Success">Journaleintrag angelegt!</string>
     <string name="line_Add_Fail">Journaleintrag konnte nicht angelegt werden!</string>
     <string name="book_Description">Eingaben für Journaleintrag</string>
+    <string name="wood_Board">Planke für Überschrift</string>
 
 
 

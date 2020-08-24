@@ -14,6 +14,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+        <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="159dp" app:srcCompat="@drawable/hiclipart_com"
+                android:id="@+id/wood_Board" android:contentDescription="@string/wood_Board"/>
         <TextView
                 android:text="@string/bang_Jrnl_Head"
                 android:layout_width="wrap_content"
@@ -21,19 +25,20 @@
                 android:textAlignment="center"
                 android:textAllCaps="true" android:textSize="14sp"
                 android:textStyle="bold"
-                android:layout_marginTop="30dp"
-                android:textColor="#000000" android:layout_marginStart="220dp"/>
+                android:layout_marginTop="100dp"
+                android:textColor="#000000" android:layout_marginStart="200dp"/>
         <TextView
                 android:id="@+id/user_Name_Jrnl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:layout_marginTop="30dp"
-                android:textColor="#000000" android:layout_marginStart="100dp"/>
+                android:layout_marginTop="100dp"
+                android:textColor="#000000" android:layout_toStartOf="@id/bang_Jrnl_Head"
+                android:layout_marginEnd="-195dp"/>
         <ImageView
                 android:src="@drawable/tan_open_book_cover_texture_1"
-                android:id="@+id/imageView"
+                android:id="@+id/open_Journal"
                 android:scaleType="fitCenter"
                 android:layout_width="352dp" android:layout_height="425dp"
                 android:contentDescription="@string/book_Description" android:layout_marginStart="35dp"
