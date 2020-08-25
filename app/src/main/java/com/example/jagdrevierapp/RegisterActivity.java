@@ -1,5 +1,6 @@
 package com.example.jagdrevierapp;
 
+import android.icu.text.SimpleDateFormat;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
@@ -26,9 +27,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -96,16 +95,28 @@ public class RegisterActivity extends AppCompatActivity {
         //##########################################################
         //###    Firebase - Firestore
         //##########################################################
-        //Initialize FireStore - Collection Hochsitze
+        //Initialize FireStore - Collection User
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference colUser = db.collection(COLLECTION_KEY);
 
+        /**
+         * *********UPDATE 25.08.20 Nico ***********************
+         * +++++++++++++++++++++++++++++++++++++++++++++++++++++
+         * Anstelle einer HashMap wird nun ein User-Objekt an die Datenbank übergeben
+         * Mehr wars gar nicht. Hat sofort funktioniert :)
+         * Außerdem noch ein String eingefügt, um das Datum der Registrierung festzuhalten.
+         * Hab den alten Code noch stehen gelassen, damit der Unterschied besser erkenntlich ist.
+         * +++++++++++++++++++++++++++++++++++++++++++++++++++++
+         */
         //Calendar c = Calendar.getInstance();
-        Map<String, Object> userJaeger = new HashMap<String, Object>();
+        /*Map<String, Object> userJaeger = new HashMap<String, Object>();
         userJaeger.put(NICK, user);
-        userJaeger.put(PAECHTER, paechter);
-        //userJaeger.put(REGISTERED, c);
-        userJaeger.put(MAIL, mail);
+        userJaeger.put(PAECHTER, paechter);*/
+        /*userJaeger.put(REGISTERED, registerDate);
+        userJaeger.put(MAIL, mail);*/
+        String registerDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).
+                format(new Date());
+        User userJaeger = new User(mail,user,paechter,registerDate);
 
 
         colUser.document(mail).set(userJaeger)
