@@ -18,7 +18,6 @@ import android.os.Bundle;
 import androidx.core.app.ActivityCompat;
 import com.example.jagdrevierapp.data.model.Journal;
 import com.example.jagdrevierapp.data.model.User;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -47,15 +46,14 @@ public class JournalPop extends AppCompatActivity {
     //###    Firebase - Authentication
     //##########################################################
     //Initialize Firebase Auth
-    //Firebase instance variables
     final FirebaseAuth mAuth = FirebaseAuth.getInstance();
     final FirebaseUser mFirebaseUser = mAuth.getCurrentUser();
 
-    //Initialize FireStore
+
+    //Initialize FireStore and References
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference dbUser = db.collection(COLLECTION_KEY);
     private final CollectionReference dbJournal;
-
     {
         assert mFirebaseUser != null;
         String JOURNAL_COLLECTION_KEY = "Schussjournal";
@@ -95,7 +93,7 @@ public class JournalPop extends AppCompatActivity {
                         User currentUser = document.toObject(User.class);
                         if (currentUser.getMail() != null) {
 
-                            userText.setText(currentUser.getNick().toUpperCase() + "s'");
+                            userText.setText(currentUser.getNick().toUpperCase() + "s");
                         }
                     }
                 } else {
@@ -117,7 +115,6 @@ public class JournalPop extends AppCompatActivity {
         final Double caliberUsed = Double.parseDouble(caliber.getText().toString());
         final String aimedTarget = target.getText().toString();
         final String meansForShot = means.getText().toString();
-
         //aktuelles Datum mit Uhrzeit
         final String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
 
@@ -137,6 +134,10 @@ public class JournalPop extends AppCompatActivity {
         Journal journal = new Journal(shotsTaken, hitsLanded, caliberUsed, meansForShot,
                 aimedTarget, date, current);
 
+        /*
+            Speichern des Journal-Documents in der Subcollection "Schussjournal" des angemeldeten Users
+            und Rückkehr zum Schussjournal
+         */
         dbJournal.document(journal.getDate()).set(journal)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -159,27 +160,6 @@ public class JournalPop extends AppCompatActivity {
             }
         });
 
-    }/*else{
-
-                            for(int i = 2 ; journal.getIndex() == i++ ; i++ ){
-
-                               journal = new Journal(i,shotsTaken,hitsLanded,caliberUsed,meansForShot,
-                                       aimedTarget,date,current);
-
-                                dbJournal.add(journal).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                    @Override
-                                    public void onSuccess(DocumentReference documentReference) {
-                                        Toast.makeText(JournalPop.this,"Eintrag angelegt!",Toast.LENGTH_LONG)
-                                                .show();
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(JournalPop.this,"Eintrag konnte nicht angelegt werden!",
-                                                Toast.LENGTH_LONG).show();
-                                    }
-                                });
-                            }
-                        }*/
+    }
 
 }
