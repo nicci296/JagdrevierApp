@@ -58,6 +58,7 @@
     <!-- Schussjournal -->
     <string name="bang_Jrnl_Head">Schussjournal</string>
     <string name="bang_Add_Line">Neuer Eintrag</string>
+    <string name="delete">DELETE</string>
 
     <!-- JournalPop -->
     <string name="shots">Anzahl Schüsse:</string>

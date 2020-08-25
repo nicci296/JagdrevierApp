@@ -281,9 +281,10 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
          * Speichern des Hochsitzobjects in der Collection dbHochsitz.
          * Über .document(inputText).set(kanzel) wird die ID in der DB mit dem Text aus dem EditText gefüllt.
          * Soll Firebase eine eigene ID generieren, müsste auf dbHochsitz.add(kanzel) geändert werden.
-         * Wenn das Objekt erfolgreich gespeichert werden konnte, wird ein Marker an der aktuellen Position
-         * (currentLoc) auf der Karte gesetzt und die Kamera schwenkt zum neuen Marker rüber.
+         * OnSuccessListener: Wenn das Objekt erfolgreich gespeichert werden konnte, wird ein Marker an der
+         * aktuellen Position (currentLoc) auf der Karte gesetzt und die Kamera schwenkt zum neuen Marker rüber.
          * Abschließend wird die EditText-View wieder geleert.
+         * OnFailureListener: Toast weist auf fehlgeschlagenes Speichern hin
          * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
          * ***************UPDATE 22.08.20 Nico**************************************************************
          * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

@@ -3,12 +3,15 @@ package com.example.jagdrevierapp;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.jagdrevierapp.data.model.Journal;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+
 
 /**
  * ***************Nico 24.08.20 ***************************
@@ -42,10 +45,10 @@ public class JournalAdapter extends FirestoreRecyclerAdapter<Journal, JournalAda
         super(options);
     }
 
+
     //Callback, welcher die an die journal_item-CardView zu übergebenen Werte pro TextView festlegt
     @Override
     protected void onBindViewHolder(JournalHolder journalHolder, int i, Journal journal) {
-
 
         journalHolder.shotView.setText("Schüsse: " + journal.getShots());
         journalHolder.hitView.setText("Treffer: " + journal.getHits());
@@ -54,7 +57,6 @@ public class JournalAdapter extends FirestoreRecyclerAdapter<Journal, JournalAda
         journalHolder.meanView.setText("Zweck: " + journal.getMean());
         journalHolder.dateView.setText(journal.getDate().toString());
         journalHolder.locationView.setText(journal.getLocation().toString());
-
     }
 
     /*
@@ -70,7 +72,9 @@ public class JournalAdapter extends FirestoreRecyclerAdapter<Journal, JournalAda
 
     //Methode zum Löschen eines Journaleintrags aus der View und dem Firestore
     public void deleteItem(int position){
+
         getSnapshots().getSnapshot(position).getReference().delete();
+
     }
 
     /*  Eine eigene ViewHolder-Class, welcher die einzelnen Views der item_layout.xml bekannt gemacht werden.
@@ -86,6 +90,9 @@ public class JournalAdapter extends FirestoreRecyclerAdapter<Journal, JournalAda
        TextView dateView;
        TextView locationView;
 
+       public RelativeLayout viewBackground;
+       public RelativeLayout viewForeground;
+
        //super Constructor
        public JournalHolder(View itemView) {
            super(itemView);
@@ -96,6 +103,10 @@ public class JournalAdapter extends FirestoreRecyclerAdapter<Journal, JournalAda
            meanView = itemView.findViewById(R.id.mean_View);
            dateView = itemView.findViewById(R.id.date_View);
            locationView = itemView.findViewById(R.id.location_View);
+
+           viewBackground = itemView.findViewById(R.id.view_background);
+           viewForeground = itemView.findViewById(R.id.viewForeground);
+
        }
    }
 }

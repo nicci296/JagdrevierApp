@@ -34,12 +34,41 @@
                                    app:cardBackgroundColor="#FFFFF8" >
 
     <RelativeLayout
+            android:id="@+id/view_background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/bg_row_background"
+            android:visibility="invisible">
+
+        <ImageView
+                android:id="@+id/delete_icon"
+                android:layout_width="@dimen/ic_delete"
+                android:layout_height="@dimen/ic_delete"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/padd_10"
+                android:src="@android:drawable/ic_menu_delete"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/padd_10"
+                android:layout_toLeftOf="@id/delete_icon"
+                android:text="@string/delete"
+                android:textColor="#fff"
+                android:textSize="13dp" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
             android:layout_width="match_parent" android:layout_height="match_parent"
-            android:padding="8dp">
-        
+            android:padding="8dp" android:id="@+id/viewForeground">
+
         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                   android:id="@+id/date_View" android:text="yyyy-MM-dd HH:mm:ss"
-                  android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                  android:textAppearance="@style/TextAppearance.AppCompat.Small"
                   android:layout_alignParentTop="true"
                   android:layout_alignParentStart="true" android:maxLines="1"
                    />
