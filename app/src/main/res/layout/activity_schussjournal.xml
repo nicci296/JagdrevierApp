@@ -63,20 +63,31 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/bang_Jrnl_Head"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
-            android:text="@string/bang_Jrnl_Head"
-            android:textAlignment="center"
-            android:textAllCaps="true"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent" />
+                android:id="@+id/bang_Jrnl_Head"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:text="@string/bang_Jrnl_Head"
+                android:textAlignment="center"
+                android:textAllCaps="true"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"/>
+        <TextView
+                android:id="@+id/user_Name_Jrnl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/wood_Board"
+                android:layout_marginEnd="45dp" app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintHorizontal_bias="0.0" android:layout_marginStart="100dp"
+                app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="45dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -108,28 +119,15 @@
                 app:layout_constraintBottom_toTopOf="@+id/journal_View"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <TextView
-                android:id="@+id/user_Name_Jrnl"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="68dp"
-                android:layout_marginTop="32dp"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/journal_View"
-                android:layout_width="281dp"
-                android:layout_height="302dp"
-                android:layout_marginTop="56dp"
-                android:background="#4CAF50"
-                android:scrollbars="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                    android:id="@+id/journal_View"
+                    android:layout_width="281dp"
+                    android:layout_height="302dp"
+                    android:layout_marginTop="56dp"
+                    android:scrollbars="vertical"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

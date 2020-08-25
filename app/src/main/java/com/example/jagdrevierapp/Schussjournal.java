@@ -51,14 +51,14 @@ public class Schussjournal extends AppCompatActivity  {
     //###    Firebase - Authentication
     //##########################################################
     //Initialize Firebase Auth
-    //Firebase instance variables
     final FirebaseAuth mAuth = FirebaseAuth.getInstance();
     final FirebaseUser mFirebaseUser = mAuth.getCurrentUser();
 
-    //Initialize FireStore
+    //Initialize FireStore and References
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference dbUser = db.collection(COLLECTION_KEY);
     private final CollectionReference dbJournal = dbUser.document(mFirebaseUser.getEmail()).collection(JOURNAL_COLLECTION_KEY);
+    //Initialisierung eines neuen JournalAdapter-Objekts - Instanzierung weiter unten
     private JournalAdapter adapter;
 
     @Override
@@ -138,30 +138,40 @@ public class Schussjournal extends AppCompatActivity  {
         /**
          * **************24.08.20. Nico*****************************************
          * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-         * Abruf aller docs aus dem Schussjournal und Darstellung in RecyclerView.
-         * Implementierung der Methode weiter unten.
+         * Abruf aller docs aus dem Schussjournal und Darstellung in RecyclerView
+         * via JournalAdapter.
          * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
          */
         //Query sortiert die Docs aus User-bezogenen Schussjournal nach Datum
         Query journalUser = dbJournal.orderBy("date", Query.Direction.DESCENDING);
-        //RecyclerView gibt Journal aus
+        //RecyclerView gibt Journaleinträge aus, indem es das JournalAdapter-Objekt registriert
         RecyclerView journalView = findViewById(R.id.journal_View);
         journalView.setHasFixedSize(true);
         journalView.setLayoutManager(new LinearLayoutManager(this));
-        journalView.setAdapter(adapter);
 
+
+
+        /*
+            ItemTouchHelper legt fest was passiert, wenn bestimmte Elemente vom User berührt werden.
+            legt in seinen Parametern die möglichen Bewegungsrichtungen für Drag und Swipe fest.
+            Da Drag nicht benötigt wird es 0 gesetzt und die Swipe-Richtungen LEFT und RIGHT festgelegt.
+         */
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+            //OnMove definiert Vorgehen bei Drag&Drop-Bewegungen - hier irrelevant
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder,
                                   @NonNull RecyclerView.ViewHolder target) {
                 return false;
             }
 
+            //onSwipe definiert, was ein Swipe auslöst. In diesem Fall die deleteItem-Methode aus dem JournalAdapter
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 adapter.deleteItem(viewHolder.getAdapterPosition());
             }
+            //abschließend wird der ItemTouchHelper an die RecyclerView gebunden.
         }).attachToRecyclerView(journalView);
 
         FirestoreRecyclerOptions<Journal> options = new FirestoreRecyclerOptions.Builder<Journal>()
@@ -176,28 +186,14 @@ public class Schussjournal extends AppCompatActivity  {
 
     }
 
-    /*private void setUpRecyclerView(){
-        //Query sortiert die Docs aus User-bezogenen Schussjournal nach Datum
-        Query journalUser = dbJournal.orderBy("date", Query.Direction.DESCENDING);
-
-        FirestoreRecyclerOptions<Journal> options = new FirestoreRecyclerOptions.Builder<Journal>()
-                .setQuery(journalUser,Journal.class)
-                .build();
-
-        adapter = new JournalAdapter(options);
-        //RecyclerView gibt Journal aus
-        RecyclerView journalView = findViewById(R.id.journal_View);
-        journalView.setHasFixedSize(true);
-        journalView.setLayoutManager(new LinearLayoutManager(this));
-        journalView.setAdapter(adapter);
-    }*/
-
+    //onStart-Callback legt fest, dass der adapter bei Activity-Start die datenbank auf relevante Einträge überwacht
     @Override
     protected void onStart() {
         super.onStart();
         adapter.startListening();
     }
 
+    //OnStop-callback legt fest, dass der adapter bei Activity-Stop die Datenbank-Überwachung beendet
     @Override
     protected void onStop() {
         super.onStop();

@@ -10,14 +10,39 @@ import com.example.jagdrevierapp.data.model.Journal;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
+/**
+ * ***************Nico 24.08.20 ***************************
+ * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ * Damit die in der userbezogenen Schussjournal-Collection liegenden Journaleinträge ordentlich
+ * in einer RecyclerView(View zur Darstellung mehrerer Docs) dargestellt werden können, bedarf es folgender Schritte:
+ *
+ *      1. Implementierung der benötigten Dependencies (s. build.gradle(App))
+ *      2. Anlegen und Design einer Layout-XML zur Gestaltung der einzelnen
+ *         Einträge der RecyclerView (s. journal_item.xml)
+ *      3. Anlegen und Implementierung eines FirestoreRecyclerAdapters, welcher
+ *         die datenbank nach den gewünschten Docs abhört, diese holt und an die View weitergibt,
+ *         welche in der RecyclerView angezeigt wird.
+ *
+ *      4. Instanzierung in der Schussjournal Activity (s. selbige)
+ *
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ */
+
+/*
+    Der FirestoreRecyclerAdapter erbt vom gängigen RecyclerAdapter und ergänzt diesen um einige Automatismen
+    in Bezug auf Google Firebase.
+    Der Adapter arbeitet in diesem Fall mit der Modelklasse Journal.java sowie einem Objekt JournalHolder der
+    internen Klasse ViewHolder.
+
+ */
 public class JournalAdapter extends FirestoreRecyclerAdapter<Journal, JournalAdapter.JournalHolder> {
 
-
+    //super Constructor
     public JournalAdapter(FirestoreRecyclerOptions<Journal> options) {
         super(options);
     }
 
-
+    //Callback, welcher die an die journal_item-CardView zu übergebenen Werte pro TextView festlegt
     @Override
     protected void onBindViewHolder(JournalHolder journalHolder, int i, Journal journal) {
 
@@ -27,11 +52,15 @@ public class JournalAdapter extends FirestoreRecyclerAdapter<Journal, JournalAda
         journalHolder.caliberView.setText("Kaliber:" + String.valueOf(journal.getCaliber()));
         journalHolder.targetView.setText("Ziel: " + journal.getTarget());
         journalHolder.meanView.setText("Zweck: " + journal.getMean());
-        journalHolder.dateView.setText(journal.getDate());
+        journalHolder.dateView.setText(journal.getDate().toString());
         journalHolder.locationView.setText(journal.getLocation().toString());
 
     }
 
+    /*
+        Callback, welcher festlegt, an welche View die Journal-daten übergeben werden (journal_item.xml)
+        und einen neuen JournalHolder mit dieser View als Parameter zurückgibt.
+     */
     @NonNull
     @Override
     public JournalHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -39,10 +68,15 @@ public class JournalAdapter extends FirestoreRecyclerAdapter<Journal, JournalAda
         return new JournalHolder(v);
     }
 
+    //Methode zum Löschen eines Journaleintrags aus der View und dem Firestore
     public void deleteItem(int position){
         getSnapshots().getSnapshot(position).getReference().delete();
     }
 
+    /*  Eine eigene ViewHolder-Class, welcher die einzelnen Views der item_layout.xml bekannt gemacht werden.
+        Wie der Name vermutet lässt, ist diese Klasse in seinen Callbacks verantwortlich, die Werte der Views
+        aufzunehmen und an die RecyclerView mittels des Adapters zu übergeben.
+     */
     class JournalHolder extends RecyclerView.ViewHolder{
        TextView shotView;
        TextView hitView;
@@ -52,6 +86,7 @@ public class JournalAdapter extends FirestoreRecyclerAdapter<Journal, JournalAda
        TextView dateView;
        TextView locationView;
 
+       //super Constructor
        public JournalHolder(View itemView) {
            super(itemView);
            shotView = itemView.findViewById(R.id.shot_View);

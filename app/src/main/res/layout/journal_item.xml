@@ -1,4 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+        <!--
+        * ***************Nico 24.08.20 ***************************
+        * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        * Damit die in der userbezogenen Schussjournal-Collection liegenden Journaleinträge ordentlich
+        * in einer RecyclerView(View zur Darstellung mehrerer Docs) dargestellt werden können, bedarf es folgender Schritte:
+        *
+        *      1. Implementierung der benötigten Dependencies (s. build.gradle(App))
+        *      2. Anlegen und Design einer Layout-XML zur Gestaltung der einzelnen
+        *         Einträge der RecyclerView
+        *      3. Anlegen und Implementierung eines FirestoreRecyclerAdapters, welcher
+        *         die datenbank nach den gewünschten Docs abhört, diese holt und an die View weitergibt,
+        *         welche in der RecyclerView angezeigt wird. (s. JournalAdapter.java)
+        *
+        *      4. Instanzierung in der Schussjournal Activity (s. selbige)
+        *
+        * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        -->
+
+    <!--
+        *****************************25.08.20 Nico*****************************
+        +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        Eine CardView, welche das Layout für die in der RecyclerView anzuzeigenden Documents definiert.
+        +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        -->
+
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
                                    android:layout_width="match_parent"
                                    android:layout_height="wrap_content"

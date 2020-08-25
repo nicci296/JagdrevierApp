@@ -1,16 +1,19 @@
 package com.example.jagdrevierapp.data.model;
 
-import android.view.View;
-import android.widget.TextView;
-import androidx.recyclerview.widget.RecyclerView;
-import com.example.jagdrevierapp.R;
+
 import com.google.firebase.firestore.GeoPoint;
 
 import java.util.Date;
 
+/**
+ * ****************************23.08.20 Nico *************************
+ * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ * Modelklasse zur Übergabe von Einträgen im Schussjournal an den Firestore
+ * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ */
+
 public class Journal {
 
-    /*private int index;*/
     private int shots;
     private int hits;
     private double caliber;
@@ -23,7 +26,7 @@ public class Journal {
     }
 
     public Journal(int shots, int hits, double caliber, String mean, String target, String date, GeoPoint location) {
-        /*this.index = index;*/
+
         this.shots = shots;
         this.hits = hits;
         this.caliber = caliber;
@@ -32,16 +35,6 @@ public class Journal {
         this.date = date;
         this.location = location;
     }
-
-
-
-   /* public int getIndex() {
-        return index;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
-    }*/
 
     public int getShots() {
         return shots;
