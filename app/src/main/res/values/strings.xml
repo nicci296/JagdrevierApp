@@ -76,6 +76,8 @@
     <string name="line_Add_Fail">Journaleintrag konnte nicht angelegt werden!</string>
     <string name="book_Description">Eingaben für Journaleintrag</string>
     <string name="wood_Board">Planke für Überschrift</string>
+    <string name="fields_Req">Bitte alle Felder ausfüllen.</string>
+    <string name="hits_Over_Shots">Mehr Treffer als Schüsse? Komm schon...</string>
 
 
 

@@ -12,15 +12,17 @@ public class User {
     private String mail;
     private String nick;
     private boolean paechter;
+    private String registered;
 
 
     public User() {
     }
 
-    public User(String mail, String nick, boolean paechter) {
+    public User(String mail, String nick, boolean paechter, String registered) {
         this.mail = mail;
         this.nick = nick;
         this.paechter = paechter;
+        this.registered = registered;
 
 
     }
@@ -49,4 +51,7 @@ public class User {
         this.paechter = paechter;
     }
 
+    public String getRegistered() { return registered; }
+
+    public void setRegistered(String registered) { this.registered = registered; }
 }

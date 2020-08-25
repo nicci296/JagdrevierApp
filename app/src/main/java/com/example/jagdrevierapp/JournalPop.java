@@ -118,6 +118,19 @@ public class JournalPop extends AppCompatActivity {
         //aktuelles Datum mit Uhrzeit
         final String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
 
+        /*//Toast, falls Felder leer, und return, damit keine unvollständigen Einträge angelegt werden.
+        if (aimedTarget.isEmpty()|meansForShot.isEmpty()| shots.getText().toString().isEmpty() |
+                hits.getText().toString().isEmpty() | caliber.getText().toString().isEmpty() ) {
+            Toast.makeText(JournalPop.this, R.string.fields_Req, Toast.LENGTH_LONG).show();
+            return;
+        }*/
+
+        //Toast, falls mehr Treffer als Schüsse, weil geht ja nicht...
+        if (hitsLanded > shotsTaken) {
+            Toast.makeText(JournalPop.this, R.string.hits_Over_Shots, Toast.LENGTH_LONG).show();
+            return;
+        }
+
         //Initialisierung eines LocationManagers zur Standortbestimmung für den Geopoint im Journal-Constructor
         LocationManager locManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         String locationProvider = LocationManager.NETWORK_PROVIDER;
