@@ -17,6 +17,7 @@ public class JournalAdapter extends FirestoreRecyclerAdapter<Journal, JournalAda
         super(options);
     }
 
+
     @Override
     protected void onBindViewHolder(JournalHolder journalHolder, int i, Journal journal) {
 
@@ -27,7 +28,7 @@ public class JournalAdapter extends FirestoreRecyclerAdapter<Journal, JournalAda
         journalHolder.targetView.setText("Ziel: " + journal.getTarget());
         journalHolder.meanView.setText("Zweck: " + journal.getMean());
         journalHolder.dateView.setText(journal.getDate());
-        journalHolder.locationView.setText(String.valueOf(journal.getLocation()));
+        journalHolder.locationView.setText(journal.getLocation().toString());
 
     }
 
@@ -36,6 +37,10 @@ public class JournalAdapter extends FirestoreRecyclerAdapter<Journal, JournalAda
     public JournalHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.journal_item,parent,false);
         return new JournalHolder(v);
+    }
+
+    public void deleteItem(int position){
+        getSnapshots().getSnapshot(position).getReference().delete();
     }
 
     class JournalHolder extends RecyclerView.ViewHolder{
