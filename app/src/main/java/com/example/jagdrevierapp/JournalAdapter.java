@@ -49,14 +49,25 @@ public class JournalAdapter extends FirestoreRecyclerAdapter<Journal, JournalAda
     //Callback, welcher die an die journal_item-CardView zu übergebenen Werte pro TextView festlegt
     @Override
     protected void onBindViewHolder(JournalHolder journalHolder, int i, Journal journal) {
+        /*
+          Kürzen des Strings journal.getLocation().toString() String.
+          GeoPoint wird als String
+            "GeoPoint latitude= xx.xxxxxxx longitude= x.xxxxxxx"
+          ausgegeben, was den Platz der View übersteigt.
+          Stattdessen werden über substring() die reinen Koordinaten zusammengeführt.
+         */
+        String lat = journal.getLocation().toString().substring(20,30);
+        String lng = journal.getLocation().toString().substring(42,51);
+        String latLng = "lat: "+lat+" , "+"lng: "+lng;
+
 
         journalHolder.shotView.setText("Schüsse: " + journal.getShots());
         journalHolder.hitView.setText("Treffer: " + journal.getHits());
-        journalHolder.caliberView.setText("Kaliber:" + String.valueOf(journal.getCaliber()));
+        journalHolder.caliberView.setText("Kaliber:" +journal.getCaliber());
         journalHolder.targetView.setText("Ziel: " + journal.getTarget());
         journalHolder.meanView.setText("Zweck: " + journal.getMean());
-        journalHolder.dateView.setText(journal.getDate().toString());
-        journalHolder.locationView.setText(journal.getLocation().toString());
+        journalHolder.dateView.setText(journal.getDate());
+        journalHolder.locationView.setText(latLng);
     }
 
     /*
@@ -103,9 +114,6 @@ public class JournalAdapter extends FirestoreRecyclerAdapter<Journal, JournalAda
            meanView = itemView.findViewById(R.id.mean_View);
            dateView = itemView.findViewById(R.id.date_View);
            locationView = itemView.findViewById(R.id.location_View);
-
-           viewBackground = itemView.findViewById(R.id.view_background);
-           viewForeground = itemView.findViewById(R.id.viewForeground);
 
        }
    }
