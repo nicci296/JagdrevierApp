@@ -91,4 +91,5 @@ public class Journal {
     public void setLocation(GeoPoint location) {
         this.location = location;
     }
+
 }

@@ -1,6 +1,8 @@
 package com.example.jagdrevierapp;
 
+
 import android.util.Log;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
 
 
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -20,12 +23,12 @@ import com.example.jagdrevierapp.data.model.User;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.*;
 import com.google.firebase.firestore.Query;
 
-import java.util.Date;
 import java.util.Objects;
 
 
@@ -46,6 +49,7 @@ public class Schussjournal extends AppCompatActivity  {
     private final String TAG = "Schussjournal";
     private final String COLLECTION_KEY = "User";
     private final String JOURNAL_COLLECTION_KEY = "Schussjournal";
+
 
     //##########################################################
     //###    Firebase - Authentication
@@ -145,7 +149,7 @@ public class Schussjournal extends AppCompatActivity  {
         //Query sortiert die Docs aus User-bezogenen Schussjournal nach Datum
         Query journalUser = dbJournal.orderBy("date", Query.Direction.DESCENDING);
         //RecyclerView gibt Journaleinträge aus, indem es das JournalAdapter-Objekt registriert
-        RecyclerView journalView = findViewById(R.id.journal_View);
+        final RecyclerView journalView = findViewById(R.id.journal_View);
         journalView.setHasFixedSize(true);
         journalView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -159,6 +163,7 @@ public class Schussjournal extends AppCompatActivity  {
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
+
             //OnMove definiert Vorgehen bei Drag&Drop-Bewegungen - hier irrelevant
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder,
@@ -169,7 +174,9 @@ public class Schussjournal extends AppCompatActivity  {
             //onSwipe definiert, was ein Swipe auslöst. In diesem Fall die deleteItem-Methode aus dem JournalAdapter
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                adapter.deleteItem(viewHolder.getAdapterPosition());
+                if (viewHolder instanceof JournalAdapter.JournalHolder) {
+                    adapter.deleteItem(viewHolder.getAdapterPosition());
+                }
             }
             //abschließend wird der ItemTouchHelper an die RecyclerView gebunden.
         }).attachToRecyclerView(journalView);
@@ -185,6 +192,7 @@ public class Schussjournal extends AppCompatActivity  {
 
 
     }
+
 
     //onStart-Callback legt fest, dass der adapter bei Activity-Start die datenbank auf relevante Einträge überwacht
     @Override
