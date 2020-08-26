@@ -80,6 +80,15 @@
     <string name="fields_Req">Bitte alle Felder ausfüllen.</string>
     <string name="hits_Over_Shots">Mehr Treffer als Schüsse? Komm schon...</string>
 
+    <!-- JournalAdapter -->
+    <string name="shot_line">Schüsse: </string>
+    <string name="hit_line">Treffer: </string>
+    <string name="caliber_line">Kaliber: </string>
+    <string name="target_line">Ziel: </string>
+    <string name="mean_line">Zweck: </string>
+    <string name="lat_line">lat: </string>
+    <string name="lng_line">lng: </string>
+
 
 
     <!-- Permissions -->

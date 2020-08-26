@@ -164,7 +164,7 @@ public class Schussjournal extends AppCompatActivity  {
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
 
-            //OnMove definiert Vorgehen bei Drag&Drop-Bewegungen - hier irrelevant
+            //OnMove definiert Vorgehen bei Drag&Drop-Bewegungen (hoch,runter) - hier irrelevant
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder,
                                   @NonNull RecyclerView.ViewHolder target) {
