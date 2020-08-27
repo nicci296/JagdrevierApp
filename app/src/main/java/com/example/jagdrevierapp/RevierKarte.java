@@ -202,19 +202,27 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
         jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLng(revierMitte));
 
 
-        //Empfangen
-        /*Bundle extras = getIntent().getExtras();
+        /**
+         * ************27.08.20 Nico ******************************
+         * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+         * Empfangen des Intents aus Schussjournal.
+         * Die aus den Extras gewonnenen double-Werte werden in einem
+         * LatLng Objekt gespeichert und als Marker auf der Map angezeigt.
+         * Farblich von den anderen Markern abgehoben.
+         * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+         */
+        Bundle extras = getIntent().getExtras();
         if(extras != null){
             double intentLat = extras.getDouble(LATITUDE);
             double intentLng = extras.getDouble(LONGITUDE);
             LatLng intentLoc = new LatLng(intentLat,intentLng);
 
             jagdrevierMap.addMarker(new MarkerOptions().position(intentLoc)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
-        }*/
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)));
+            jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLngZoom(intentLoc,17));
+        }
 
-
-
+        //Siehe Code-Zeile 356
         dbHochsitze.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -233,8 +241,6 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
                                             .title(kanzel.getHochsitzName()));
                                 }
                             }
-                            Toast.makeText
-                                    (RevierKarte.this,R.string.data_Get_Success,Toast.LENGTH_LONG).show();
                         } else {
                             Toast.makeText
                                     (RevierKarte.this,R.string.data_Get_Fail,Toast.LENGTH_LONG).show();
@@ -359,7 +365,8 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
      * *************************UPDATE 23.08.20 Nico ***********************************************************
      * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
      * Aus Platz- und Nutzungsgründen wird Inhalt der onClickShowAll-Methode im onMapReady-Callback ausgelöst.
-     * Alternaiv wird ein Refreshbutton implementiert.
+     * Alternaiv wird ein onClickRefresh-Button implementiert.
+     * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
      */
     //Zeigt alle in der Firebase gespeicherten Objekte vom Typ Hochsitz auf der Karte als Marker
     /*public void onClickShowAll(View v){
@@ -456,7 +463,8 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
     /**
      * **********************23.08.20 Nico ***************************************************
      * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-     * Erneuter Abruf der Ddocuments aus der Hochsitze-Collection.
+     * Erneuter Abruf der Documents aus der Hochsitze-Collection, um eventuelle Änderungen
+     * am Revier zu aktualisieren
      * Kamera bewegt sich zurück zum Revier.
      * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
      */

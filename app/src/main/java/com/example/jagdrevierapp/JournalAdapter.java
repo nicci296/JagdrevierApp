@@ -120,10 +120,17 @@ public class JournalAdapter extends FirestoreRecyclerAdapter<Journal, JournalAda
            dateView = itemView.findViewById(R.id.date_View);
            locationView = itemView.findViewById(R.id.location_View);
 
-           /*
-            OnClickListener bei Click auf einen Eintrag in der RecyclerView.
-            Die einzelnen Karten der CardView werden per getAdapterPosition()
-            unterschieden.
+           /**
+            * *****************27.08.20 Nico ****************************
+            * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            * OnClickListener bei Click auf einen Eintrag in der RecyclerView.
+            * Die einzelnen Karten der View werden per getAdapterPosition()
+            * unterschieden.
+            * Nutzt das OnJournalClickListener-Interface, welches eine
+            * onItemClick- Methode implementiert.
+            * Diese kann später in der Schussjournal-Activity überschrieben
+            * werden.
+            * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
             */
            itemView.setOnClickListener(new View.OnClickListener() {
                @Override
@@ -146,7 +153,6 @@ public class JournalAdapter extends FirestoreRecyclerAdapter<Journal, JournalAda
     Interface OnJournalClickLstener und Methode setOnJournalClickListener ermöglichen das Senden
     von Daten aus dem Adapter an die Activity, die das Inteface implementiert.
     */
-
    public interface OnJournalClickListener{
         void onItemClick(DocumentSnapshot documentSnapshot, int position);
    }
