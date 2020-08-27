@@ -107,17 +107,17 @@
             android:layout_marginTop="-2dp">
 
             <ImageButton
-                android:id="@+id/add_Line_Btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="80dp"
-                android:layout_marginBottom="4dp"
-                android:background="#2196F3"
-                android:contentDescription="@string/bang_Add_Line"
-                android:onClick="onClickAddLine"
-                android:src="@android:drawable/ic_input_add"
-                app:layout_constraintBottom_toTopOf="@+id/journal_View"
-                app:layout_constraintStart_toStartOf="parent" />
+                    android:id="@+id/add_Line_Btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="80dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/bang_Add_Line"
+                    android:onClick="onClickAddLine"
+                    android:src="@drawable/outline_menu_book_white_48"
+                    app:layout_constraintBottom_toTopOf="@+id/journal_View"
+                    app:layout_constraintStart_toStartOf="parent" android:tint="#FFFFFF"/>
 
             <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/journal_View"
