@@ -24,6 +24,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.common.io.LittleEndianDataInputStream;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -132,6 +133,13 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
 
                 final LinearLayout orderLayout = findViewById(R.id.orderLayoutHochsitze);
                 if (task.isSuccessful()){
+
+                    LayoutInflater infalter = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+                    // 
+                    //HERE IS TE INFLATE OF NEW BUTTONS TO SET
+                    //LinearLayout btnStatLayout = (LinearLayout) findViewById(R.id.);
+
+
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         obj = document.toObject(Hochsitz.class);
 
@@ -164,6 +172,8 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
 
                         docname = document.getId();
                         textAuswahlHochsitze.setText(docname);
+
+
 
                         //Button to book hochsitz
                         Button btnBook = findViewById(R.id.btnBook);
