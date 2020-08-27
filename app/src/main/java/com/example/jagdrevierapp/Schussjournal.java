@@ -164,10 +164,17 @@ public class Schussjournal extends AppCompatActivity  {
         journalView.setLayoutManager(new LinearLayoutManager(this));
         journalView.setAdapter(adapter);
 
-        /*
-            ItemTouchHelper legt fest was passiert, wenn bestimmte Elemente vom User berührt werden.
-            legt in seinen Parametern die möglichen Bewegungsrichtungen für Drag und Swipe fest.
-            Da Drag nicht benötigt wird es 0 gesetzt und die Swipe-Richtungen LEFT und RIGHT festgelegt.
+        /**
+         * **************25.08.20 Nico *****************************************
+         * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+         * ItemTouchHelper legt fest was passiert, wenn bestimmte Elemente der
+         * RecyclerView vom User berührt werden.
+         * Legt in seinen Parametern die möglichen Bewegungsrichtungen für Drag
+         * und Swipe fest.
+         * Da Drag/Drop nicht benötigt, wird es 0 gesetzt und die Swipe-Richtungen
+         * LEFT und RIGHT festgelegt.
+         * Durch den Swipe werden documents an der Stelle aus der Firebase gelöscht.
+         * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
          */
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -184,20 +191,41 @@ public class Schussjournal extends AppCompatActivity  {
             //abschließend wird der ItemTouchHelper an die RecyclerView gebunden.
         }).attachToRecyclerView(journalView);
 
+        /**
+         * **************27.08.20 Nico *****************************************
+         * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+         * Bei Klick auf ein Item der RecyclerView, soll auf die RevierKarte
+         * gewechselt werden und ein Marker dort angezeigt werden, wo der Journal-
+         * eintrag gemacht wurde.
+         * Dazu ruft der adapter die Interface-Methode setOnItemClick aus dem
+         * OnJournalClickListener-Interface (liegt im JournalAdapter) auf und
+         * überschreibt deren innere onItemClick-Methode.
+         * Das Interface wird über die Parameter-Angabe der setOnJournalClickListener-
+         * Methode implementiert. Dadurch muss das Interface nicht über die
+         * Klassen-Deklaration Schussjournal-Activity implementiert werden.
+         * Ein DocumentSnapshot holt sich an der Stelle, wo geklickt wurde, das zugehörige
+         * Document aus der Firebase und zieht den GeoPoint aus diesem Document.
+         * Da ein GeoPoint nicht in einen Intent übergeben werden kann, wird dieser
+         * auf zwei double aufgeteilt, welche als extra in den changeIntent übergeben
+         * werden.
+         * Durch die Key LATITUDE und LONGITUDE kann die Revierkarte-Activity diese
+         * wieder auslesen.
+         * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+         */
         adapter.setOnJournalClickListener(new JournalAdapter.OnJournalClickListener() {
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
                 Journal journal = documentSnapshot.toObject(Journal.class);
                 String id = documentSnapshot.getId();
                 Toast.makeText(Schussjournal.this,"Ich war hier am:"+id,Toast.LENGTH_LONG).show();
-                /*GeoPoint entryLoc = journal.getLocation();
+                GeoPoint entryLoc = journal.getLocation();
                 double intentLat = entryLoc.getLatitude();
                 double intentLng = entryLoc.getLongitude();
 
                 Intent changeIntent = new Intent(Schussjournal.this,RevierKarte.class);
                 changeIntent.putExtra(LATITUDE,intentLat);
                 changeIntent.putExtra(LONGITUDE,intentLng);
-                startActivity(changeIntent);*/
+                startActivity(changeIntent);
             }
         });
     }
