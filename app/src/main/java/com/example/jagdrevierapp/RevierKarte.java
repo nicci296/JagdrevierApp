@@ -55,6 +55,9 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
     //Keys
     private static final String TAG = "Revierkarte";
     private final String COLLECTION_KEY = "HochsitzeMichi";
+    public final String LATITUDE = "latitude";
+    public final String LONGITUDE = "longitude";
+
     private static final int COLOR_WHITE_ARGB = 0xffffffff;
     /*private static final int COLOR_GREEN_ARGB = 0xff388E3C;*/
     private static final int POLYGON_STROKE_WIDTH_PX = 8;
@@ -197,6 +200,20 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
         // Marker in Reviermitte zur Orientierung setzen
         jagdrevierMap.addMarker(new MarkerOptions().position(revierMitte).title("Revier-Mittelpunkt"));
         jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLng(revierMitte));
+
+
+        //Empfangen
+        /*Bundle extras = getIntent().getExtras();
+        if(extras != null){
+            double intentLat = extras.getDouble(LATITUDE);
+            double intentLng = extras.getDouble(LONGITUDE);
+            LatLng intentLoc = new LatLng(intentLat,intentLng);
+
+            jagdrevierMap.addMarker(new MarkerOptions().position(intentLoc)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+        }*/
+
+
 
         dbHochsitze.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -477,6 +494,8 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
 
 
     }
+
+
 
 
     //---------------------copy pasta der Permissions aus der Google API-----------------------------------------------

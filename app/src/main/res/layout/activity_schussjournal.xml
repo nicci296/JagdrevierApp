@@ -115,7 +115,7 @@
                     android:background="@android:color/transparent"
                     android:contentDescription="@string/bang_Add_Line"
                     android:onClick="onClickAddLine"
-                    android:src="@drawable/outline_menu_book_white_48"
+                    android:src="@drawable/writing"
                     app:layout_constraintBottom_toTopOf="@+id/journal_View"
                     app:layout_constraintStart_toStartOf="parent" android:tint="#FFFFFF"/>
 

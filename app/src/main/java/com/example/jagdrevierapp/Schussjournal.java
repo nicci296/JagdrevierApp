@@ -1,9 +1,11 @@
 package com.example.jagdrevierapp;
 
 
+import android.content.Context;
 import android.util.Log;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -49,7 +51,8 @@ public class Schussjournal extends AppCompatActivity  {
     private final String TAG = "Schussjournal";
     private final String COLLECTION_KEY = "User";
     private final String JOURNAL_COLLECTION_KEY = "Schussjournal";
-
+    private final String LATITUDE = "latitude";
+    private final String LONGITUDE = "longitude";
 
     //##########################################################
     //###    Firebase - Authentication
@@ -148,12 +151,18 @@ public class Schussjournal extends AppCompatActivity  {
          */
         //Query sortiert die Docs aus User-bezogenen Schussjournal nach Datum
         Query journalUser = dbJournal.orderBy("date", Query.Direction.DESCENDING);
+
+        FirestoreRecyclerOptions<Journal> options = new FirestoreRecyclerOptions.Builder<Journal>()
+                .setQuery(journalUser,Journal.class)
+                .build();
+        //Instanzierung des Adapters
+        adapter = new JournalAdapter(options);
+
         //RecyclerView gibt Journaleinträge aus, indem es das JournalAdapter-Objekt registriert
-        final RecyclerView journalView = findViewById(R.id.journal_View);
+        RecyclerView journalView = findViewById(R.id.journal_View);
         journalView.setHasFixedSize(true);
         journalView.setLayoutManager(new LinearLayoutManager(this));
-
-
+        journalView.setAdapter(adapter);
 
         /*
             ItemTouchHelper legt fest was passiert, wenn bestimmte Elemente vom User berührt werden.
@@ -162,35 +171,35 @@ public class Schussjournal extends AppCompatActivity  {
          */
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-
-
             //OnMove definiert Vorgehen bei Drag&Drop-Bewegungen (hoch,runter) - hier irrelevant
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder,
-                                  @NonNull RecyclerView.ViewHolder target) {
-                return false;
-            }
+                                  @NonNull RecyclerView.ViewHolder target) { return false; }
 
             //onSwipe definiert, was ein Swipe auslöst. In diesem Fall die deleteItem-Methode aus dem JournalAdapter
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                if (viewHolder instanceof JournalAdapter.JournalHolder) {
                     adapter.deleteItem(viewHolder.getAdapterPosition());
-                }
             }
             //abschließend wird der ItemTouchHelper an die RecyclerView gebunden.
         }).attachToRecyclerView(journalView);
 
-        FirestoreRecyclerOptions<Journal> options = new FirestoreRecyclerOptions.Builder<Journal>()
-                .setQuery(journalUser,Journal.class)
-                .build();
+        adapter.setOnJournalClickListener(new JournalAdapter.OnJournalClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                Journal journal = documentSnapshot.toObject(Journal.class);
+                String id = documentSnapshot.getId();
+                Toast.makeText(Schussjournal.this,"Ich war hier am:"+id,Toast.LENGTH_LONG).show();
+                /*GeoPoint entryLoc = journal.getLocation();
+                double intentLat = entryLoc.getLatitude();
+                double intentLng = entryLoc.getLongitude();
 
-        //Instanzierung des Adapters
-        adapter = new JournalAdapter(options);
-
-        journalView.setAdapter(adapter);
-
-
+                Intent changeIntent = new Intent(Schussjournal.this,RevierKarte.class);
+                changeIntent.putExtra(LATITUDE,intentLat);
+                changeIntent.putExtra(LONGITUDE,intentLng);
+                startActivity(changeIntent);*/
+            }
+        });
     }
 
 

@@ -16,7 +16,7 @@ public class Journal {
 
     private int shots;
     private int hits;
-    private double caliber;
+    private String caliber;
     private String mean;
     private String target;
     private String date;
@@ -25,7 +25,7 @@ public class Journal {
     public Journal() {
     }
 
-    public Journal(int shots, int hits, double caliber, String mean, String target, String date, GeoPoint location) {
+    public Journal(int shots, int hits, String caliber, String mean, String target, String date, GeoPoint location) {
 
         this.shots = shots;
         this.hits = hits;
@@ -52,11 +52,11 @@ public class Journal {
         this.hits = hits;
     }
 
-    public double getCaliber() {
+    public String getCaliber() {
         return caliber;
     }
 
-    public void setCaliber(double caliber) {
+    public void setCaliber(String caliber) {
         this.caliber = caliber;
     }
 
