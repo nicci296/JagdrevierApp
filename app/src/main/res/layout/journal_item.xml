@@ -26,12 +26,12 @@
         -->
 
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                                   xmlns:app="http://schemas.android.com/apk/res-auto"
                                    android:layout_width="match_parent"
                                    android:layout_height="wrap_content"
-                                   xmlns:app="http://schemas.android.com/apk/res-auto"
                                    android:layout_marginStart="8dp" android:layout_marginTop="8dp"
                                    android:layout_marginEnd="8dp"
-                                   app:cardBackgroundColor="#FFFFF8" >
+                                   app:cardBackgroundColor="#FFFFF8" android:id="@+id/card_View">
 
     <!--<RelativeLayout
             android:id="@+id/view_background"
@@ -72,7 +72,7 @@
                   android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                   android:layout_alignParentTop="true"
                   android:layout_alignParentStart="true" android:maxLines="1"
-                   />
+        />
 
         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                   android:id="@+id/location_View" android:text="Location"
@@ -99,20 +99,16 @@
 
         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                   android:id="@+id/target_View" android:text="Ziel: Wildschwein"
-                  android:layout_below="@+id/shot_View" android:maxLines="1" />
+                  android:layout_below="@+id/shot_View" android:maxLines="1"/>
 
         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                   android:id="@+id/mean_View" android:text="Zweck: Warnschuss"
                   android:layout_marginStart="10dp"
                   android:layout_below="@+id/shot_View"
-                  android:layout_toEndOf="@+id/target_View" android:maxLines="1"  />
-
-
+                  android:layout_toEndOf="@+id/target_View" android:maxLines="1"/>
 
 
     </RelativeLayout>
-
-
 
 
 </androidx.cardview.widget.CardView>

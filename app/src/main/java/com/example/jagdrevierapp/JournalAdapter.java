@@ -1,5 +1,7 @@
 package com.example.jagdrevierapp;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,10 +9,13 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.jagdrevierapp.data.model.Journal;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.GeoPoint;
 
 
 /**
@@ -39,6 +44,8 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
  */
 public class JournalAdapter extends FirestoreRecyclerAdapter<Journal, JournalAdapter.JournalHolder> {
+
+    public OnJournalClickListener listener;
 
     //super Constructor
     public JournalAdapter(FirestoreRecyclerOptions<Journal> options) {
@@ -101,8 +108,6 @@ public class JournalAdapter extends FirestoreRecyclerAdapter<Journal, JournalAda
        TextView dateView;
        TextView locationView;
 
-       public RelativeLayout viewBackground;
-       public RelativeLayout viewForeground;
 
        //super Constructor
        public JournalHolder(View itemView) {
@@ -115,6 +120,39 @@ public class JournalAdapter extends FirestoreRecyclerAdapter<Journal, JournalAda
            dateView = itemView.findViewById(R.id.date_View);
            locationView = itemView.findViewById(R.id.location_View);
 
+           /*
+            OnClickListener bei Click auf einen Eintrag in der RecyclerView.
+            Die einzelnen Karten der CardView werden per getAdapterPosition()
+            unterschieden.
+            */
+           itemView.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                   int position = getAdapterPosition();
+                    /*Interface OnJournalClickListener aufrufen.
+                    If-Abfrage, damit die App nicht crasht während man auf ein Item clickt, welches
+                    gerade per Swipe entfernt wird. Dies würde nämlich Position -1(NO_POSITION) zurückgeben und
+                    in Verbindung mit einem documentSnapshop zum Absturz der App führen.*/
+                   if(position != RecyclerView.NO_POSITION && listener != null){
+                       listener.onItemClick(getSnapshots().getSnapshot(position), position);
+                   }
+
+               }
+           });
+
        }
    }
+   /*
+    Interface OnJournalClickLstener und Methode setOnJournalClickListener ermöglichen das Senden
+    von Daten aus dem Adapter an die Activity, die das Inteface implementiert.
+    */
+
+   public interface OnJournalClickListener{
+        void onItemClick(DocumentSnapshot documentSnapshot, int position);
+   }
+   public void setOnJournalClickListener(OnJournalClickListener listener){
+        this.listener = listener;
+
+   }
+
 }

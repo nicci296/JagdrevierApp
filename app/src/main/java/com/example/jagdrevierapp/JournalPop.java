@@ -112,7 +112,7 @@ public class JournalPop extends AppCompatActivity {
         final EditText means = findViewById(R.id.input_Means);
         final int shotsTaken = Integer.parseInt(shots.getText().toString());
         final int hitsLanded = Integer.parseInt(hits.getText().toString());
-        final Double caliberUsed = Double.parseDouble(caliber.getText().toString());
+        final String caliberUsed = caliber.getText().toString();
         final String aimedTarget = target.getText().toString();
         final String meansForShot = means.getText().toString();
         //aktuelles Datum mit Uhrzeit
