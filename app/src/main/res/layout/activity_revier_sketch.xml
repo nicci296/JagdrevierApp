@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:map="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".RevierSketch">
+
+
+    <fragment
+            android:id="@+id/sketchMap"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:name="com.google.android.gms.maps.SupportMapFragment"/>
+
+    <LinearLayout
+            android:layout_width="match_parent" android:layout_height="282dp"
+            android:orientation="vertical" android:padding="10dp" android:layout_alignParentBottom="true"
+            android:background="@android:color/white">
+
+        <CheckBox
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:id="@+id/check_box"
+                android:text="Fill Polygon"/>
+
+        <TextView
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Polygon Color" android:textStyle="bold" android:layout_marginTop="10dp"/>
+
+        <SeekBar
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:id="@+id/seek_red" android:max="255" android:thumbTint="#FF0000"
+                android:progressTint="#FF0000" android:layout_marginTop="5dp"/>
+
+        <SeekBar android:layout_width="match_parent" android:layout_height="wrap_content"
+                 android:id="@+id/seek_green" android:max="255" android:thumbTint="#00FF00"
+                 android:progressTint="#00FF00" android:layout_marginTop="5dp"/>
+
+        <SeekBar
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:id="@+id/seek_blue" android:max="255" android:thumbTint="#0000FF"
+                android:progressTint="#0000FF" android:layout_marginTop="5dp"/>
+
+        <RelativeLayout
+                android:layout_width="wrap_content" android:layout_height="106dp"
+                 android:orientation="horizontal" android:layout_marginTop="10dp">
+
+            <EditText android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      android:id="@+id/revier_ref"
+                      android:inputType="text"
+                      android:hint="Revierreferenz, z.B 1, Revier1, Hasenhöhle ..."
+                      android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                      android:layout_alignParentStart="true"/>
+
+            <ImageButton
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:id="@+id/draw_button"
+                    android:text="Revier abstecken" android:src="@drawable/outline_add_location_alt_white_36"
+                    android:layout_marginTop="10dp" android:layout_marginStart="10dp"
+                    android:layout_below="@+id/revier_ref" android:layout_alignParentStart="true"/>
+
+            <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                         android:id="@+id/clear_button"
+                         android:text="Verwerfen" android:src="@drawable/outline_wrong_location_white_36"
+                         android:layout_below="@+id/revier_ref" android:layout_marginTop="10dp"
+                         android:layout_toEndOf="@+id/draw_button" android:layout_marginStart="10dp"/>
+
+            <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
+                         android:id="@+id/save_revier_button"
+                         android:text="Verwerfen" android:src="@android:drawable/ic_menu_view"
+                         android:layout_below="@+id/revier_ref" android:layout_marginTop="10dp"
+                         android:layout_toEndOf="@+id/clear_button" android:layout_marginStart="10dp"/>
+
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+
+
+
+
+</RelativeLayout>

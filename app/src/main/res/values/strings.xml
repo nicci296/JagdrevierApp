@@ -69,7 +69,7 @@
     <string name="hint_Shots">z.B. 1</string>
     <string name="hint_Hits">Na, getroffen?</string>
     <string name="hint_Caliber">Wasn Ballermann!</string>
-    <string name="hint_Target">z.B. Bambi </string>
+    <string name="hint_Target">z.B. Bambi</string>
     <string name="hint_Means">Nur ein Warnschuss?</string>
     <string name="save_Line_Text">Eintrag speichern</string>
     <string name="return_Journal_Btn">Return to Journal.</string>
@@ -81,14 +81,13 @@
     <string name="hits_Over_Shots">Mehr Treffer als Schüsse? Komm schon...</string>
 
     <!-- JournalAdapter -->
-    <string name="shot_line">Schüsse: </string>
-    <string name="hit_line">Treffer: </string>
-    <string name="caliber_line">Kaliber: </string>
-    <string name="target_line">Ziel: </string>
-    <string name="mean_line">Zweck: </string>
-    <string name="lat_line">lat: </string>
-    <string name="lng_line">lng: </string>
-
+    <string name="shot_line">Schüsse:</string>
+    <string name="hit_line">Treffer:</string>
+    <string name="caliber_line">Kaliber:</string>
+    <string name="target_line">Ziel:</string>
+    <string name="mean_line">Zweck:</string>
+    <string name="lat_line">lat:</string>
+    <string name="lng_line">lng:</string>
 
 
     <!-- Permissions -->
@@ -111,5 +110,6 @@
     <string name="btnDamn">damn</string>
     <string name="btnInsect">Inst</string>
     <string name="txtHochsitzname">Hier könnte ihre Werbung stehen</string>
+    <string name="title_activity_revier_sketch">Map</string>
 
 </resources>

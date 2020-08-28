@@ -71,6 +71,7 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
     //Initialize FireStore
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference dbHochsitze = db.collection(COLLECTION_KEY);
+    private final CollectionReference dbReviere = db.collection("Reviere");
 
     //Map-Object declaration
     private GoogleMap jagdrevierMap;
@@ -498,10 +499,13 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
                         }
                     }
                 });
-
-
-
     }
+
+    public void onClickaddRevier(View v){
+        Intent changeIntent = new Intent(RevierKarte.this, RevierSketch.class);
+        startActivity(changeIntent);
+    }
+
 
 
 
