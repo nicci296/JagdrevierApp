@@ -369,7 +369,8 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
      * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
      */
     //Zeigt alle in der Firebase gespeicherten Objekte vom Typ Hochsitz auf der Karte als Marker
-    /*public void onClickShowAll(View v){
+
+    public void onClickShowAll(View v){
 
           dbHochsitze.get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -398,7 +399,7 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
                         }
                     }
                 });
-           }*/
+           }
 
     //Löscht eine Kanzel aus der DB
     public void onClickDelJgdEin(View v) {

@@ -140,31 +140,7 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
 
         final TextView helloUser = findViewById(R.id.helloUser);
 
-        //get UserQuery per unique Mail from FirbaseUser
-        Query userQuery = dbUser.whereEqualTo("mail", mFirebaseUser.getEmail());
-        //get actual dataset from dbUser
-        userQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    // for each document in Collection "User" do
-                    //          Log.d
-                    //          set all getters for class User
-                    //          if currentuser is not null print
-                    //              "WMH currentUser" in TextView "HelloUser"
-                    for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-                        Log.d(TAG, document.getId() + " => " + document.getData());
-                        User currentUser = document.toObject(User.class);
-                        if(currentUser.getMail() != null) {
-                            helloUser.setText("Waidmannsheil " + currentUser.getNick().toUpperCase());
-                        }
-                    }
-                } else {
-                    // in case of error print error to log.d
-                    Log.d(TAG, "Error getting documents: ", task.getException());
-                }
-            }
-        });
+
 
         //##########################################################
         //###   List of all Hochsitzen in RecylcerView
@@ -186,6 +162,7 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
         hochsitzView.setHasFixedSize(false);
         hochsitzView.setLayoutManager( new LinearLayoutManager(this));
         hochsitzView.setAdapter(adapter);
+
     }
 
     @Override
