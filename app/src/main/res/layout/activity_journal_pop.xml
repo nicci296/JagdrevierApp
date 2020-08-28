@@ -11,12 +11,15 @@
         android:layout_width="393dp"
         android:layout_height="786dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/wood_Board"
             android:layout_width="match_parent"
             android:layout_height="159dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="0dp"
             android:contentDescription="@string/wood_Board"
             app:srcCompat="@drawable/hiclipart_com" />
 
@@ -24,12 +27,14 @@
             android:id="@+id/bang_Jrnl_Head"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="200dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
             android:layout_marginTop="100dp"
+            android:layout_marginEnd="75dp"
             android:text="@string/bang_Jrnl_Head"
             android:textAlignment="center"
             android:textAllCaps="true"
-            android:textColor="#000000"
+            android:textColor="#FFFFFF"
             android:textSize="14sp"
             android:textStyle="bold" />
 
@@ -37,9 +42,11 @@
             android:id="@+id/user_Name_Jrnl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="124dp"
             android:layout_marginTop="100dp"
-            android:layout_marginEnd="-195dp"
-            android:layout_toStartOf="@id/bang_Jrnl_Head"
+            android:layout_marginEnd="76dp"
+            android:layout_toStartOf="@+id/bang_Jrnl_Head"
             android:textColor="#000000"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -206,7 +213,8 @@
             android:id="@+id/save_Line_Btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="330dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="328dp"
             android:layout_marginTop="480dp"
             android:background="@android:color/transparent"
             android:clickable="true"

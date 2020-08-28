@@ -1,58 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_hs_View"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="8dp"
+    app:cardBackgroundColor="#00FFFFF8">
 
-    <Button
-        android:id="@+id/btnStatusHochsitz"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="3dp"
-        android:layout_marginTop="11dp"
-        android:text="@string/btnStat" />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="8dp"
+        android:background="#00FFFFFF"
+        android:padding="8dp"
+        android:paddingStart="20dp">
 
-    <TextView
-        android:id="@+id/textHochsitzName"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="13dp"
-        android:layout_toEndOf="@+id/btnStatusHochsitz"
-        android:text="@string/txtHochsitzname"
-        android:textAlignment="center" />
+        <Button
+            android:id="@+id/btnStatusHochsitz"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/hochsitz_frei"
+            android:text="@string/btnStat"
+            android:textAlignment="gravity"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/btnBook"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="11dp"
-        android:layout_toEndOf="@+id/textHochsitzName"
-        android:text="@string/btnBook" />
+        <TextView
+            android:id="@+id/textHochsitzName"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@+id/btnStatusHochsitz"
+            android:ellipsize="end"
+            android:text="@string/txtHochsitzname"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF" />
 
-    <Button
-        android:id="@+id/btnDamage"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="11dp"
-        android:layout_toEndOf="@+id/btnBook"
-        android:text="@string/btnDamn" />
+        <Button
+            android:id="@+id/btnBook"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@+id/textHochsitzName"
+            android:text="@string/btnBook"
+            android:textColor="#FFFFFF" />
 
-    <Button
-        android:id="@+id/btnInsect"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="11dp"
-        android:layout_toEndOf="@+id/btnDamage"
-        android:text="@string/btnInsect" />
+        <Button
+            android:id="@+id/btnDamage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@+id/btnBook"
+            android:text="@string/btnDamn"
+            android:textColor="#FFFFFF" />
 
-</RelativeLayout>
+        <Button
+            android:id="@+id/btnInsect"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@+id/btnDamage"
+            android:text="@string/btnInsect"
+            android:textColor="#FFFFFF" />
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

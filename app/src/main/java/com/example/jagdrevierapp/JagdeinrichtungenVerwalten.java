@@ -3,6 +3,8 @@ package com.example.jagdrevierapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -19,6 +21,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jagdrevierapp.data.model.User;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -42,33 +46,50 @@ import org.xmlpull.v1.XmlPullParser;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 
 public class JagdeinrichtungenVerwalten extends AppCompatActivity {
-    //Const variables
+    //##########################################################
+    //###    Constant Variables
+    //##########################################################
     private static final String TAG = "JagdeinrichtungenVer";
-    private static final String COLLECTION_KEY ="HochsitzeMichi";
+    private static final String COLLECTION_HS_KEY ="HochsitzeMichi";
+    private static final String COLLECTION_US_KEY ="User";
 
-    private String docname;
+
+    //##########################################################
+    //###    Firebase - Authentication
+    //##########################################################
+    //Initialize Firebase Auth
+    final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    final FirebaseUser mFirebaseUser = mAuth.getCurrentUser();
 
 
-        //Object declaration
-        private Hochsitz obj;
 
-    Map<String, Object> data = new HashMap<>();
+
+    //##########################################################
+    //###    Firebase - Firestore
+    //##########################################################
+    //Initialize FireStore and References
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final CollectionReference dbHochsitze = db.collection(COLLECTION_HS_KEY);
+    private final CollectionReference dbUser = db.collection(COLLECTION_US_KEY);
+
+    //Initialisierung eines neuen HochsitzAdapter-Objekts
+    private HochsitzAdapter adapter;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_jagdeinrichtungen_verwalten);
 
+
         //##########################################################
-        //###    Firebase - Authentication
+        //###    User-Validation
         //##########################################################
-        //Initialize Firebase Auth
-        //Firebase instance variables
-        final FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser mFirebaseUser = mAuth.getCurrentUser();
         if (mFirebaseUser == null) {
             //Nicht eingeloggt, SignIn-Activity wird gestartet
             startActivity(new Intent(this, LoginActivity.class));
@@ -78,10 +99,8 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
             String mUsername = mFirebaseUser.getDisplayName();
         }
 
-
-
         //##########################################################
-        //###    Buttons from Nav-Header
+        //###   Nav-Header and Nav-Buttons
         //##########################################################
         //LogOut Button
         Button logoutBtn = findViewById(R.id.logoutBtn);
@@ -90,7 +109,7 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
             public void onClick(View view) {
                 mAuth.signOut();
                 startActivity(new Intent(JagdeinrichtungenVerwalten.this, LoginActivity.class));
-                }
+            }
         });
 
         //zu Map Button
@@ -112,139 +131,72 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
         });
 
 
+
         //##########################################################
-        //###    Firebase - Firestore
+        //###   Welcome-Notice in Infobar
         //##########################################################
-        //Initialize FireStore - Collection Hochsitze
-        final FirebaseFirestore db = FirebaseFirestore.getInstance();
-        final CollectionReference dbHochsitze = db.collection(COLLECTION_KEY);
 
-        // TextViews to create some texts
-        final TextView textAuswahlHochsitze = findViewById(R.id.textAuswahlHochsitze);
-        textAuswahlHochsitze.setText("Alle Hochsitze");
+        //Initialize TextView for welcoming user
 
+        final TextView helloUser = findViewById(R.id.helloUser);
 
-        // Read data from firestore
-        dbHochsitze
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        //get UserQuery per unique Mail from FirbaseUser
+        Query userQuery = dbUser.whereEqualTo("mail", mFirebaseUser.getEmail());
+        //get actual dataset from dbUser
+        userQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
-                final LinearLayout orderLayout = findViewById(R.id.orderLayoutHochsitze);
-                if (task.isSuccessful()){
-
-                    LayoutInflater infalter = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-                    // 
-                    //HERE IS TE INFLATE OF NEW BUTTONS TO SET
-                    //LinearLayout btnStatLayout = (LinearLayout) findViewById(R.id.);
-
-
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        obj = document.toObject(Hochsitz.class);
-
-                        //Anlegen jedes Layouts pro Schleifendurchlauf
-                        View viewHochsitze = getLayoutInflater().inflate(R.layout.hochsitz_layout, orderLayout, false );
-                        orderLayout.addView(viewHochsitze);
-
-                        // Vergeben des Hochsitznamens
-                        TextView txtHochsitzName = viewHochsitze.findViewById(R.id.textHochsitzName);
-                        txtHochsitzName.setText(obj.getHochsitzName());
-                        txtHochsitzName.setTextSize(20);
-
-                        // Status Button initialisieren
-                        Button btnStatHochsitz = viewHochsitze.findViewById(R.id.btnStatusHochsitz);
-                        btnStatHochsitz.setBackgroundResource(R.drawable.hochsitz_frei);
-                        btnStatHochsitz.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Intent intent = new Intent(JagdeinrichtungenVerwalten.this, StatusPop.class);
-                                Bundle extras = new Bundle();
-                                extras.putString("sitzname", obj.getHochsitzName());
-                                extras.putString("booker", obj.getBookedBy());
-                                extras.putBoolean("booked", obj.isIsBooked());
-                                extras.putBoolean("damage", obj.isIsDamaged());
-                                extras.putBoolean("insect", obj.isIsInsectious());
-                                intent.putExtras(extras);
-                                startActivity(intent);
-                            }
-                        });
-
-                        docname = document.getId();
-                        textAuswahlHochsitze.setText(docname);
-
-
-
-                        //Button to book hochsitz
-                        Button btnBook = findViewById(R.id.btnBook);
-                        btnBook.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                if(obj.isIsBooked()) {
-                                    data.put("IsBooked", false);
-                                    // Nutzer auslesen --> Name bekommen
-                                    // Daten an firestore --> value "Name" für variable "booked by"
-                                    // Toast Nachricht: "WMH" + name + "der Ansitz ist für Dich gebucht!"
-                                } else {
-                                    data.put("IsBooked", true);
-                                    // Nutzer auslesen --> Name bekommen
-                                    // Daten von firestore --> value "name" von variable "bookedBy"
-                                    // Toast Nachricht: "Sorry " + name + "hier sitzt heute Nacht schon " + "bookedBy"
-                                }
-                                dbHochsitze.document(docname)
-                                        .set(data, SetOptions.merge());
-                            }
-                        });
-
-
-                        // Button to announce a damaged hochsitz
-                        Button btnDamage = findViewById(R.id.btnDamage);
-                        btnDamage.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                if(obj.isIsDamaged()) {
-                                    data.put("isDamaged", false);
-                                } else {
-                                    data.put("isDamaged", true);
-                                }
-                                db.collection(COLLECTION_KEY).document(docname)
-                                        .set(data, SetOptions.merge());
-                            }
-                        });
-
-                        // Button to announce insects inside hochsitz
-                        Button btnInsect = findViewById(R.id.btnInsect);
-                        btnInsect.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                if(obj.isIsInsectious()) {
-                                    data.put("isInsectious", false);
-                                } else {
-                                    data.put("isInsectious", true);
-                                }
-                                db.collection(COLLECTION_KEY).document(docname)
-                                        .set(data, SetOptions.merge());
-                            }
-                        });
+                if (task.isSuccessful()) {
+                    // for each document in Collection "User" do
+                    //          Log.d
+                    //          set all getters for class User
+                    //          if currentuser is not null print
+                    //              "WMH currentUser" in TextView "HelloUser"
+                    for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                        Log.d(TAG, document.getId() + " => " + document.getData());
+                        User currentUser = document.toObject(User.class);
+                        if(currentUser.getMail() != null) {
+                            helloUser.setText("Waidmannsheil " + currentUser.getNick().toUpperCase());
+                        }
                     }
                 } else {
-                    Log.w(TAG, "Error getting docs: ", task.getException());
+                    // in case of error print error to log.d
+                    Log.d(TAG, "Error getting documents: ", task.getException());
                 }
-            }
-
-                } );
-
-
-
-
-        // Button to add new Hochsitz
-        FloatingActionButton addHochsitz = findViewById(R.id.btnAddHochsitz);
-        addHochsitz.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                textAuswahlHochsitze.setText("Hi there I am using WhatsApp!");
             }
         });
 
+        //##########################################################
+        //###   List of all Hochsitzen in RecylcerView
+        //##########################################################
+
+        //Get all Docs from Collection Hochsitze and sort by Name ascending (A-Z)
+        Query hochsitzQuery = dbHochsitze.orderBy("hochsitzName", Query.Direction.ASCENDING);
+
+        //set up connection between Query and class Hochsitz
+        FirestoreRecyclerOptions<Hochsitz> options = new FirestoreRecyclerOptions.Builder<Hochsitz>()
+                .setQuery(hochsitzQuery, Hochsitz.class)
+                .build();
+
+        //Instanciate Adapter
+        adapter = new HochsitzAdapter(options);
+
+        //Creating RecyclerView with List of Hochsitzen by registrating HochsitzAdapter-Objects
+        RecyclerView hochsitzView = findViewById(R.id.jw_recycler_View);
+        hochsitzView.setHasFixedSize(false);
+        hochsitzView.setLayoutManager( new LinearLayoutManager(this));
+        hochsitzView.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
     }
 }

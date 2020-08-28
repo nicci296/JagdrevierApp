@@ -18,20 +18,20 @@ public class Hochsitz {
      */
     private String hochsitzName;
     private GeoPoint gps;
-    private boolean isIsBooked;
+    private boolean isBooked;
     private String bookedBy;
-    private boolean isIsDamaged;
-    private boolean isIsInsectious;
+    private boolean isDamaged;
+    private boolean isInsectious;
 
     public Hochsitz() {}
 
     public Hochsitz(String hochsitzName,GeoPoint gps, boolean isIsBooked, String bookedBy, boolean isIsDamaged, boolean isIsInsectious) {
         this.hochsitzName = hochsitzName;
         this.gps = gps;
-        this.isIsBooked = isIsBooked;
+        this.isBooked = isIsBooked;
         this.bookedBy = bookedBy;
-        this.isIsDamaged = isIsDamaged;
-        this.isIsInsectious = isIsInsectious;
+        this.isDamaged = isIsDamaged;
+        this.isInsectious = isIsInsectious;
     }
 
 
@@ -43,16 +43,20 @@ public class Hochsitz {
         this.hochsitzName = hochsitzName;
     }
 
-    public GeoPoint getGps() { return gps; }
+    public GeoPoint getGps() {
+        return gps;
+    }
 
-    public void setGps(GeoPoint gps) { this.gps = gps;}
+    public void setGps(GeoPoint gps) {
+        this.gps = gps;
+    }
 
-    public boolean isIsBooked() {
-        return isIsBooked;
+    public boolean isBooked() {
+        return isBooked;
     }
 
     public void setBooked(boolean booked) {
-        isIsBooked = booked;
+        isBooked = booked;
     }
 
     public String getBookedBy() {
@@ -63,23 +67,20 @@ public class Hochsitz {
         this.bookedBy = bookedBy;
     }
 
-    public boolean isIsDamaged() {return isIsDamaged;    }
+    public boolean isDamaged() {
+        return isDamaged;
+    }
 
     public void setDamaged(boolean damaged) {
-        isIsDamaged = damaged;
+        isDamaged = damaged;
     }
 
-    public boolean isIsInsectious() {
-        return isIsInsectious;
+    public boolean isInsectious() {
+        return isInsectious;
     }
 
-    public void setIsInsectious(boolean insectious) {
-        isIsInsectious = insectious;
+    public void setInsectious(boolean insectious) {
+        isInsectious = insectious;
     }
-
-
-
-
-
 }
 

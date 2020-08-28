@@ -158,7 +158,6 @@ public class JournalAdapter extends FirestoreRecyclerAdapter<Journal, JournalAda
    }
    public void setOnJournalClickListener(OnJournalClickListener listener){
         this.listener = listener;
-
    }
 
 }
