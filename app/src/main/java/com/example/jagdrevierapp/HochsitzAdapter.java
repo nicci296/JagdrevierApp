@@ -232,11 +232,113 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
                 } else {
                     Toast.makeText(view.getContext(),"Heute Nacht sitzt hier: " + hochsitz.getBookedBy(),Toast.LENGTH_LONG).show();
                 }
+            }
+        });
 
+        //##########################################################
+        //###  Damage-Button
+        //##########################################################
+        hochsitzHolder.btnDamage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!hochsitz.isDamaged()) {
+                    hochsitzHolder.btnDamage.setBackgroundColor(Color.RED);
+                    Map<String, Object> damage = new HashMap<>();
+                    damage.put("damaged", true);
+                    dbHochsitze.document(hochsitz.getHochsitzName())
+                            .update(damage)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d(TAG, "Damage DocumentSnapshot successfully updated!");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "Error updating document", e);
+                                }
+                            });
+                    Toast.makeText(view.getContext(),"Danke für die Schadensmeldung, " + currentUser.getNick(),Toast.LENGTH_LONG).show();
+
+
+                } else {
+                    hochsitzHolder.btnDamage.setBackgroundColor(Color.GREEN);
+                    Map<String, Object> damage = new HashMap<>();
+                    damage.put("damaged", false);
+                    dbHochsitze.document(hochsitz.getHochsitzName())
+                            .update(damage)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d(TAG, "Damage DocumentSnapshot successfully updated!");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "Error updating document", e);
+                                }
+                            });
+                    Toast.makeText(view.getContext(),"Schadensmeldung ist aufgehoben.",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        //##########################################################
+        //###  Insect-Button
+        //##########################################################
+        hochsitzHolder.btnInsect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!hochsitz.isInsectious()) {
+                    hochsitzHolder.btnInsect.setBackgroundColor(Color.RED);
+                    Map<String, Object> insect = new HashMap<>();
+                    insect.put("insectious", true);
+                    dbHochsitze.document(hochsitz.getHochsitzName())
+                            .update(insect)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d(TAG, "Insect DocumentSnapshot successfully updated!");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "Error updating document", e);
+                                }
+                            });
+                    Toast.makeText(view.getContext(),"Danke für die Insekten-Meldung, " + currentUser.getNick(),Toast.LENGTH_LONG).show();
+
+
+                } else {
+                    hochsitzHolder.btnInsect.setBackgroundColor(Color.GREEN);
+                    Map<String, Object> insect = new HashMap<>();
+                    insect.put("insectious", false);
+                    dbHochsitze.document(hochsitz.getHochsitzName())
+                            .update(insect)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.d(TAG, "Insect DocumentSnapshot successfully updated!");
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "Error updating document", e);
+                                }
+                            });
+                    Toast.makeText(view.getContext(),"Insekten sind abgezogen.",Toast.LENGTH_LONG).show();
+                }
             }
         });
 
 
+        //##########################################################
+        //###  Hochsitzbezeichnung in RecyclerView
+        //##########################################################
         hochsitzHolder.txtHochsitzName.setText(hochsitz.getHochsitzName());
     }
 
