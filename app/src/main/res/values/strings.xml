@@ -111,5 +111,7 @@
     <string name="btnDamn">damn</string>
     <string name="btnInsect">Inst</string>
     <string name="txtHochsitzname">Hier könnte ihre Werbung stehen</string>
+    <string name="btnToSchussjrnl">Schussjournal</string>
+    <string name="btnStatToJaEinr">zurück zu Revier</string>
 
 </resources>

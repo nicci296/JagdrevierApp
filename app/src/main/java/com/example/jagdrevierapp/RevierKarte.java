@@ -295,7 +295,7 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
          *festgelegten Attributen.
          */
         final Hochsitz kanzel = new Hochsitz
-                (currentLoc.getTitle(),current, false,"TBA",false,
+                (currentLoc.getTitle(), current, false,"TBA",false,
                         false);
 
         /**

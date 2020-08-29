@@ -25,13 +25,13 @@ public class Hochsitz {
 
     public Hochsitz() {}
 
-    public Hochsitz(String hochsitzName,GeoPoint gps, boolean isIsBooked, String bookedBy, boolean isIsDamaged, boolean isIsInsectious) {
+    public Hochsitz(String hochsitzName, GeoPoint gps, boolean isBooked, String bookedBy, boolean isDamaged, boolean isInsectious) {
         this.hochsitzName = hochsitzName;
         this.gps = gps;
-        this.isBooked = isIsBooked;
+        this.isBooked = isBooked;
         this.bookedBy = bookedBy;
-        this.isDamaged = isIsDamaged;
-        this.isInsectious = isIsInsectious;
+        this.isDamaged = isDamaged;
+        this.isInsectious = isInsectious;
     }
 
 
