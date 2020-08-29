@@ -24,23 +24,6 @@ import java.util.Map;
 
 public class Revierverwaltung extends AppCompatActivity {
 
-    /**
-     * Wilderei durch Michi am 15.08.2020 - 15.56 Uhr
-     *
-     *Ich habe die "Navigation" als ein Constraint-Layout in der Activity_revierverwaltung.xml hinzugefügt
-     * Damit die Navigation klappt, implementiere ich hier die Klasse "View.onClickListener
-     * In den weiteren Steps muss ich die Buttons per findViewByID definieren (passiert in Methode OnCreate)
-     * Nachder Definition der Buttons lege ich auf jeden Button ein .setOnClickListener(this) --> Erkennung, wenn der Button gedrückt wird
-     *
-     * in Der Method onClick(View v) implementiere ich dann die startActivity und rufe per expliziten Intent die jeweilige View auf.
-     */
-
-    /**
-     * Wilderei durch Mich am 16.08.2020 - 19:25
-     * Habe 2 Buttons für die Navigtaion zu Revierverwaltung und Schussjournal hinzugefügt.
-     * Bin leider völlig aus dem Ruder gelaufen, da man per Navigation sehr schnell bei Jetpack-Navigation landet und ab da wird es kompliziert.
-     *
-     */
 
 
     private static final String TAG = "Revierverwaltung";
@@ -175,13 +158,7 @@ public class Revierverwaltung extends AppCompatActivity {
 
         //Lässt bei Click einen Jäger aus der Datenbank entfernen
     public void onClickDeleteJaeger(View button){
-
-
     }
 
-    //Intent zum Wechseln der Activity
-    public void onClickRevierkarte(View button){
-        Intent changeIntent = new Intent(this, RevierKarte.class);
-        startActivity(changeIntent);
-    }
+
 }

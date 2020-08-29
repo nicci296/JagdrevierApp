@@ -154,7 +154,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
-            android:text="@string/titleJagdeinrichtungen"
+            android:text="@string/addJagdEinr"
             android:textAlignment="center"
             android:textAllCaps="true"
             android:textColor="#DCD1D1"
@@ -187,6 +187,126 @@
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="409dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/infoBar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="210dp"
+            android:layout_height="46dp"
+            android:layout_marginTop="64dp"
+            android:layout_marginEnd="16dp"
+            android:background="#97DCD1D1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/radioGroup2"
+            app:layout_constraintStart_toStartOf="@+id/txtSitzName"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.466">
+
+            <ImageButton
+                android:id="@+id/btnAddJagdEinrPop"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:backgroundTint="#00FFFFFF"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/txtAdd"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/outline_add_location_alt_24" />
+
+            <TextView
+                android:id="@+id/txtAdd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginBottom="16dp"
+                android:text="@string/addJagdEinr"
+                android:textColor="#354559"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <RadioGroup
+            android:id="@+id/radioGroup2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:background="#97DCD1D1"
+            android:orientation="vertical"
+            app:layout_constraintStart_toEndOf="@+id/txtSitzName"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <RadioButton
+                android:id="@+id/radio_sitz"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:onClick="onRadioButtonClicked"
+                android:text="@string/radio_sitz"
+                android:textColor="#354559"
+                android:textColorHighlight="#354559"
+                android:textColorLink="#354559"
+                android:textCursorDrawable="@drawable/fui_ic_check_circle_black_128dp"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <RadioButton
+                android:id="@+id/radio_cams"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onRadioButtonClicked"
+                android:text="@string/radio_cam"
+                android:textColor="#354559"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <RadioButton
+                android:id="@+id/radio_trap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onRadioButtonClicked"
+                android:text="@string/radio_trap"
+                android:textColor="#354559"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <RadioButton
+                android:id="@+id/radio_kirrung"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onRadioButtonClicked"
+                android:text="@string/radio_kirrung"
+                android:textColor="#354559"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </RadioGroup>
+
+        <EditText
+            android:id="@+id/txtSitzName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="16dp"
+            android:background="#97DCD1D1"
+            android:ems="10"
+            android:hint="@string/JagdEinrBezeichnung"
+            android:inputType="textPersonName"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:textAlignment="center"
+            android:textColor="#354559"
+            android:textColorHint="#BF354559"
+            android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

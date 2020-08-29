@@ -2,6 +2,7 @@ package com.example.jagdrevierapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +14,8 @@ import android.widget.TextView;
 import com.example.jagdrevierapp.data.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -27,7 +30,7 @@ public class AddJagdEinrPop extends AppCompatActivity {
     //##########################################################
     //###    Constant Variables
     //##########################################################
-    private static final String TAG = "JagdeinrichtungenVer";
+    private static final String TAG = "AddJagdEinriPop";
     private static final String COLLECTION_HS_KEY ="HochsitzeMichi";
     private static final String COLLECTION_US_KEY ="User";
 
@@ -127,6 +130,22 @@ public class AddJagdEinrPop extends AppCompatActivity {
                     // in case of error print error to log.d
                     Log.d(TAG, "Error getting documents: ", task.getException());
                 }
+            }
+        });
+
+
+        //##########################################################
+        //###  Adding Jagdeinrichtung into Database
+        //##########################################################
+        ImageButton btnAddJagdEinr = findViewById(R.id.btnAddJagdEinrPop);
+        btnAddJagdEinr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+
+
+                Snackbar.make(view, "Hochsitz hinzugefügt - keine Action, da DB noch nicht bereit", BaseTransientBottomBar.LENGTH_SHORT).show();
             }
         });
 

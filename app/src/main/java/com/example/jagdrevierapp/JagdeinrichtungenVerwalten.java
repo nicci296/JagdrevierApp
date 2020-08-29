@@ -30,6 +30,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.common.io.LittleEndianDataInputStream;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -134,6 +135,18 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
         });
 
         //##########################################################
+        //###   FloatingBtn for Adding JagdEinr
+        //##########################################################
+        FloatingActionButton addJagdEinr = findViewById(R.id.btnAddHochsitz);
+        addJagdEinr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(JagdeinrichtungenVerwalten.this, AddJagdEinrPop.class);
+                startActivity(intent);
+            }
+        });
+
+        //##########################################################
         //###   User aus Datenbank extrahieren
         //##########################################################
 
@@ -207,21 +220,6 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         adapter.stopListening();
-
-
-    //##########################################################
-    //###   FloatingBtn for Adding JagdEinr
-    //##########################################################
-        FloatingActionButton addJagdEinr = findViewById(R.id.btnAddHochsitz);
-        addJagdEinr.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), AddJagdEinrPop.class);
-                startActivity(intent);
-            }
-        });
-
-
 
     }
 }
