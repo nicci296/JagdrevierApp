@@ -3,16 +3,31 @@ package com.example.jagdrevierapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.jagdrevierapp.data.model.Hochsitz;
 import com.example.jagdrevierapp.data.model.User;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -20,6 +35,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -137,10 +153,64 @@ public class AddJagdEinrPop extends AppCompatActivity {
         //##########################################################
         //###  Adding Jagdeinrichtung into Database
         //##########################################################
-        ImageButton btnAddJagdEinr = findViewById(R.id.btnAddJagdEinrPop);
+        final ImageButton btnAddJagdEinr = findViewById(R.id.btnAddJagdEinrPop);
         btnAddJagdEinr.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
+                //Bekanntmachen der View zur Texteingabe und Abruf der Eingabe als String
+                final EditText jgdeinName = findViewById(R.id.txtSitzName);
+                final String inputText = jgdeinName.getText().toString();
+
+                //Snackbar (weils schönes ist), falls kein Name im Feld, und return, damit keine Einrichtung namenlos gespeichert wird
+                if (inputText.isEmpty()) {
+                    Snackbar.make(view, R.string.nameReq, Snackbar.LENGTH_LONG).show();
+                    return;
+                }
+
+                //Initialisierung eines LocationManagers zur aktuellen Standortbestimmung
+                LocationManager locationManager = (LocationManager) AddJagdEinrPop.this.getSystemService(Context.LOCATION_SERVICE);
+                String locationProvider = LocationManager.NETWORK_PROVIDER;
+                if (ActivityCompat.checkSelfPermission(AddJagdEinrPop.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(AddJagdEinrPop.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
+                final GeoPoint current = new GeoPoint(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+                final LatLng latLng = new LatLng(current.getLatitude(),current.getLongitude());
+
+                 final Hochsitz kanzel = new Hochsitz
+                        (inputText, current, false,"TBA",false,
+                                false);
+
+
+                Query query = dbHochsitze.whereEqualTo("hochsitzName", inputText);
+                query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Snackbar.make(view,"Jagdeinrichtung existiert bereits", Snackbar.LENGTH_LONG).show();
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                jgdeinName.getText().clear();
+                                return;
+                            }
+                        }
+                        dbHochsitze.document(inputText).set(kanzel)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Snackbar.make(view, "Jagdeinrichtung hinzugefügt", Snackbar.LENGTH_LONG).show();
+                                        jgdeinName.getText().clear();
+
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Snackbar.make(view, "Jagdeinrichtung konnte nicht hinzugefügt werden!", Snackbar.LENGTH_LONG).show();
+                                    }
+                                });
+                    }
+                });
 
 
 

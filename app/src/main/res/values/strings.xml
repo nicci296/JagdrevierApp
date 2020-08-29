@@ -45,11 +45,11 @@
     <string name="del_Jagdeinrichtung">Kanzel entfernen</string>
     <string name="kanzel_Name">Name der Kanzel</string>
     <string name="refresh_Btn">Refresh</string>
-    <string name="nameReq">Bitte benenne die Kanzel.</string>
+    <string name="nameReq">Bitte benenne die jagdliche Einrichtung.</string>
     <string name="data_Get_Fail">Kanzeln konnten nicht abgerufen werden.</string>
     <string name="data_Get_Success">Aktuelles Revier geladen.</string>
     <string name="data_Del_Fail">Kanzel existiert nicht.</string>
-    <string name="data_Del_Success">Kanzel erfolgreich aus Revier entfernt.</string>
+    <string name="data_Del_Success">Jagdeinrichtung erfolgreich aus Revier entfernt.</string>
     <string name="jagdeinrichtung_exists">Jagdeinrichtung existiert bereits!</string>
     <string name="jagdeinrichtung_saved">Jagdeinrichtung hinzugefügt!</string>
     <string name="refresh_Fail">Aktualisieren fehlgeschlagen.</string>
