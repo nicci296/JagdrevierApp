@@ -13,15 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.jagdrevierapp.data.model.Journal;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -35,7 +32,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -92,6 +88,10 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
     protected void onBindViewHolder(final HochsitzHolder hochsitzHolder, int position, final Hochsitz hochsitz) {
 
 
+        //##########################################################
+        //###   User aus Datenbank extrahieren
+        //##########################################################
+
         //get UserQuery per unique Mail from FirbaseUser
         Query userQuery = dbUser.whereEqualTo("mail", mFirebaseUser.getEmail());
         //get actual dataset from dbUser
@@ -108,9 +108,6 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
                         Log.d(TAG, document.getId() + " => " + document.getData());
                        currentUser = document.toObject(User.class);
                         if(currentUser.getMail() != null) {
-
-
-
                         }
                     }
                 } else {
@@ -128,23 +125,30 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
         //##########################################################
         if(hochsitz.isBooked()) {
             hochsitzHolder.btnStatus.setBackgroundResource(R.drawable.hochsetz_besetzt);
-            hochsitzHolder.btnBook.setBackgroundColor(Color.RED);
+            hochsitzHolder.btnBook.setBackgroundColor(Color.parseColor("#354559"));
+            hochsitzHolder.btnBook.setTextColor(Color.parseColor("#DCD1D1"));
 
         } else{
             hochsitzHolder.btnStatus.setBackgroundResource(R.drawable.hochsitz_frei);
-            hochsitzHolder.btnBook.setBackgroundColor(Color.GREEN);
+            hochsitzHolder.btnBook.setBackgroundColor(Color.parseColor("#DCD1D1"));
+            hochsitzHolder.btnBook.setTextColor(Color.parseColor("#354559"));
                     }
 
         if(hochsitz.isDamaged()) {
-            hochsitzHolder.btnDamage.setBackgroundColor(Color.RED);
+            hochsitzHolder.btnDamage.setBackgroundColor(Color.parseColor("#354559"));
+            hochsitzHolder.btnDamage.setTextColor(Color.parseColor("#DCD1D1"));
         } else {
-            hochsitzHolder.btnDamage.setBackgroundColor(Color.GREEN);
+            hochsitzHolder.btnDamage.setBackgroundColor(Color.parseColor("#DCD1D1"));
+            hochsitzHolder.btnDamage.setTextColor(Color.parseColor("#354559"));
         }
 
         if(hochsitz.isInsectious()) {
-            hochsitzHolder.btnInsect.setBackgroundColor(Color.RED);
+            hochsitzHolder.btnInsect.setBackgroundColor(Color.parseColor("#354559"));
+            hochsitzHolder.btnInsect.setTextColor(Color.parseColor("#DCD1D1"));
         } else {
-            hochsitzHolder.btnInsect.setBackgroundColor(Color.GREEN);
+
+            hochsitzHolder.btnInsect.setBackgroundColor(Color.parseColor("#DCD1D1"));
+            hochsitzHolder.btnInsect.setTextColor(Color.parseColor("#354559"));
         }
 
 
@@ -187,8 +191,6 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
             @Override
             public void onClick(View view) {
                 if(!hochsitz.isBooked()) {
-                    hochsitzHolder.btnStatus.setBackgroundResource(R.drawable.hochsetz_besetzt);
-                    hochsitzHolder.btnBook.setBackgroundColor(Color.RED);
                     Map<String, Object> hunter = new HashMap<>();
                     hunter.put("booked", true);
                     hunter.put("bookedBy", currentUser.getNick());
@@ -208,8 +210,6 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
                             });
                     Toast.makeText(view.getContext(),"WMH " + currentUser.getNick(),Toast.LENGTH_LONG).show();
                 } else if (hochsitz.getBookedBy().equals(currentUser.getNick())) {
-                    hochsitzHolder.btnStatus.setBackgroundResource(R.drawable.hochsitz_frei);
-                    hochsitzHolder.btnBook.setBackgroundColor(Color.GREEN);
                     Map<String, Object> hunter = new HashMap<>();
                     hunter.put("booked", false);
                     hunter.put("bookedBy", "");
@@ -242,7 +242,6 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
             @Override
             public void onClick(View view) {
                 if(!hochsitz.isDamaged()) {
-                    hochsitzHolder.btnDamage.setBackgroundColor(Color.RED);
                     Map<String, Object> damage = new HashMap<>();
                     damage.put("damaged", true);
                     dbHochsitze.document(hochsitz.getHochsitzName())
@@ -263,7 +262,6 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
 
 
                 } else {
-                    hochsitzHolder.btnDamage.setBackgroundColor(Color.GREEN);
                     Map<String, Object> damage = new HashMap<>();
                     damage.put("damaged", false);
                     dbHochsitze.document(hochsitz.getHochsitzName())
@@ -292,7 +290,6 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
             @Override
             public void onClick(View view) {
                 if(!hochsitz.isInsectious()) {
-                    hochsitzHolder.btnInsect.setBackgroundColor(Color.RED);
                     Map<String, Object> insect = new HashMap<>();
                     insect.put("insectious", true);
                     dbHochsitze.document(hochsitz.getHochsitzName())
@@ -313,7 +310,6 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
 
 
                 } else {
-                    hochsitzHolder.btnInsect.setBackgroundColor(Color.GREEN);
                     Map<String, Object> insect = new HashMap<>();
                     insect.put("insectious", false);
                     dbHochsitze.document(hochsitz.getHochsitzName())
@@ -340,6 +336,8 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
         //###  Hochsitzbezeichnung in RecyclerView
         //##########################################################
         hochsitzHolder.txtHochsitzName.setText(hochsitz.getHochsitzName());
+        hochsitzHolder.txtHochsitzName.setTextColor(Color.parseColor("#DCD1D1"));
+        hochsitzHolder.txtHochsitzName.setTextSize(20);
     }
 
 
@@ -362,7 +360,7 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
         public HochsitzHolder(View itemView) {
             super(itemView);
             btnStatus = itemView.findViewById(R.id.btnStatusHochsitz);
-            txtHochsitzName = itemView.findViewById(R.id.textHochsitzName);
+            txtHochsitzName = itemView.findViewById(R.id.textJVJagerName);
             btnBook = itemView.findViewById(R.id.btnBook);
             btnDamage = itemView.findViewById(R.id.btnDamage);
             btnInsect = itemView.findViewById(R.id.btnInsect);

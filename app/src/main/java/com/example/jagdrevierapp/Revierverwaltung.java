@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,7 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Revierverwaltung extends AppCompatActivity implements View.OnClickListener {
+public class Revierverwaltung extends AppCompatActivity {
 
     /**
      * Wilderei durch Michi am 15.08.2020 - 15.56 Uhr
@@ -78,16 +79,37 @@ public class Revierverwaltung extends AppCompatActivity implements View.OnClickL
         userPass = findViewById(R.id.user_Pass);
 
         //von Michi hinzugefügt: Buttons aus Navigation initialisieren
-        Button logoutBtn = findViewById(R.id.logoutBtn);
-        logoutBtn.setOnClickListener(this);
-        Button mapBtn = findViewById(R.id.mapBtn);
-        mapBtn.setOnClickListener(this);
-        Button menuBtn = findViewById(R.id.menuBtn);
-        menuBtn.setOnClickListener(this);
-        Button schussBtn = findViewById(R.id.schussBtn);
-        schussBtn.setOnClickListener(this);
-        Button revierBtn = findViewById(R.id.revierBtn);
-        revierBtn.setOnClickListener(this);
+        //##########################################################
+        //###   Nav-Header and Nav-Buttons
+        //##########################################################
+        //LogOut Button
+        ImageButton logoutBtn = findViewById(R.id.logoutBtn);
+        logoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAuth.signOut();
+                startActivity(new Intent(Revierverwaltung.this, LoginActivity.class));
+            }
+        });
+
+        //zu Map Button
+        ImageButton mapBtn = findViewById(R.id.mapBtn);
+        mapBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Revierverwaltung.this, RevierKarte.class));
+            }
+        });
+
+        //zu Schussjournal Button
+        ImageButton schussBtn = findViewById(R.id.schussBtn);
+        schussBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Revierverwaltung.this, Schussjournal.class));
+            }
+        });
+
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -162,37 +184,4 @@ public class Revierverwaltung extends AppCompatActivity implements View.OnClickL
         Intent changeIntent = new Intent(this, RevierKarte.class);
         startActivity(changeIntent);
     }
-
-
-
-    /**
-     * Navigation eingerichtet, Menü funktioniert noch nicht
-     */
-    @Override
-    public void onClick(View v) {
-        int i = v.getId();
-        if (i == R.id.logoutBtn) {
-            mAuth.signOut();
-            startActivity(new Intent(this, LoginActivity.class));
-        }
-        if (i == R.id.mapBtn) {
-            startActivity(new Intent(this, RevierKarte.class));
-        }
-        // nur zu testzwecken, da Menübutton etwas mehr in anspruch nehmen wird
-        if (i == R.id.revierBtn) {
-            startActivity(new Intent(this, Revierverwaltung.class));
-            Toast.makeText(this, "Entfällt wenn Menü ok", Toast.LENGTH_SHORT).show();
-        }
-        if (i == R.id.schussBtn) {
-            startActivity(new Intent(this, Schussjournal.class));
-            Toast.makeText(this, "Entfällt wenn Menü ok", Toast.LENGTH_SHORT).show();
-        }
-        if (i == R.id.menuBtn) {
-            Toast.makeText(this, "Imagine: Menü erscheint", Toast.LENGTH_SHORT).show();
-        }
-
-    }
-
-
-
 }
