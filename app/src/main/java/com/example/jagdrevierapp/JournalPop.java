@@ -9,7 +9,9 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -74,6 +76,40 @@ public class JournalPop extends AppCompatActivity {
             //general variables
             String mUsername = mFirebaseUser.getDisplayName();
         }
+
+
+        //##########################################################
+        //###   Nav-Header and Nav-Buttons
+        //##########################################################
+        //LogOut Button
+        ImageButton logoutBtn = findViewById(R.id.logoutBtn);
+        logoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAuth.signOut();
+                startActivity(new Intent(JournalPop.this, LoginActivity.class));
+            }
+        });
+
+        //zu Map Button
+        ImageButton mapBtn = findViewById(R.id.mapBtn);
+        mapBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(JournalPop.this, RevierKarte.class));
+            }
+        });
+
+        //zu Schussjournal Button
+        ImageButton schussBtn = findViewById(R.id.schussBtn);
+        schussBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(JournalPop.this, Schussjournal.class));
+            }
+        });
+
+
 
         /**
          * ******************23.08.20 Nico ***************************************************

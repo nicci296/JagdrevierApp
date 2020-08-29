@@ -35,7 +35,7 @@
     <string name="passwordHint">Passwort</string>
     <string name="toSignInText">Bereits registriert? - Klicke hier!</string>
     <string name="toRegisterText">Noch nicht registriert? - Klicke hier</string>
-    <string name="schussBtn">Schussjournal</string>
+    <string name="schussBtn">Schuss\njournal</string>
     <string name="revierBtn">Revierverwaltung</string>
     <string name="jagdein_Btn">Jagdeinrichtunge</string>
     <string name="titleSchussjournal">Schussjournal</string>
@@ -113,5 +113,8 @@
     <string name="txtHochsitzname">Hier könnte ihre Werbung stehen</string>
     <string name="btnToSchussjrnl">Schussjournal</string>
     <string name="btnStatToJaEinr">zurück zu Revier</string>
+    <string name="RegisterMsg">Registrierung</string>
+    <string name="btnToJagdEinr">Jagdeinrichtungen</string>
+    <string name="todo">TODO</string>
 
 </resources>

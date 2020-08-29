@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -103,7 +104,7 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
         //###   Nav-Header and Nav-Buttons
         //##########################################################
         //LogOut Button
-        Button logoutBtn = findViewById(R.id.logoutBtn);
+        ImageButton logoutBtn = findViewById(R.id.logoutBtn);
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,7 +114,7 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
         });
 
         //zu Map Button
-        Button mapBtn = findViewById(R.id.mapBtn);
+        ImageButton mapBtn = findViewById(R.id.mapBtn);
         mapBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -122,7 +123,7 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
         });
 
         //zu Schussjournal Button
-        Button schussBtn = findViewById(R.id.schussBtn);
+        ImageButton schussBtn = findViewById(R.id.schussBtn);
         schussBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -9,7 +9,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/navHeader"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="142dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -27,69 +27,159 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/schussBtn"
-            android:layout_width="82dp"
-            android:layout_height="53dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:text="@string/jagdein_Btn"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/mapBtn"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/mapBtn"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="32dp"
             android:layout_marginTop="4dp"
-            android:text="@string/mapBtn"
-            app:layout_constraintEnd_toStartOf="@+id/schussBtn"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/logoutBtn"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:background="#354559"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            app:layout_constraintStart_toEndOf="@+id/constraintLayout2"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            android:id="@+id/logoutBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:text="@string/logOutBtnText"
-            app:layout_constraintEnd_toStartOf="@+id/mapBtn"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-                android:id="@+id/bang_Jrnl_Head"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:text="@string/bang_Jrnl_Head"
-                android:textAlignment="center"
-                android:textAllCaps="true"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
+            <ImageButton
+                android:id="@+id/schussBtn"
+                android:layout_width="50dp"
+                android:layout_height="35dp"
+                android:background="#00354559"
+                android:contentDescription="TODO"
+                android:src="@android:drawable/ic_menu_compass"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
-                app:layout_constraintStart_toStartOf="parent"/>
-        <TextView
-                android:id="@+id/user_Name_Jrnl"
-                android:layout_width="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textColor="#FFFFFF"
+                android:text="@string/btnToJagdEinr"
+                android:textAlignment="center"
+                android:textColor="#DCD1D1"
+                android:textSize="10sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/schussBtn" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout2"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:background="#354559"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            app:layout_constraintEnd_toStartOf="@+id/wood_Board"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/wood_Board"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageButton
+                android:id="@+id/mapBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:backgroundTint="#00354559"
+                android:contentDescription="TODO"
+                android:src="@android:drawable/ic_menu_mapmode"
+                android:text="@string/mapBtn"
+                android:textColor="#354559"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/wood_Board"
-                android:layout_marginEnd="45dp" app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintHorizontal_bias="0.0" android:layout_marginStart="100dp"
-                app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="45dp"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mapBtn"
+                android:textAlignment="center"
+                android:textColor="#DCD1D1"
+                android:textSize="10sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/mapBtn" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout3"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="32dp"
+            android:background="#354559"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            app:layout_constraintEnd_toStartOf="@+id/constraintLayout2"
+            app:layout_constraintTop_toTopOf="parent">
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="4dp"
+            android:background="#354559"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="8dp"
+
+            <ImageButton
+                android:id="@+id/logoutBtn"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="#00354559"
+                android:fontFamily="sans-serif-medium"
+                android:src="@drawable/ic_sports_bar_24px"
+                android:text="@string/logOutBtnText"
+                android:textColor="#354559"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/logOutBtnText"
+                android:textAlignment="center"
+                android:textColor="#DCD1D1"
+                android:textSize="10sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/logoutBtn" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/bang_Jrnl_Head"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="32dp"
+            android:text="@string/titleSchussjournal"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="#DCD1D1"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/user_Name_Jrnl" />
+
+        <TextView
+            android:id="@+id/user_Name_Jrnl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="100dp"
+            android:layout_marginBottom="32dp"
+            android:text="hall"
+            android:textColor="#DCD1D1"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
 
     <RelativeLayout
         android:id="@+id/second_Lvl_Layout"
@@ -107,17 +197,18 @@
             android:layout_marginTop="-2dp">
 
             <ImageButton
-                    android:id="@+id/add_Line_Btn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="80dp"
-                    android:layout_marginBottom="4dp"
-                    android:background="@android:color/transparent"
-                    android:contentDescription="@string/bang_Add_Line"
-                    android:onClick="onClickAddLine"
-                    android:src="@drawable/writing"
-                    app:layout_constraintBottom_toTopOf="@+id/journal_View"
-                    app:layout_constraintStart_toStartOf="parent" android:tint="#FFFFFF"/>
+                android:id="@+id/add_Line_Btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="80dp"
+                android:layout_marginBottom="4dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/bang_Add_Line"
+                android:onClick="onClickAddLine"
+                android:src="@drawable/writing"
+                android:tint="#DCD1D1"
+                app:layout_constraintBottom_toTopOf="@+id/journal_View"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/journal_View"
