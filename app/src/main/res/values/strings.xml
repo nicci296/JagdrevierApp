@@ -78,7 +78,7 @@
     <string name="book_Description">Eingaben für Journaleintrag</string>
     <string name="wood_Board">Planke für Überschrift</string>
     <string name="fields_Req">Bitte alle Felder ausfüllen.</string>
-    <string name="hits_Over_Shots">Mehr Treffer als Schüsse? Komm schon...</string>
+    <string name="hits_Over_Shots">Mehr Treffer als Schüsse? Komm schon…</string>
 
     <!-- JournalAdapter -->
     <string name="shot_line">Schüsse:</string>
@@ -89,6 +89,11 @@
     <string name="lat_line">lat:</string>
     <string name="lng_line">lng:</string>
 
+    <!-- Reviersketch -->
+    <string name="draw">draw</string>
+    <string name="undo">undo</string>
+    <string name="save">save</string>
+    <string name="revier_sketch_hint">"Revierreferenz, z.B 1, Revier1, Hasenhöhle …"</string>
 
     <!-- Permissions -->
     <string name="permission_rationale_location">Access to the location service is required to demonstrate the
