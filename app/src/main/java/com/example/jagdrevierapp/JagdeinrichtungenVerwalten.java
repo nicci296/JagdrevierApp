@@ -116,7 +116,7 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
             //general variables
             String mUsername = mFirebaseUser.getDisplayName();
             dbReviere = dbPachter.document(mFirebaseUser.getEmail()).collection(COLLECTION_REV_KEY);
-            dbHochsitze = dbReviere.document(COLLECTION_HS_KEY).collection(COLLECTION_HS_KEY);
+            dbHochsitze = dbReviere.document(COLLECTION_REV_KEY).collection(COLLECTION_HS_KEY);
         }
 
 
@@ -216,7 +216,7 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
         //##########################################################
         //###   Spinner for Reviere in Infobar
         //##########################################################
-     /*   Spinner revSpinner = findViewById(R.id.reviere_spinner);
+        Spinner revSpinner = findViewById(R.id.reviere_spinner);
         //populate spinner with docs from Revier-collection
         final ArrayAdapter<String> revAdapter = new ArrayAdapter<String>(getApplicationContext(),
                 android.R.layout.simple_spinner_item, reviere);
@@ -235,7 +235,7 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
 
                 revAdapter.notifyDataSetChanged();
             }
-        });*/
+        });
 
 
 
