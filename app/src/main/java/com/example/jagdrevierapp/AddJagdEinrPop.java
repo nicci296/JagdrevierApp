@@ -50,8 +50,10 @@ public class AddJagdEinrPop extends AppCompatActivity {
     //###    Constant Variables
     //##########################################################
     private static final String TAG = "AddJagdEinriPop";
-    private static final String COLLECTION_HS_KEY ="HochsitzeMichi";
+    private static final String COLLECTION_PA_KEY = "Pachter";
     private static final String COLLECTION_US_KEY ="User";
+    private static final String COLLECTION_HS_KEY="Hochsitze";
+    private static final String COLLECTION_REV_KEY="Reviere";
 
 
     //##########################################################
@@ -69,8 +71,10 @@ public class AddJagdEinrPop extends AppCompatActivity {
     //##########################################################
     //Initialize FireStore and References
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference dbHochsitze = db.collection(COLLECTION_HS_KEY);
+    private final CollectionReference dbPachter = db.collection(COLLECTION_PA_KEY);
     private final CollectionReference dbUser = db.collection(COLLECTION_US_KEY);
+    CollectionReference dbReviere = dbPachter.document(mFirebaseUser.getEmail()).collection(COLLECTION_REV_KEY);
+    CollectionReference dbHochsitze = dbReviere.document(COLLECTION_HS_KEY).collection(COLLECTION_HS_KEY);
 
     //Initialisierung eines neuen HochsitzAdapter-Objekts
     private HochsitzAdapter adapter;
@@ -114,12 +118,6 @@ public class AddJagdEinrPop extends AppCompatActivity {
                 startActivity(new Intent(AddJagdEinrPop.this, JagdeinrichtungenVerwalten.class));
             }
         });
-
-        //##########################################################
-        //###   SetUp OnClickMethod for clicking RadioButtons
-        //##########################################################
-
-
 
 
         //##########################################################
@@ -209,8 +207,7 @@ public class AddJagdEinrPop extends AppCompatActivity {
                 final LatLng latLng = new LatLng(current.getLatitude(),current.getLongitude());
 
                  final Hochsitz kanzel = new Hochsitz
-                        (inputText, current, false,"",false,
-                                false, jagdeinrichtungType);
+                        (inputText, current, false,"",false,false, jagdeinrichtungType);
 
 
                 Query query = dbHochsitze.whereEqualTo("hochsitzName", inputText);

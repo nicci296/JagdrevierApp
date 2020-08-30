@@ -15,6 +15,8 @@ import com.example.jagdrevierapp.data.model.Hochsitz;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -24,17 +26,29 @@ public class StatusPop extends Activity {
     //##########################################################
     //###    Constant Variables
     //##########################################################
-    private static final String TAG = "JagdeinrichtungenVer";
-    private static final String COLLECTION_HS_KEY ="HochsitzeMichi";
+    private static final String TAG = "StatusPop";
+    private static final String COLLECTION_HS_KEY ="Hochsitze";
     private static final String COLLECTION_US_KEY ="User";
+    private static final String COLLECTION_REV_KEY="Reviere";
+    private static final String COLLECTION_PA_KEY="Pachter";
+
+    //##########################################################
+    //###    Firebase - Authentication
+    //##########################################################
+    //Initialize Firebase Auth
+    final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    final FirebaseUser mFirebaseUser = mAuth.getCurrentUser();
 
     //##########################################################
     //###    Firebase - Firestore
     //##########################################################
     //Initialize FireStore and References
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference dbHochsitze = db.collection(COLLECTION_HS_KEY);
     private final CollectionReference dbUser = db.collection(COLLECTION_US_KEY);
+    private final CollectionReference dbPachter = db.collection(COLLECTION_PA_KEY);
+    CollectionReference dbReviere = dbPachter.document(mFirebaseUser.getEmail()).collection(COLLECTION_REV_KEY);
+    CollectionReference dbHochsitze = dbReviere.document(COLLECTION_HS_KEY).collection(COLLECTION_HS_KEY);
+
 
 
 

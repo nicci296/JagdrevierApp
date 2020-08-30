@@ -51,10 +51,15 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
         GoogleMap.OnMyLocationButtonClickListener,
         GoogleMap.OnMyLocationClickListener,
         ActivityCompat.OnRequestPermissionsResultCallback {
-
+    //##########################################################
+    //###    Constant Variables
+    //##########################################################
     //Keys
     private static final String TAG = "Revierkarte";
-    private final String COLLECTION_KEY = "HochsitzeMichi";
+    private static final String COLLECTION_HS_KEY ="Hochsitze";
+    private static final String COLLECTION_US_KEY ="User";
+    private static final String COLLECTION_REV_KEY="Reviere";
+    private static final String COLLECTION_PA_KEY="Pachter";
     public final String LATITUDE = "latitude";
     public final String LONGITUDE = "longitude";
 
@@ -68,10 +73,24 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
      */
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
+
+    //##########################################################
+    //###    Firebase - Authentication
+    //##########################################################
+    //Initialize Firebase Auth
+    final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    final FirebaseUser mFirebaseUser = mAuth.getCurrentUser();
+
+
+    //##########################################################
+    //###    Firebase - Firestore
+    //##########################################################
     //Initialize FireStore
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference dbHochsitze = db.collection(COLLECTION_KEY);
-    private final CollectionReference dbReviere = db.collection("Reviere");
+    private final CollectionReference dbUser = db.collection(COLLECTION_US_KEY);
+    private final CollectionReference dbPachter = db.collection(COLLECTION_PA_KEY);
+    CollectionReference dbReviere = dbPachter.document(mFirebaseUser.getEmail()).collection(COLLECTION_REV_KEY);
+    CollectionReference dbHochsitze = dbReviere.document(COLLECTION_HS_KEY).collection(COLLECTION_HS_KEY);
 
     //Map-Object declaration
     private GoogleMap jagdrevierMap;

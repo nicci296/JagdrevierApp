@@ -116,12 +116,6 @@
             android:paddingRight="4dp"
             app:layout_constraintEnd_toStartOf="@+id/constraintLayout2"
             app:layout_constraintTop_toTopOf="parent">
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="4dp"
-            android:background="#354559"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingBottom="8dp"
 
             <ImageButton
                 android:id="@+id/logoutBtn"
@@ -173,6 +167,7 @@
         android:id="@+id/infoBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@color/lightColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -180,15 +175,25 @@
 
         <TextView
             android:id="@+id/helloUser"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
             android:background="#97DCD1D1"
             android:textAlignment="center"
             android:textColor="#354559"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <Spinner
+            android:id="@+id/reviere_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            app:layout_constraintStart_toEndOf="@+id/helloUser"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
