@@ -63,7 +63,6 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
     //##########################################################
     private static final String TAG = "Revierkarte";
     private static final String COLLECTION_HS_KEY ="Hochsitze";
-    private static final String COLLECTION_US_KEY ="User";
     private static final String COLLECTION_REV_KEY="Reviere";
     private static final String COLLECTION_PA_KEY="Pachter";
     public final String LATITUDE = "latitude";
@@ -96,8 +95,8 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
     //Initialize FireStore
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference dbPachter = db.collection(COLLECTION_PA_KEY);
-    CollectionReference dbReviere = dbPachter.document(mFirebaseUser.getEmail()).collection(COLLECTION_REV_KEY);
-    CollectionReference dbHochsitze = dbReviere.document(COLLECTION_HS_KEY).collection(COLLECTION_HS_KEY);
+    CollectionReference dbReviere;
+    CollectionReference dbHochsitze;
 
     /**
      * Flag indicating whether a requested permission has been denied after returning in
@@ -130,7 +129,6 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
             //general variables
             String mUsername = mFirebaseUser.getDisplayName();
             dbReviere = dbPachter.document(mFirebaseUser.getEmail()).collection(COLLECTION_REV_KEY);
-            dbHochsitze = dbReviere.document(COLLECTION_REV_KEY).collection(COLLECTION_HS_KEY);
         }
 
         //Bekanntmachen der Views
@@ -235,6 +233,7 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
                                         double lng = point.getLongitude();
                                         LatLng latLng = new LatLng(lat, lng);
                                         poly.add(latLng);
+                                        dbHochsitze = dbReviere.document(polySpin.getItemAtPosition(position).toString()).collection(COLLECTION_HS_KEY);
                                     }
                                     jagdrevierMap.addPolygon(poly);
                                     dbHochsitze.get()
