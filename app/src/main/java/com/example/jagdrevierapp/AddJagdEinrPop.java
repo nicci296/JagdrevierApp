@@ -6,6 +6,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -16,6 +17,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,8 +50,10 @@ public class AddJagdEinrPop extends AppCompatActivity {
     //###    Constant Variables
     //##########################################################
     private static final String TAG = "AddJagdEinriPop";
-    private static final String COLLECTION_HS_KEY ="HochsitzeMichi";
+    private static final String COLLECTION_PA_KEY = "Pachter";
     private static final String COLLECTION_US_KEY ="User";
+    private static final String COLLECTION_HS_KEY="Hochsitze";
+    private static final String COLLECTION_REV_KEY="Reviere";
 
 
     //##########################################################
@@ -66,8 +71,10 @@ public class AddJagdEinrPop extends AppCompatActivity {
     //##########################################################
     //Initialize FireStore and References
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference dbHochsitze = db.collection(COLLECTION_HS_KEY);
+    private final CollectionReference dbPachter = db.collection(COLLECTION_PA_KEY);
     private final CollectionReference dbUser = db.collection(COLLECTION_US_KEY);
+    CollectionReference dbReviere = dbPachter.document(mFirebaseUser.getEmail()).collection(COLLECTION_REV_KEY);
+    CollectionReference dbHochsitze = dbReviere.document(COLLECTION_HS_KEY).collection(COLLECTION_HS_KEY);
 
     //Initialisierung eines neuen HochsitzAdapter-Objekts
     private HochsitzAdapter adapter;
@@ -108,18 +115,19 @@ public class AddJagdEinrPop extends AppCompatActivity {
         schussBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(AddJagdEinrPop.this, Schussjournal.class));
+                startActivity(new Intent(AddJagdEinrPop.this, JagdeinrichtungenVerwalten.class));
             }
         });
+
 
         //##########################################################
         //###   User aus Datenbank extrahieren
         //##########################################################
-
         //get UserQuery per unique Mail from FirbaseUser
         Query userQuery = dbUser.whereEqualTo("mail", mFirebaseUser.getEmail());
         //get actual dataset from dbUser
         userQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -137,7 +145,6 @@ public class AddJagdEinrPop extends AppCompatActivity {
                             //##########################################################
 
                             //Initialize TextView for welcoming user
-
                             final TextView helloUser = findViewById(R.id.helloUser);
                             helloUser.setText("WaiHei, " + currentUser.getNick());
                         }
@@ -157,6 +164,27 @@ public class AddJagdEinrPop extends AppCompatActivity {
         btnAddJagdEinr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
+
+                //##########################################################
+                //###  Value Radiobuttons
+                //##########################################################
+
+
+
+                RadioGroup radiobtngrp = findViewById(R.id.radioGroup2);
+                int radioButtonID = radiobtngrp.getCheckedRadioButtonId();
+                View radioButton = radiobtngrp.findViewById(radioButtonID);
+                int idx = radiobtngrp.indexOfChild(radioButton);
+                RadioButton r = (RadioButton) radiobtngrp.getChildAt(idx);
+                String jagdeinrichtungType = r.getText().toString();
+
+
+
+
+                //##########################################################
+                //###  Meet Firestore
+                //##########################################################
+
                 //Bekanntmachen der View zur Texteingabe und Abruf der Eingabe als String
                 final EditText jgdeinName = findViewById(R.id.txtSitzName);
                 final String inputText = jgdeinName.getText().toString();
@@ -174,12 +202,12 @@ public class AddJagdEinrPop extends AppCompatActivity {
                     return;
                 }
                 Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
+                assert lastKnownLocation != null;
                 final GeoPoint current = new GeoPoint(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
                 final LatLng latLng = new LatLng(current.getLatitude(),current.getLongitude());
 
                  final Hochsitz kanzel = new Hochsitz
-                        (inputText, current, false,"TBA",false,
-                                false);
+                        (inputText, current, false,"",false,false, jagdeinrichtungType);
 
 
                 Query query = dbHochsitze.whereEqualTo("hochsitzName", inputText);
@@ -187,7 +215,7 @@ public class AddJagdEinrPop extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
+                            for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
                                 Snackbar.make(view,"Jagdeinrichtung existiert bereits", Snackbar.LENGTH_LONG).show();
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 jgdeinName.getText().clear();
@@ -198,7 +226,10 @@ public class AddJagdEinrPop extends AppCompatActivity {
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        Snackbar.make(view, "Jagdeinrichtung hinzugefügt", Snackbar.LENGTH_LONG).show();
+                                        Snackbar sbJagdEinrAdd = Snackbar.make(view, "Jagdeinrichtung hinzugefügt", Snackbar.LENGTH_LONG);
+                                        sbJagdEinrAdd.setAction("zu Jagdeinrichtungen", new backToHome());
+                                        sbJagdEinrAdd.show();
+
                                         jgdeinName.getText().clear();
 
                                     }
@@ -211,13 +242,17 @@ public class AddJagdEinrPop extends AppCompatActivity {
                                 });
                     }
                 });
-
-
-
-
-                Snackbar.make(view, "Hochsitz hinzugefügt - keine Action, da DB noch nicht bereit", BaseTransientBottomBar.LENGTH_SHORT).show();
-            }
+                            }
         });
 
+    }
+
+    public class backToHome implements View.OnClickListener {
+
+        @Override
+        public void onClick(View view) {
+            Intent yeah = new Intent(AddJagdEinrPop.this, JagdeinrichtungenVerwalten.class);
+            startActivity(yeah);
+        }
     }
 }

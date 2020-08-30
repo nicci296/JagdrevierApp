@@ -41,9 +41,11 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
     //##########################################################
     //###    Constant Variables
     //##########################################################
-    private static final String TAG = "JagdeinrichtungenVer";
-    private static final String COLLECTION_HS_KEY ="HochsitzeMichi";
+    private static final String TAG = "HochsitzAdapter";
+    private static final String COLLECTION_HS_KEY ="Hochsitze";
     private static final String COLLECTION_US_KEY ="User";
+    private static final String COLLECTION_REV_KEY="Reviere";
+    private static final String COLLECTION_PA_KEY="Pachter";
 
 
 
@@ -61,9 +63,10 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
     //##########################################################
     //Initialize FireStore and References
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference dbHochsitze = db.collection(COLLECTION_HS_KEY);
     private final CollectionReference dbUser = db.collection(COLLECTION_US_KEY);
-
+    private final CollectionReference dbPachter = db.collection(COLLECTION_PA_KEY);
+    CollectionReference dbReviere = dbPachter.document(mFirebaseUser.getEmail()).collection(COLLECTION_REV_KEY);
+    CollectionReference dbHochsitze = dbReviere.document(COLLECTION_HS_KEY).collection(COLLECTION_HS_KEY);
     private OnHochsitzClickListener listener;
 
 
@@ -348,6 +351,11 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
         return new HochsitzHolder(v);
     }
 
+    //Methode zum Löschen eines Hochsitzeintrags aus der View und dem Firestore
+    public void deleteItem(int position){
+        getSnapshots().getSnapshot(position).getReference().delete();
+    }
+
 
     class HochsitzHolder extends RecyclerView.ViewHolder {
         Button btnStatus;
@@ -364,6 +372,22 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
             btnBook = itemView.findViewById(R.id.btnBook);
             btnDamage = itemView.findViewById(R.id.btnDamage);
             btnInsect = itemView.findViewById(R.id.btnInsect);
+
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    /*Interface OnJournalClickListener aufrufen.
+                    If-Abfrage, damit die App nicht crasht während man auf ein Item clickt, welches
+                    gerade per Swipe entfernt wird. Dies würde nämlich Position -1(NO_POSITION) zurückgeben und
+                    in Verbindung mit einem documentSnapshop zum Absturz der App führen.*/
+                    if(position != RecyclerView.NO_POSITION && listener != null){
+                        listener.onItemClick(getSnapshots().getSnapshot(position), position);
+                    }
+
+                }
+            });
         }
     }
 

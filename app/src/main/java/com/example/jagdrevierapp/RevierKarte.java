@@ -58,11 +58,14 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
         GoogleMap.OnMyLocationButtonClickListener,
         GoogleMap.OnMyLocationClickListener,
         ActivityCompat.OnRequestPermissionsResultCallback {
-
-    //Keys
+    //##########################################################
+    //###    Constant Variables
+    //##########################################################
     private static final String TAG = "Revierkarte";
-    private final String COLLECTION_KEY = "HochsitzeMichi";
-    /*private final String REVIER_COLLECTION_KEY = "Reviere";*/
+    private static final String COLLECTION_HS_KEY ="Hochsitze";
+    private static final String COLLECTION_US_KEY ="User";
+    private static final String COLLECTION_REV_KEY="Reviere";
+    private static final String COLLECTION_PA_KEY="Pachter";
     public final String LATITUDE = "latitude";
     public final String LONGITUDE = "longitude";
     /**
@@ -71,6 +74,7 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
      * @see #onRequestPermissionsResult(int, String[], int[])
      */
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+
 
     //Initialize Variables
     private ImageButton jgdEinAdd, jgdEinDel, refresh, addRevier;
@@ -81,10 +85,21 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
     private GoogleMap jagdrevierMap;
     LatLng start = new LatLng(48.854296, 11.239171);
 
+    //##########################################################
+    //###    Firebase - Authentication
+    //##########################################################
+    //Initialize Firebase Auth
+    final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    final FirebaseUser mFirebaseUser = mAuth.getCurrentUser();
+    //##########################################################
+    //###    Firebase - Firestore
+    //##########################################################
     //Initialize FireStore
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference dbHochsitze = db.collection(COLLECTION_KEY);
-    private final CollectionReference dbReviere = db.collection("Reviere");
+    private final CollectionReference dbUser = db.collection(COLLECTION_US_KEY);
+    private final CollectionReference dbPachter = db.collection(COLLECTION_PA_KEY);
+    CollectionReference dbReviere = dbPachter.document(mFirebaseUser.getEmail()).collection(COLLECTION_REV_KEY);
+    CollectionReference dbHochsitze = dbReviere.document(COLLECTION_HS_KEY).collection(COLLECTION_HS_KEY);
 
     /**
      * Flag indicating whether a requested permission has been denied after returning in
@@ -150,6 +165,7 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
         final String locationProvider = LocationManager.NETWORK_PROVIDER;
 
         /**
+
          * ******************30.08.20 Nico **************************************
          * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
          *
@@ -193,7 +209,6 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         String subject = document.getString("revName");
                         reviere.add(subject);
-
                     }
                 }adapter.notifyDataSetChanged();
             }
