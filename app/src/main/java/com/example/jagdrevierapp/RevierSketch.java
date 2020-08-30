@@ -61,9 +61,8 @@ public class RevierSketch extends FragmentActivity implements OnMapReadyCallback
     //Initialize FireStore
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference dbPachter = db.collection(COLLECTION_PA_KEY);
-    CollectionReference dbReviere = dbPachter.document(mFirebaseUser.getEmail()).collection(COLLECTION_REV_KEY);
-    CollectionReference dbHochsitze = dbReviere.document(COLLECTION_HS_KEY).collection(COLLECTION_HS_KEY);
-
+    CollectionReference dbReviere;
+    CollectionReference dbHochsitze;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +80,7 @@ public class RevierSketch extends FragmentActivity implements OnMapReadyCallback
             //general variables
             String mUsername = mFirebaseUser.getDisplayName();
             dbReviere = dbPachter.document(mFirebaseUser.getEmail()).collection(COLLECTION_REV_KEY);
-            dbHochsitze = dbReviere.document(COLLECTION_REV_KEY).collection(COLLECTION_HS_KEY);
+            /*dbHochsitze = dbReviere.document(COLLECTION_REV_KEY).collection(COLLECTION_HS_KEY);*/
         }
 
         //Assign Variable

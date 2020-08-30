@@ -74,7 +74,7 @@ public class AddJagdEinrPop extends AppCompatActivity {
     private final CollectionReference dbPachter = db.collection(COLLECTION_PA_KEY);
     private final CollectionReference dbUser = db.collection(COLLECTION_US_KEY);
     CollectionReference dbReviere = dbPachter.document(mFirebaseUser.getEmail()).collection(COLLECTION_REV_KEY);
-    CollectionReference dbHochsitze = dbReviere.document(COLLECTION_HS_KEY).collection(COLLECTION_HS_KEY);
+    CollectionReference dbHochsitze = dbReviere.document(COLLECTION_REV_KEY).collection(COLLECTION_HS_KEY);
 
     //Initialisierung eines neuen HochsitzAdapter-Objekts
     private HochsitzAdapter adapter;
