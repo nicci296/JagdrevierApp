@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class RevierSketch extends FragmentActivity implements OnMapReadyCallback, SeekBar.OnSeekBarChangeListener {
+public class RevierSketch extends FragmentActivity implements OnMapReadyCallback {
 
     //Keys
     private static final String TAG = "RevierSketch";
@@ -34,17 +34,15 @@ public class RevierSketch extends FragmentActivity implements OnMapReadyCallback
     //Initialize Variables
     private GoogleMap mMap;
     private CheckBox checkBox;
-    private SeekBar seekRed, seekGreen, seekBlue;
     private ImageButton drawBtn, clearBtn,saveBtn;
     private EditText revRef;
+    private Spinner polySpin;
 
     Polygon polygon = null;
     List<LatLng> latLngList = new ArrayList<>();
     List<Marker> markerList = new ArrayList<>();
-    List<GeoPoint> geoList = new ArrayList<>();
-
-    int red=0,green=0,blue=0;
-
+    ArrayList<GeoPoint> geoList = new ArrayList<>();
+    List<String> reviere = new ArrayList<>();
     LatLng start = new LatLng(48.854296, 11.239171);
 
     //Initialize FireStore
@@ -57,19 +55,16 @@ public class RevierSketch extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_revier_sketch);
 
+
         //Assign Variable
         checkBox = findViewById(R.id.check_box);
-        seekRed = findViewById(R.id.seek_red);
-        seekGreen = findViewById(R.id.seek_green);
-        seekBlue = findViewById(R.id.seek_blue);
         drawBtn = findViewById(R.id.draw_button);
         clearBtn = findViewById(R.id.clear_button);
         saveBtn = findViewById(R.id.save_revier_button);
         revRef = findViewById(R.id.revier_ref);
 
-
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+        final SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.sketchMap);
         mapFragment.getMapAsync(this);
 
@@ -81,7 +76,7 @@ public class RevierSketch extends FragmentActivity implements OnMapReadyCallback
                 if(b){
                     if(polygon == null)return;;
                     //Fill Polygon with Color
-                    polygon.setFillColor(Color.rgb(red,green,blue));
+                    polygon.setFillColor(Color.WHITE);
                 }else{
                     //Unfill Polygon Color if unchecked
                     polygon.setFillColor(Color.TRANSPARENT);
@@ -93,15 +88,14 @@ public class RevierSketch extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
                 //Draw Polyline on Map
-                /*if(polygon == null)polygon.remove();*/
                 //Create PolygonOptions
                 PolygonOptions polygonOptions = new PolygonOptions().addAll(latLngList).clickable(true);
                 polygon = mMap.addPolygon(polygonOptions);
                 //Polygon Stroke Color
-                polygon.setStrokeColor(Color.rgb(red,green,blue));
+                polygon.setStrokeColor(Color.WHITE);
                 if(checkBox.isChecked())
                     //Fill Polygon with Color
-                    polygon.setFillColor(Color.rgb(red,green,blue));
+                    polygon.setFillColor(Color.WHITE);
             }
         });
 
@@ -111,10 +105,10 @@ public class RevierSketch extends FragmentActivity implements OnMapReadyCallback
                 //Clear All
                 if(polygon != null)polygon.remove();
                 for(Marker marker : markerList)marker.remove();
+                latLngList.clear();
+                geoList.clear();
                 checkBox.setChecked(false);
-                seekRed.setProgress(0);
-                seekGreen.setProgress(0);
-                seekBlue.setProgress(0);
+                mMap.clear();
             }
         });
 
@@ -124,7 +118,7 @@ public class RevierSketch extends FragmentActivity implements OnMapReadyCallback
                 String revierRef = revRef.getText().toString();
                 //no safe if no polygon drawn
                 if(polygon == null)return;
-                Revier newRevier = new Revier(polygon,geoList,revierRef);
+                Revier newRevier = new Revier(geoList,revierRef);
 
                 dbReviere.document(revierRef).set(newRevier).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -132,10 +126,10 @@ public class RevierSketch extends FragmentActivity implements OnMapReadyCallback
                         //Clear All
                         if(polygon != null)polygon.remove();
                         for(Marker marker : markerList)marker.remove();
+                        latLngList.clear();
+                        geoList.clear();
                         checkBox.setChecked(false);
-                        seekRed.setProgress(0);
-                        seekGreen.setProgress(0);
-                        seekBlue.setProgress(0);
+                        mMap.clear();
                         Toast.makeText(RevierSketch.this, "Revier gespeichert", Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -148,51 +142,83 @@ public class RevierSketch extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-        seekRed.setOnSeekBarChangeListener(this);
-        seekGreen.setOnSeekBarChangeListener(this);
-        seekBlue.setOnSeekBarChangeListener(this);
+        //populate spinner with docs from Revier-collection
+        polySpin = findViewById(R.id.revier_spin);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),
+                android.R.layout.simple_spinner_item, reviere);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        polySpin.setAdapter(adapter);
+
+        dbReviere.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        String subject = document.getString("revName");
+                        reviere.add(subject);
+                    }
+
+                }adapter.notifyDataSetChanged();
+            }
+        });
+        //Show polygon from Spinner-item on Map
+        polySpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(final AdapterView<?> polySpin, View view, final int position, long id) {
+                final String selectedItem = polySpin.getItemAtPosition(position).toString();
+                dbReviere.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if(selectedItem.equals(document.getString("revName"))) {
+                                    Revier revier = document.toObject(Revier.class);
+                                    ArrayList<GeoPoint> points=(ArrayList<GeoPoint>) revier.getTierPoints();
+                                    int length = points.size();
+                                    if (length == 0) {
+                                        return;
+                                    }
+                                    PolygonOptions poly = new PolygonOptions();
+                                    poly.strokeColor(Color.WHITE);
+                                    /*PolygonOptions poly = new PolygonOptions().clickable(true);*/
+                                    for (int i = 0; i < length; i++) {
+                                        GeoPoint polyGeo = (GeoPoint) points.get(i);
+                                        double lat = polyGeo.getLatitude();
+                                        double lng = polyGeo.getLongitude ();
+                                        LatLng latLng = new LatLng(lat, lng);
+                                        poly.add(latLng);
+                                    }
+
+                                    mMap.addPolygon(poly);
+                                }
+                            }
+
+                        }
+                    }
+                });
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> polySpin) {
+            }
+        });
+
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+
+        //Config der Karte - Typ Satellit, Zoom per Click&Touch, Compass auf Karte und Startposition
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(start, 13));
-        //Config der Karte - Typ Satellit, Zoom per Click&Touch, Compass auf Karte
         mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setZoomGesturesEnabled(true);
         mMap.getUiSettings().setCompassEnabled(true);
 
-      /*  dbReviere.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-                        Log.d(TAG, document.getId() + " => " + document.getData());
-                    Revier revier = document.toObject(Revier.class);
-                    List<GeoPoint> points = revier.getTierPoints();
-
-                    for (GeoPoint geoPoint : points) {
-                        LatLng newLatlng = new LatLng(geoPoint.getLatitude(),geoPoint.getLongitude());
-                        List<LatLng> list = new ArrayList<>();
-                        list.add(newLatlng);
-
-                    }
-
-                    PolygonOptions polygonOptions = new PolygonOptions().addAll(points).clickable(true);
-                    Polygon polygon1 = mMap.addPolygon(polygonOptions);
-                    polygon1.setStrokeColor(revier.getTier().getStrokeColor());
-                    polygon1.setFillColor(revier.getTier().getFillColor());
-                    }
-
-                }
-            }
-        });
-*/
-
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latlng) {
+                /*if(polygon != null)polygon.remove();*/
                 //MarkerOptions
                 MarkerOptions markerOptions = new MarkerOptions().position(latlng);
                 //Marker
@@ -201,39 +227,8 @@ public class RevierSketch extends FragmentActivity implements OnMapReadyCallback
                 latLngList.add(latlng);
                 markerList.add(marker);
                 GeoPoint geoPoint = new GeoPoint(latlng.latitude, latlng.longitude);
+                geoList.add(geoPoint);
             }
         });
-    }
-
-    @Override
-    public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-        switch (seekBar.getId()){
-            case R.id.seek_red:
-                red = i;
-                break;
-            case R.id.seek_green:
-                green = i;
-                break;
-            case R.id.seek_blue:
-                blue = i;
-                break;
-        }
-        if(polygon != null) {
-            //Polygon Stroke Color
-            polygon.setStrokeColor(Color.rgb(red, green, blue));
-            if (checkBox.isChecked())
-                //Fill Polygon with Color
-                polygon.setFillColor(Color.rgb(red, green, blue));
-        }
-    }
-
-    @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {
-
-    }
-
-    @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {
-
     }
 }

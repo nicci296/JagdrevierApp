@@ -4,42 +4,32 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.firebase.firestore.GeoPoint;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Revier {
 
-    private Polygon tier;
-    private List<GeoPoint> tierPoints;
-    private String reference;
+    private ArrayList<GeoPoint> tierPoints;
+    private String revName;
 
     public Revier(){}
 
-    public Revier(Polygon tier, List<GeoPoint> tierPoints, String reference) {
-        this.tier = tier;
+    public Revier(ArrayList<GeoPoint> tierPoints, String revName) {
         this.tierPoints = tierPoints;
+        this.revName = revName;
     }
 
-    public Polygon getTier() {
-        return tier;
-    }
-
-    public void setTier(Polygon tier) {
-        this.tier = tier;
-    }
-
-    public List<GeoPoint> getTierPoints() {
+    public ArrayList<GeoPoint> getTierPoints() {
         return tierPoints;
     }
 
-    public void setTierPoints(List<GeoPoint> tierPoints) {
+    public void setTierPoints(ArrayList<GeoPoint> tierPoints) {
         this.tierPoints = tierPoints;
     }
 
-    public String getReference() {
-        return reference;
+    public String getRevName() { return revName;
     }
 
-    public void setReference(String reference) {
-        this.reference = reference;
+    public void setRevName(String revName) { this.revName = revName;
     }
 }
