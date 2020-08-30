@@ -33,16 +33,13 @@ public class RevierSketch extends FragmentActivity implements OnMapReadyCallback
 
     //Initialize Variables
     private GoogleMap mMap;
-    private CheckBox checkBox;
     private ImageButton drawBtn, clearBtn,saveBtn;
     private EditText revRef;
-    private Spinner polySpin;
 
     Polygon polygon = null;
     List<LatLng> latLngList = new ArrayList<>();
     List<Marker> markerList = new ArrayList<>();
     ArrayList<GeoPoint> geoList = new ArrayList<>();
-    List<String> reviere = new ArrayList<>();
     LatLng start = new LatLng(48.854296, 11.239171);
 
     //Initialize FireStore
@@ -57,7 +54,7 @@ public class RevierSketch extends FragmentActivity implements OnMapReadyCallback
 
 
         //Assign Variable
-        checkBox = findViewById(R.id.check_box);
+
         drawBtn = findViewById(R.id.draw_button);
         clearBtn = findViewById(R.id.clear_button);
         saveBtn = findViewById(R.id.save_revier_button);
@@ -68,21 +65,6 @@ public class RevierSketch extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.sketchMap);
         mapFragment.getMapAsync(this);
 
-        //CheckBox behaviour
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                //Get State of CheckBox
-                if(b){
-                    if(polygon == null)return;;
-                    //Fill Polygon with Color
-                    polygon.setFillColor(Color.WHITE);
-                }else{
-                    //Unfill Polygon Color if unchecked
-                    polygon.setFillColor(Color.TRANSPARENT);
-                }
-            }
-        });
 
         drawBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,9 +75,7 @@ public class RevierSketch extends FragmentActivity implements OnMapReadyCallback
                 polygon = mMap.addPolygon(polygonOptions);
                 //Polygon Stroke Color
                 polygon.setStrokeColor(Color.WHITE);
-                if(checkBox.isChecked())
-                    //Fill Polygon with Color
-                    polygon.setFillColor(Color.WHITE);
+
             }
         });
 
@@ -107,7 +87,6 @@ public class RevierSketch extends FragmentActivity implements OnMapReadyCallback
                 for(Marker marker : markerList)marker.remove();
                 latLngList.clear();
                 geoList.clear();
-                checkBox.setChecked(false);
                 mMap.clear();
             }
         });
@@ -128,7 +107,6 @@ public class RevierSketch extends FragmentActivity implements OnMapReadyCallback
                         for(Marker marker : markerList)marker.remove();
                         latLngList.clear();
                         geoList.clear();
-                        checkBox.setChecked(false);
                         mMap.clear();
                         Toast.makeText(RevierSketch.this, "Revier gespeichert", Toast.LENGTH_SHORT).show();
                         return;
@@ -141,67 +119,6 @@ public class RevierSketch extends FragmentActivity implements OnMapReadyCallback
                 });
             }
         });
-
-        //populate spinner with docs from Revier-collection
-        polySpin = findViewById(R.id.revier_spin);
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),
-                android.R.layout.simple_spinner_item, reviere);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        polySpin.setAdapter(adapter);
-
-        dbReviere.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        String subject = document.getString("revName");
-                        reviere.add(subject);
-                    }
-
-                }adapter.notifyDataSetChanged();
-            }
-        });
-        //Show polygon from Spinner-item on Map
-        polySpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(final AdapterView<?> polySpin, View view, final int position, long id) {
-                final String selectedItem = polySpin.getItemAtPosition(position).toString();
-                dbReviere.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                if(selectedItem.equals(document.getString("revName"))) {
-                                    Revier revier = document.toObject(Revier.class);
-                                    ArrayList<GeoPoint> points=(ArrayList<GeoPoint>) revier.getTierPoints();
-                                    int length = points.size();
-                                    if (length == 0) {
-                                        return;
-                                    }
-                                    PolygonOptions poly = new PolygonOptions();
-                                    poly.strokeColor(Color.WHITE);
-                                    /*PolygonOptions poly = new PolygonOptions().clickable(true);*/
-                                    for (int i = 0; i < length; i++) {
-                                        GeoPoint polyGeo = (GeoPoint) points.get(i);
-                                        double lat = polyGeo.getLatitude();
-                                        double lng = polyGeo.getLongitude ();
-                                        LatLng latLng = new LatLng(lat, lng);
-                                        poly.add(latLng);
-                                    }
-
-                                    mMap.addPolygon(poly);
-                                }
-                            }
-
-                        }
-                    }
-                });
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> polySpin) {
-            }
-        });
-
     }
 
     @Override
