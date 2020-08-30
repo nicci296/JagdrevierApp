@@ -26,7 +26,8 @@ public class Hochsitz {
 
     public Hochsitz() {}
 
-    public Hochsitz(String hochsitzName, GeoPoint gps, boolean isBooked, String bookedBy, boolean isDamaged, boolean isInsectious, String jagdeinrichtungType) {
+    public Hochsitz(String hochsitzName, GeoPoint gps, boolean isBooked, String bookedBy, boolean isDamaged,
+                    boolean isInsectious, String jagdeinrichtungType) {
         this.hochsitzName = hochsitzName;
         this.gps = gps;
         this.isBooked = isBooked;

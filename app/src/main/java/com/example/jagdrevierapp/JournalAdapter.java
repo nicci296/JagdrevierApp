@@ -63,8 +63,8 @@ public class JournalAdapter extends FirestoreRecyclerAdapter<Journal, JournalAda
           ausgegeben, was den Platz der View übersteigt.
           Stattdessen werden über substring() die reinen Koordinaten zusammengeführt.
          */
-        String lat = journal.getLocation().toString().substring(20,30);
-        String lng = journal.getLocation().toString().substring(42,51);
+        String lat = journal.getLocation().toString().substring(20,28);
+        String lng = journal.getLocation().toString().substring(40,50);
         String latLng = "lat: "+lat+" , "+"lng: "+lng;
 
 
