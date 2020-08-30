@@ -75,7 +75,6 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
      */
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
-
     //Initialize Variables
     private ImageButton jgdEinAdd, jgdEinDel, refresh, addRevier;
     private Spinner polySpin;
@@ -339,7 +338,7 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
                  */
                 final Hochsitz kanzel = new Hochsitz
                         (currentLoc.getTitle(), current, false,"TBA",false,
-                                false);
+                                false,"Hochsitz");
                 //Start der Datenbank-Operation
                 Query query = dbHochsitze.whereEqualTo("hochsitzName", inputText);
                 query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
