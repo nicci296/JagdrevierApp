@@ -3,11 +3,13 @@ package com.example.jagdrevierapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Layout;
@@ -83,7 +85,6 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
     private HochsitzAdapter adapter;
 
     private User currentUser;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,12 +187,14 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
 
 
 
+
+
         //##########################################################
         //###   List of all Hochsitzen in RecylcerView
         //##########################################################
 
         //Get all Docs from Collection Hochsitze and sort by Name ascending (A-Z)
-        Query hochsitzQuery = dbHochsitze.orderBy("hochsitzName", Query.Direction.ASCENDING);
+        final Query hochsitzQuery = dbHochsitze.orderBy("hochsitzName", Query.Direction.ASCENDING);
 
         //set up connection between Query and class Hochsitz
         FirestoreRecyclerOptions<Hochsitz> options = new FirestoreRecyclerOptions.Builder<Hochsitz>()
@@ -207,7 +210,44 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
         hochsitzView.setLayoutManager( new LinearLayoutManager(this));
         hochsitzView.setAdapter(adapter);
 
-    }
+
+        //##########################################################
+        //###   Deletable Hochsitze - Permission "Pächter" required
+        //##########################################################
+
+        // Abfrage, ob Pächter && Revierowner, wobei Pächterabfrage nicht zwingend erfolgen muss --> nur pächter können Reviere anlegen
+        // if (Pächter && Revierowner)
+        //      make Hochsitze deleteable by swiping
+
+            new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
+                    ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+                //OnMove definiert Vorgehen bei Drag&Drop-Bewegungen (hoch,runter) - hier irrelevant
+                @Override
+                public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder,
+                                      @NonNull RecyclerView.ViewHolder target) {
+                    return false;
+                }
+
+                //onSwipe definiert, was ein Swipe auslöst. In diesem Fall die deleteItem-Methode aus dem JournalAdapter
+                @Override
+                public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                    int position = viewHolder.getAdapterPosition();
+
+                    View view = findViewById(R.id.theGrandView);
+                    final int pos = viewHolder.getAdapterPosition();
+                    Snackbar mySnackbar = Snackbar.make(view, "Soll wirklich gelöscht werden?" , Snackbar.LENGTH_LONG);
+                    mySnackbar.setAction("Löschen", new deleteJagdEinr(pos));
+                    mySnackbar.show();
+
+                }
+                //abschließend wird der ItemTouchHelper an die RecyclerView gebunden.
+            }).attachToRecyclerView(hochsitzView);
+        }
+
+
+
+
     //If app forwarded: listener to adapter/ db is active
     @Override
     protected void onStart() {
@@ -220,6 +260,20 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         adapter.stopListening();
+    }
 
+    public class deleteJagdEinr implements View.OnClickListener {
+        int pos;
+
+        deleteJagdEinr (int pos) {
+            this.pos = pos;
+        }
+
+        @Override
+        public  void onClick(View view) {
+
+            adapter.deleteItem(pos);
+        }
     }
 }
+

@@ -45,7 +45,7 @@
                 android:layout_height="35dp"
                 android:background="#00354559"
                 android:contentDescription="TODO"
-                android:src="@android:drawable/ic_menu_compass"
+                android:src="@android:drawable/ic_menu_crop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

@@ -22,16 +22,18 @@ public class Hochsitz {
     private String bookedBy;
     private boolean isDamaged;
     private boolean isInsectious;
+    private String jagdeinrichtungType;
 
     public Hochsitz() {}
 
-    public Hochsitz(String hochsitzName, GeoPoint gps, boolean isBooked, String bookedBy, boolean isDamaged, boolean isInsectious) {
+    public Hochsitz(String hochsitzName, GeoPoint gps, boolean isBooked, String bookedBy, boolean isDamaged, boolean isInsectious, String jagdeinrichtungType) {
         this.hochsitzName = hochsitzName;
         this.gps = gps;
         this.isBooked = isBooked;
         this.bookedBy = bookedBy;
         this.isDamaged = isDamaged;
         this.isInsectious = isInsectious;
+        this.jagdeinrichtungType = jagdeinrichtungType;
     }
 
 
@@ -82,5 +84,9 @@ public class Hochsitz {
     public void setInsectious(boolean insectious) {
         isInsectious = insectious;
     }
+
+    public String getJagdeinrichtungType() { return jagdeinrichtungType;  }
+
+    public void setJagdeinrichtungType(String jagdeinrichtungType) { this.jagdeinrichtungType = jagdeinrichtungType;  }
 }
 

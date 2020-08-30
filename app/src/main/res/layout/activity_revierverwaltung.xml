@@ -60,7 +60,8 @@
                 android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/schussBtn" />
+                app:layout_constraintTop_toBottomOf="@+id/schussBtn"
+                tools:ignore="SmallSp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -101,26 +102,20 @@
                 android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/mapBtn" />
+                app:layout_constraintTop_toBottomOf="@+id/mapBtn"
+                tools:ignore="SmallSp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout3"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="32dp"
             android:background="#354559"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
             app:layout_constraintEnd_toStartOf="@+id/constraintLayout2"
             app:layout_constraintTop_toTopOf="parent">
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="4dp"
-            android:background="#354559"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingBottom="8dp"
+
 
             <ImageButton
                 android:id="@+id/logoutBtn"
@@ -135,7 +130,8 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="TODO" />
 
             <TextView
                 android:layout_width="0dp"
@@ -146,7 +142,8 @@
                 android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/logoutBtn" />
+                app:layout_constraintTop_toBottomOf="@+id/logoutBtn"
+                tools:ignore="SmallSp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
@@ -231,8 +228,9 @@
             android:onClick="onClickAddJaeger"
             android:text="@string/Add_Jaeger_Button"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="30dp" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/user_First_Name"
@@ -254,9 +252,10 @@
             android:onClick="onClickDeleteJaeger"
             android:text="@string/Delete_Jaeger_Button"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.609"
-            tools:layout_editor_absoluteX="30dp" />
+            app:layout_constraintVertical_bias="0.644" />
 
         <TextView
             android:id="@+id/textView6"

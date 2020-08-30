@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
-    tools:context=".JagdeinrichtungenVerwalten">
+    tools:context=".AddJagdEinrPop">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/navHeader"
@@ -46,7 +46,7 @@
                 android:layout_height="35dp"
                 android:background="#00354559"
                 android:contentDescription="@string/todo"
-                android:src="@android:drawable/ic_menu_compass"
+                android:src="@android:drawable/ic_menu_crop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -54,13 +54,14 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/btnToSchussjrnl"
+                android:text="@string/btnToJagdEinr"
                 android:textAlignment="center"
                 android:textColor="#DCD1D1"
                 android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/schussBtn" />
+                app:layout_constraintTop_toBottomOf="@+id/schussBtn"
+                tools:ignore="SmallSp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -101,7 +102,8 @@
                 android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/mapBtn" />
+                app:layout_constraintTop_toBottomOf="@+id/mapBtn"
+                tools:ignore="SmallSp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -115,12 +117,7 @@
             android:paddingRight="4dp"
             app:layout_constraintEnd_toStartOf="@+id/constraintLayout2"
             app:layout_constraintTop_toTopOf="parent">
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="4dp"
-            android:background="#354559"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingBottom="8dp"
+
 
             <ImageButton
                 android:id="@+id/logoutBtn"
@@ -135,7 +132,8 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="@string/todo5" />
 
             <TextView
                 android:layout_width="0dp"
@@ -146,7 +144,8 @@
                 android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/logoutBtn" />
+                app:layout_constraintTop_toBottomOf="@+id/logoutBtn"
+                tools:ignore="SmallSp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
@@ -200,6 +199,62 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/infoBar">
 
+        <RadioGroup
+            android:id="@+id/radioGroup2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/lightColor"
+            android:orientation="vertical"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            app:layout_constraintStart_toEndOf="@+id/txtSitzName"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <RadioButton
+                android:id="@+id/radio_sitz"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="@string/radio_sitz"
+                android:textColor="@color/darkColor"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:buttonTint="@color/darkColor"/>
+
+            <RadioButton
+                android:id="@+id/radio_cams"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/radio_cam"
+                android:textColor="@color/darkColor"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:buttonTint="@color/darkColor"/>
+
+            <RadioButton
+                android:id="@+id/radio_trap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/radio_trap"
+                android:textColor="@color/darkColor"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:buttonTint="@color/darkColor"/>
+
+            <RadioButton
+                android:id="@+id/radio_kirrung"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/radio_kirrung"
+                android:textColor="#354559"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:buttonTint="@color/darkColor"/>
+
+        </RadioGroup>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="210dp"
             android:layout_height="46dp"
@@ -220,7 +275,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/txtAdd"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/outline_add_location_alt_24" />
+                app:srcCompat="@drawable/outline_add_location_alt_24"
+                android:contentDescription="@string/todo" />
 
             <TextView
                 android:id="@+id/txtAdd"
@@ -234,62 +290,6 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <RadioGroup
-            android:id="@+id/radioGroup2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:background="#97DCD1D1"
-            android:orientation="vertical"
-            app:layout_constraintStart_toEndOf="@+id/txtSitzName"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <RadioButton
-                android:id="@+id/radio_sitz"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:onClick="onRadioButtonClicked"
-                android:text="@string/radio_sitz"
-                android:textColor="#354559"
-                android:textColorHighlight="#354559"
-                android:textColorLink="#354559"
-                android:textCursorDrawable="@drawable/fui_ic_check_circle_black_128dp"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <RadioButton
-                android:id="@+id/radio_cams"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"
-                android:text="@string/radio_cam"
-                android:textColor="#354559"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <RadioButton
-                android:id="@+id/radio_trap"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"
-                android:text="@string/radio_trap"
-                android:textColor="#354559"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <RadioButton
-                android:id="@+id/radio_kirrung"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onRadioButtonClicked"
-                android:text="@string/radio_kirrung"
-                android:textColor="#354559"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-        </RadioGroup>
 
         <EditText
             android:id="@+id/txtSitzName"
@@ -308,7 +308,8 @@
             android:textColorHint="#BF354559"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:autofillHints="" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

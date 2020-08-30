@@ -6,4 +6,8 @@
     <color name="bg_row_background">#fa315b</color>
     <color name="item_name">#535353</color>
     <color name="description">#a9a9a9</color>
+    <color name="darkColor">#354559</color>
+    <color name="lightColor">#97DCD1D1</color>
+    <color name="linkColor">#C3C3C3</color>
+    <color name="greenSpecial">#FF266C08</color>
 </resources>

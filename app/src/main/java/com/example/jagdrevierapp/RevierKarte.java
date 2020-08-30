@@ -211,7 +211,7 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
          * LatLng Objekt gespeichert und als Marker auf der Map angezeigt.
          * Farblich von den anderen Markern abgehoben.
          * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-         */
+         **/
         Bundle extras = getIntent().getExtras();
         if(extras != null){
             double intentLat = extras.getDouble(LATITUDE);
@@ -296,8 +296,8 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
          *festgelegten Attributen.
          */
         final Hochsitz kanzel = new Hochsitz
-                (currentLoc.getTitle(), current, false,"TBA",false,
-                        false);
+                (currentLoc.getTitle(), current, false,"RevierMap",false,
+                        false, "");
 
         /**
          * ****************20.08.20 Nico********************************************************************

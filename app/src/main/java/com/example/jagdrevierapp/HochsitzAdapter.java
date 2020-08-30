@@ -348,6 +348,11 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
         return new HochsitzHolder(v);
     }
 
+    //Methode zum Löschen eines Hochsitzeintrags aus der View und dem Firestore
+    public void deleteItem(int position){
+        getSnapshots().getSnapshot(position).getReference().delete();
+    }
+
 
     class HochsitzHolder extends RecyclerView.ViewHolder {
         Button btnStatus;
@@ -364,6 +369,22 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
             btnBook = itemView.findViewById(R.id.btnBook);
             btnDamage = itemView.findViewById(R.id.btnDamage);
             btnInsect = itemView.findViewById(R.id.btnInsect);
+
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    /*Interface OnJournalClickListener aufrufen.
+                    If-Abfrage, damit die App nicht crasht während man auf ein Item clickt, welches
+                    gerade per Swipe entfernt wird. Dies würde nämlich Position -1(NO_POSITION) zurückgeben und
+                    in Verbindung mit einem documentSnapshop zum Absturz der App führen.*/
+                    if(position != RecyclerView.NO_POSITION && listener != null){
+                        listener.onItemClick(getSnapshots().getSnapshot(position), position);
+                    }
+
+                }
+            });
         }
     }
 
