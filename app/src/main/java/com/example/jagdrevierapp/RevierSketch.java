@@ -1,5 +1,6 @@
 package com.example.jagdrevierapp;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
@@ -19,6 +20,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.*;
 
 import java.util.ArrayList;
@@ -30,6 +33,10 @@ public class RevierSketch extends FragmentActivity implements OnMapReadyCallback
     //Keys
     private static final String TAG = "RevierSketch";
     private final String COLLECTION_KEY = "Reviere";
+    private static final String COLLECTION_HS_KEY ="Hochsitze";
+    private static final String COLLECTION_US_KEY ="User";
+    private static final String COLLECTION_REV_KEY="Reviere";
+    private static final String COLLECTION_PA_KEY="Pachter";
 
     //Initialize Variables
     private GoogleMap mMap;
@@ -42,9 +49,20 @@ public class RevierSketch extends FragmentActivity implements OnMapReadyCallback
     ArrayList<GeoPoint> geoList = new ArrayList<>();
     LatLng start = new LatLng(48.854296, 11.239171);
 
+    //##########################################################
+    //###    Firebase - Authentication
+    //##########################################################
+    //Initialize Firebase Auth
+    final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    final FirebaseUser mFirebaseUser = mAuth.getCurrentUser();
+    //##########################################################
+    //###    Firebase - Firestore
+    //##########################################################
     //Initialize FireStore
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference dbReviere = db.collection(COLLECTION_KEY);
+    private final CollectionReference dbPachter = db.collection(COLLECTION_PA_KEY);
+    CollectionReference dbReviere = dbPachter.document(mFirebaseUser.getEmail()).collection(COLLECTION_REV_KEY);
+    CollectionReference dbHochsitze = dbReviere.document(COLLECTION_HS_KEY).collection(COLLECTION_HS_KEY);
 
 
     @Override
@@ -52,6 +70,19 @@ public class RevierSketch extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_revier_sketch);
 
+        //##########################################################
+        //###    User-Validation
+        //##########################################################
+        if (mFirebaseUser == null) {
+            //Nicht eingeloggt, SignIn-Activity wird gestartet
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+        } else {
+            //general variables
+            String mUsername = mFirebaseUser.getDisplayName();
+            dbReviere = dbPachter.document(mFirebaseUser.getEmail()).collection(COLLECTION_REV_KEY);
+            dbHochsitze = dbReviere.document(COLLECTION_REV_KEY).collection(COLLECTION_HS_KEY);
+        }
 
         //Assign Variable
 

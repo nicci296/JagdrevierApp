@@ -95,7 +95,6 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
     //##########################################################
     //Initialize FireStore
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private final CollectionReference dbUser = db.collection(COLLECTION_US_KEY);
     private final CollectionReference dbPachter = db.collection(COLLECTION_PA_KEY);
     CollectionReference dbReviere = dbPachter.document(mFirebaseUser.getEmail()).collection(COLLECTION_REV_KEY);
     CollectionReference dbHochsitze = dbReviere.document(COLLECTION_HS_KEY).collection(COLLECTION_HS_KEY);
@@ -119,6 +118,21 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
         super.onCreate(savedInstanceState);
         // Festlegen der Mapview.
         setContentView(R.layout.activity_revier_karte);
+
+        //##########################################################
+        //###    User-Validation
+        //##########################################################
+        if (mFirebaseUser == null) {
+            //Nicht eingeloggt, SignIn-Activity wird gestartet
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+        } else {
+            //general variables
+            String mUsername = mFirebaseUser.getDisplayName();
+            dbReviere = dbPachter.document(mFirebaseUser.getEmail()).collection(COLLECTION_REV_KEY);
+            dbHochsitze = dbReviere.document(COLLECTION_REV_KEY).collection(COLLECTION_HS_KEY);
+        }
+
         //Bekanntmachen der Views
         polySpin = findViewById(R.id.revier_spin);
         spinnerItem =findViewById(R.id.spinner_item);
@@ -129,22 +143,6 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
         addRevier = findViewById(R.id.add_Revier);
         jgdeinOut = findViewById(R.id.jgdeinNameInputOut);
 
-        //##########################################################
-        //###    Firebase - Authentication
-        //##########################################################
-        //Initialize Firebase Auth
-        //Firebase instance variables
-        final FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser mFirebaseUser = mAuth.getCurrentUser();
-
-        if (mFirebaseUser == null) {
-            //Nicht eingeloggt, SignIn-Activity wird gestartet
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
-        } else {
-            //general variables
-            String mUsername = mFirebaseUser.getDisplayName();
-        }
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.revier);
