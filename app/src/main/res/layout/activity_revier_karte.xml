@@ -83,5 +83,12 @@
               app:layout_constraintStart_toEndOf="@+id/jgdein_Del_Btn" android:layout_marginTop="32dp"
               app:layout_constraintTop_toBottomOf="@+id/jgdeinNameInput" android:textSize="14sp"
               android:textColor="#FFFFFF" android:textColorHint="#FFFFFF"/>
+    <Button
+            android:text="Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/add_Revier"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="16dp"
+            android:clickable="true" android:onClick="onClickaddRevier" android:layout_marginTop="31dp"
+            app:layout_constraintTop_toBottomOf="@+id/jgdeinNameInputOut"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
