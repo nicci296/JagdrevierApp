@@ -3,60 +3,50 @@ package com.example.jagdrevierapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.core.app.ActivityCompat;
 
-import android.annotation.SuppressLint;
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
-import android.text.Layout;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jagdrevierapp.data.model.Hochsitz;
 import com.example.jagdrevierapp.data.model.User;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.common.io.LittleEndianDataInputStream;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import com.example.jagdrevierapp.data.model.Hochsitz;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.SetOptions;
 
-import org.xmlpull.v1.XmlPullParser;
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
-
-public class JagdeinrichtungenVerwalten extends AppCompatActivity {
+public class AddJagdEinrPop extends AppCompatActivity {
     //##########################################################
     //###    Constant Variables
     //##########################################################
-    private static final String TAG = "JagdeinrichtungenVer";
+    private static final String TAG = "AddJagdEinriPop";
     private static final String COLLECTION_HS_KEY ="HochsitzeMichi";
     private static final String COLLECTION_US_KEY ="User";
 
@@ -88,20 +78,8 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_jagdeinrichtungen_verwalten);
+        setContentView(R.layout.add_jagd_einr_pop);
 
-
-        //##########################################################
-        //###    User-Validation
-        //##########################################################
-        if (mFirebaseUser == null) {
-            //Nicht eingeloggt, SignIn-Activity wird gestartet
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
-        } else {
-            //general variables
-            String mUsername = mFirebaseUser.getDisplayName();
-        }
 
         //##########################################################
         //###   Nav-Header and Nav-Buttons
@@ -112,7 +90,7 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mAuth.signOut();
-                startActivity(new Intent(JagdeinrichtungenVerwalten.this, LoginActivity.class));
+                startActivity(new Intent(AddJagdEinrPop.this, LoginActivity.class));
             }
         });
 
@@ -121,7 +99,7 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
         mapBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(JagdeinrichtungenVerwalten.this, RevierKarte.class));
+                startActivity(new Intent(AddJagdEinrPop.this, RevierKarte.class));
             }
         });
 
@@ -130,19 +108,7 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
         schussBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(JagdeinrichtungenVerwalten.this, Schussjournal.class));
-            }
-        });
-
-        //##########################################################
-        //###   FloatingBtn for Adding JagdEinr
-        //##########################################################
-        FloatingActionButton addJagdEinr = findViewById(R.id.btnAddHochsitz);
-        addJagdEinr.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(JagdeinrichtungenVerwalten.this, AddJagdEinrPop.class);
-                startActivity(intent);
+                startActivity(new Intent(AddJagdEinrPop.this, Schussjournal.class));
             }
         });
 
@@ -184,42 +150,74 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
         });
 
 
-
-
         //##########################################################
-        //###   List of all Hochsitzen in RecylcerView
+        //###  Adding Jagdeinrichtung into Database
         //##########################################################
+        final ImageButton btnAddJagdEinr = findViewById(R.id.btnAddJagdEinrPop);
+        btnAddJagdEinr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                //Bekanntmachen der View zur Texteingabe und Abruf der Eingabe als String
+                final EditText jgdeinName = findViewById(R.id.txtSitzName);
+                final String inputText = jgdeinName.getText().toString();
 
-        //Get all Docs from Collection Hochsitze and sort by Name ascending (A-Z)
-        Query hochsitzQuery = dbHochsitze.orderBy("hochsitzName", Query.Direction.ASCENDING);
+                //Snackbar (weils schönes ist), falls kein Name im Feld, und return, damit keine Einrichtung namenlos gespeichert wird
+                if (inputText.isEmpty()) {
+                    Snackbar.make(view, R.string.nameReq, Snackbar.LENGTH_LONG).show();
+                    return;
+                }
 
-        //set up connection between Query and class Hochsitz
-        FirestoreRecyclerOptions<Hochsitz> options = new FirestoreRecyclerOptions.Builder<Hochsitz>()
-                .setQuery(hochsitzQuery, Hochsitz.class)
-                .build();
+                //Initialisierung eines LocationManagers zur aktuellen Standortbestimmung
+                LocationManager locationManager = (LocationManager) AddJagdEinrPop.this.getSystemService(Context.LOCATION_SERVICE);
+                String locationProvider = LocationManager.NETWORK_PROVIDER;
+                if (ActivityCompat.checkSelfPermission(AddJagdEinrPop.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(AddJagdEinrPop.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
+                final GeoPoint current = new GeoPoint(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+                final LatLng latLng = new LatLng(current.getLatitude(),current.getLongitude());
 
-        //Instanciate Adapter
-        adapter = new HochsitzAdapter(options);
+                 final Hochsitz kanzel = new Hochsitz
+                        (inputText, current, false,"TBA",false,
+                                false);
 
-        //Creating RecyclerView with List of Hochsitzen by registrating HochsitzAdapter-Objects
-        RecyclerView hochsitzView = findViewById(R.id.jw_recycler_View);
-        hochsitzView.setHasFixedSize(false);
-        hochsitzView.setLayoutManager( new LinearLayoutManager(this));
-        hochsitzView.setAdapter(adapter);
 
-    }
-    //If app forwarded: listener to adapter/ db is active
-    @Override
-    protected void onStart() {
-        super.onStart();
-        adapter.startListening();
-    }
+                Query query = dbHochsitze.whereEqualTo("hochsitzName", inputText);
+                query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Snackbar.make(view,"Jagdeinrichtung existiert bereits", Snackbar.LENGTH_LONG).show();
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                jgdeinName.getText().clear();
+                                return;
+                            }
+                        }
+                        dbHochsitze.document(inputText).set(kanzel)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Snackbar.make(view, "Jagdeinrichtung hinzugefügt", Snackbar.LENGTH_LONG).show();
+                                        jgdeinName.getText().clear();
 
-    //if app in background: listener to adapter/ db is inactive
-    @Override
-    protected void onStop() {
-        super.onStop();
-        adapter.stopListening();
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Snackbar.make(view, "Jagdeinrichtung konnte nicht hinzugefügt werden!", Snackbar.LENGTH_LONG).show();
+                                    }
+                                });
+                    }
+                });
+
+
+
+
+                Snackbar.make(view, "Hochsitz hinzugefügt - keine Action, da DB noch nicht bereit", BaseTransientBottomBar.LENGTH_SHORT).show();
+            }
+        });
 
     }
 }

@@ -3,6 +3,7 @@ package com.example.jagdrevierapp;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -87,7 +88,7 @@ public class Schussjournal extends AppCompatActivity  {
         //###    Buttons from Nav-Header
         //##########################################################
         //LogOut Button
-        Button logoutBtn = findViewById(R.id.logoutBtn);
+        ImageButton logoutBtn = findViewById(R.id.logoutBtn);
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -97,7 +98,7 @@ public class Schussjournal extends AppCompatActivity  {
         });
 
         //zu Map Button
-        Button mapBtn = findViewById(R.id.mapBtn);
+        ImageButton mapBtn = findViewById(R.id.mapBtn);
         mapBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -106,7 +107,7 @@ public class Schussjournal extends AppCompatActivity  {
         });
 
         //zu Schussjournal Button
-        Button schussBtn = findViewById(R.id.schussBtn);
+        ImageButton schussBtn = findViewById(R.id.schussBtn);
         schussBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

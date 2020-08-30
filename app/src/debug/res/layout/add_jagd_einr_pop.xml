@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                   xmlns:tools="http://schemas.android.com/tools"
-                                                   android:layout_width="match_parent"
-                                                   android:layout_height="match_parent"
-                                                   android:background="@drawable/background"
-                                                   tools:context=".Schussjournal" android:id="@+id/first_Lvl_Layout">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    tools:context=".JagdeinrichtungenVerwalten">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/navHeader"
@@ -18,14 +18,15 @@
 
         <ImageView
             android:id="@+id/wood_Board"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="155dp"
             android:contentDescription="@string/wood_Board"
             android:src="@drawable/hiclipart_com"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="50dp"
@@ -44,7 +45,7 @@
                 android:layout_width="50dp"
                 android:layout_height="35dp"
                 android:background="#00354559"
-                android:contentDescription="TODO"
+                android:contentDescription="@string/todo"
                 android:src="@android:drawable/ic_menu_compass"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -53,7 +54,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/btnToJagdEinr"
+                android:text="@string/btnToSchussjrnl"
                 android:textAlignment="center"
                 android:textColor="#DCD1D1"
                 android:textSize="10sp"
@@ -81,7 +82,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
                 android:backgroundTint="#00354559"
-                android:contentDescription="TODO"
+                android:contentDescription="@string/todo"
                 android:src="@android:drawable/ic_menu_mapmode"
                 android:text="@string/mapBtn"
                 android:textColor="#354559"
@@ -152,73 +153,163 @@
             android:id="@+id/bang_Jrnl_Head"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginBottom="32dp"
-            android:text="@string/titleSchussjournal"
+            android:layout_marginBottom="24dp"
+            android:text="@string/addJagdEinr"
             android:textAlignment="center"
             android:textAllCaps="true"
             android:textColor="#DCD1D1"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/user_Name_Jrnl" />
-
-        <TextView
-            android:id="@+id/user_Name_Jrnl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="100dp"
-            android:layout_marginBottom="32dp"
-            android:text="hall"
-            android:textColor="#DCD1D1"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.506"
             app:layout_constraintStart_toStartOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
-
-
-    <RelativeLayout
-        android:id="@+id/second_Lvl_Layout"
-        android:layout_width="391dp"
-        android:layout_height="787dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/infoBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/navHeader">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/third_Lvl_Layout"
+        <TextView
+            android:id="@+id/helloUser"
             android:layout_width="match_parent"
-            android:layout_height="606dp"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="-2dp">
+            android:layout_height="wrap_content"
+            android:background="#97DCD1D1"
+            android:textAlignment="center"
+            android:textColor="#354559"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="409dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/infoBar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="210dp"
+            android:layout_height="46dp"
+            android:layout_marginTop="64dp"
+            android:layout_marginEnd="16dp"
+            android:background="#97DCD1D1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/radioGroup2"
+            app:layout_constraintStart_toStartOf="@+id/txtSitzName"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.466">
 
             <ImageButton
-                android:id="@+id/add_Line_Btn"
+                android:id="@+id/btnAddJagdEinrPop"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:backgroundTint="#00FFFFFF"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/txtAdd"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/outline_add_location_alt_24" />
+
+            <TextView
+                android:id="@+id/txtAdd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="80dp"
-                android:layout_marginBottom="4dp"
-                android:background="@android:color/transparent"
-                android:contentDescription="@string/bang_Add_Line"
-                android:onClick="onClickAddLine"
-                android:src="@drawable/writing"
-                android:tint="#DCD1D1"
-                app:layout_constraintBottom_toTopOf="@+id/journal_View"
+                android:layout_marginStart="24dp"
+                android:layout_marginBottom="16dp"
+                android:text="@string/addJagdEinr"
+                android:textColor="#354559"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/journal_View"
-                    android:layout_width="281dp"
-                    android:layout_height="302dp"
-                    android:layout_marginTop="56dp"
-                    android:scrollbars="vertical"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </RelativeLayout>
+
+        <RadioGroup
+            android:id="@+id/radioGroup2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:background="#97DCD1D1"
+            android:orientation="vertical"
+            app:layout_constraintStart_toEndOf="@+id/txtSitzName"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <RadioButton
+                android:id="@+id/radio_sitz"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:onClick="onRadioButtonClicked"
+                android:text="@string/radio_sitz"
+                android:textColor="#354559"
+                android:textColorHighlight="#354559"
+                android:textColorLink="#354559"
+                android:textCursorDrawable="@drawable/fui_ic_check_circle_black_128dp"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <RadioButton
+                android:id="@+id/radio_cams"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onRadioButtonClicked"
+                android:text="@string/radio_cam"
+                android:textColor="#354559"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <RadioButton
+                android:id="@+id/radio_trap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onRadioButtonClicked"
+                android:text="@string/radio_trap"
+                android:textColor="#354559"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <RadioButton
+                android:id="@+id/radio_kirrung"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onRadioButtonClicked"
+                android:text="@string/radio_kirrung"
+                android:textColor="#354559"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </RadioGroup>
+
+        <EditText
+            android:id="@+id/txtSitzName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="16dp"
+            android:background="#97DCD1D1"
+            android:ems="10"
+            android:hint="@string/JagdEinrBezeichnung"
+            android:inputType="textPersonName"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:textAlignment="center"
+            android:textColor="#354559"
+            android:textColorHint="#BF354559"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

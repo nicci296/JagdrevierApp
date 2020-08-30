@@ -35,7 +35,7 @@
     <string name="passwordHint">Passwort</string>
     <string name="toSignInText">Bereits registriert? - Klicke hier!</string>
     <string name="toRegisterText">Noch nicht registriert? - Klicke hier</string>
-    <string name="schussBtn">Schussjournal</string>
+    <string name="schussBtn">Schuss\njournal</string>
     <string name="revierBtn">Revierverwaltung</string>
     <string name="jagdein_Btn">Jagdeinrichtunge</string>
     <string name="titleSchussjournal">Schussjournal</string>
@@ -45,11 +45,11 @@
     <string name="del_Jagdeinrichtung">Kanzel entfernen</string>
     <string name="kanzel_Name">Name der Kanzel</string>
     <string name="refresh_Btn">Refresh</string>
-    <string name="nameReq">Bitte benenne die Kanzel.</string>
+    <string name="nameReq">Bitte benenne die jagdliche Einrichtung.</string>
     <string name="data_Get_Fail">Kanzeln konnten nicht abgerufen werden.</string>
     <string name="data_Get_Success">Aktuelles Revier geladen.</string>
     <string name="data_Del_Fail">Kanzel existiert nicht.</string>
-    <string name="data_Del_Success">Kanzel erfolgreich aus Revier entfernt.</string>
+    <string name="data_Del_Success">Jagdeinrichtung erfolgreich aus Revier entfernt.</string>
     <string name="jagdeinrichtung_exists">Jagdeinrichtung existiert bereits!</string>
     <string name="jagdeinrichtung_saved">Jagdeinrichtung hinzugefügt!</string>
     <string name="refresh_Fail">Aktualisieren fehlgeschlagen.</string>
@@ -110,6 +110,19 @@
     <string name="btnDamn">damn</string>
     <string name="btnInsect">Inst</string>
     <string name="txtHochsitzname">Hier könnte ihre Werbung stehen</string>
+
     <string name="title_activity_revier_sketch">Map</string>
+    <string name="btnToSchussjrnl">Schussjournal</string>
+    <string name="btnStatToJaEinr">zurück zu Revier</string>
+    <string name="RegisterMsg">Registrierung</string>
+    <string name="btnToJagdEinr">Jagdeinrichtungen</string>
+    <string name="todo">TODO</string>
+    <string name="addJagdEinr">Add Jagdeinrichtung</string>
+    <string name="radio_sitz">Hochsitz</string>
+    <string name="radio_cam">Kamera</string>
+    <string name="radio_trap">Falle</string>
+    <string name="radio_kirrung">Kirrung</string>
+    <string name="JagdEinrBezeichnung">Jagdeinrichtung</string>
+
 
 </resources>

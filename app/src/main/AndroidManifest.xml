@@ -44,6 +44,7 @@
         <activity android:name=".Schussjournal"/>
         <activity android:name=".Revierverwaltung"/>
         <activity android:name=".StatusPop"/>
+        <activity android:name=".AddJagdEinrPop"/>
         <activity android:name=".JagdeinrichtungenVerwalten">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

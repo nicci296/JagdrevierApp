@@ -9,7 +9,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/navHeader"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="142dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -18,124 +18,216 @@
 
         <ImageView
             android:id="@+id/wood_Board"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="155dp"
             android:contentDescription="@string/wood_Board"
             android:src="@drawable/hiclipart_com"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/schussBtn"
-            android:layout_width="82dp"
-            android:layout_height="53dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="24dp"
-            android:text="@string/jagdein_Btn"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/mapBtn"
-            app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/mapBtn"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="8dp"
-            android:text="@string/mapBtn"
-            app:layout_constraintEnd_toStartOf="@+id/schussBtn"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/logoutBtn"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="4dp"
+            android:background="#354559"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            app:layout_constraintStart_toEndOf="@+id/constraintLayout2"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            android:id="@+id/logoutBtn"
-            android:layout_width="wrap_content"
+
+            <ImageButton
+                android:id="@+id/schussBtn"
+                android:layout_width="50dp"
+                android:layout_height="35dp"
+                android:background="#00354559"
+                android:contentDescription="@string/todo"
+                android:src="@android:drawable/ic_menu_compass"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/btnToSchussjrnl"
+                android:textAlignment="center"
+                android:textColor="#DCD1D1"
+                android:textSize="10sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/schussBtn" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout2"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="8dp"
-            android:fontFamily="sans-serif-thin"
-            android:text="@string/logOutBtnText"
-            android:textSize="10sp"
-            app:layout_constraintEnd_toStartOf="@+id/mapBtn"
+            android:layout_marginTop="4dp"
+            android:background="#354559"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            app:layout_constraintEnd_toStartOf="@+id/wood_Board"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toEndOf="@+id/wood_Board"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageButton
+                android:id="@+id/mapBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:backgroundTint="#00354559"
+                android:contentDescription="@string/todo"
+                android:src="@android:drawable/ic_menu_mapmode"
+                android:text="@string/mapBtn"
+                android:textColor="#354559"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mapBtn"
+                android:textAlignment="center"
+                android:textColor="#DCD1D1"
+                android:textSize="10sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/mapBtn" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout3"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="32dp"
+            android:background="#354559"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            app:layout_constraintEnd_toStartOf="@+id/constraintLayout2"
+            app:layout_constraintTop_toTopOf="parent">
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="4dp"
+            android:background="#354559"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="8dp"
+
+            <ImageButton
+                android:id="@+id/logoutBtn"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="#00354559"
+                android:fontFamily="sans-serif-medium"
+                android:src="@drawable/ic_sports_bar_24px"
+                android:text="@string/logOutBtnText"
+                android:textColor="#354559"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/logOutBtnText"
+                android:textAlignment="center"
+                android:textColor="#DCD1D1"
+                android:textSize="10sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/logoutBtn" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/bang_Jrnl_Head"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="24dp"
             android:text="@string/titleJagdeinrichtungen"
             android:textAlignment="center"
             android:textAllCaps="true"
-            android:textColor="#FFFFFF"
+            android:textColor="#DCD1D1"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintHorizontal_bias="0.506"
             app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btnAddHochsitz"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="30dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:backgroundTint="#955E3B3B"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:rippleColor="#F40000"
-        app:srcCompat="@android:drawable/ic_input_add" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="409dp"
-        android:layout_height="37dp"
-        android:layout_marginTop="1dp"
-        android:orientation="horizontal"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/infoBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/navHeader">
 
         <TextView
-            android:id="@+id/textAuswahlHochsitze"
+            android:id="@+id/helloUser"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center|center_horizontal"
-            android:text="@string/allHochsitze"
+            android:layout_height="wrap_content"
+            android:background="#97DCD1D1"
             android:textAlignment="center"
-            android:textColor="#7CD679" />
-    </LinearLayout>
+            android:textColor="#354559"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <ScrollView
-        android:id="@+id/scrollHochsitz"
-        android:layout_width="0dp"
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
+        android:layout_width="412dp"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginBottom="90dp"
-        android:background="#55FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+        app:layout_constraintTop_toBottomOf="@+id/infoBar">
 
-        <LinearLayout
-            android:id="@+id/orderLayoutHochsitze"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/jw_recycler_View"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
-    </ScrollView>
+            android:layout_height="match_parent"
+            android:layout_marginTop="18dp"
+            android:scrollbars="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/recycler_view_item" />
 
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnAddHochsitz"
+        android:layout_width="58dp"
+        android:layout_height="54dp"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:backgroundTint="#955E3B3B"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/coordinatorLayout"
+        app:rippleColor="#354559"
+        app:srcCompat="@android:drawable/ic_input_add" />
 </androidx.constraintlayout.widget.ConstraintLayout>
