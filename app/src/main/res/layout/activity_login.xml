@@ -90,7 +90,6 @@
         android:id="@+id/toRegisterText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
         android:background="#00DCD1D1"
         android:text="@string/toRegisterText"
         android:textColor="#C3C3C3"

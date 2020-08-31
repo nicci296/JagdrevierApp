@@ -45,7 +45,7 @@ public class RevierSketch extends FragmentActivity implements OnMapReadyCallback
 
     //Initialize Variables
     private GoogleMap mMap;
-    private ImageButton drawBtn, clearBtn,saveBtn;
+    private ImageButton drawBtn, clearBtn,saveBtn,bckToMap;
     private EditText revRef;
 
     Polygon polygon = null;
@@ -92,6 +92,7 @@ public class RevierSketch extends FragmentActivity implements OnMapReadyCallback
         clearBtn = findViewById(R.id.clear_button);
         saveBtn = findViewById(R.id.save_revier_button);
         revRef = findViewById(R.id.revier_ref);
+        bckToMap = findViewById(R.id.backTo_map_button);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         final SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -128,8 +129,15 @@ public class RevierSketch extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
                 String revierRef = revRef.getText().toString();
+                if(revierRef.isEmpty()){
+                    Toast.makeText(RevierSketch.this, R.string.rev_name_req, Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 //no safe if no polygon drawn
-                if(polygon == null)return;
+                if(polygon == null){
+                    Toast.makeText(RevierSketch.this, R.string.poly_empty, Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Revier newRevier = new Revier(geoList,revierRef);
 
                 dbReviere.document(revierRef).set(newRevier).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -150,6 +158,14 @@ public class RevierSketch extends FragmentActivity implements OnMapReadyCallback
 
                     }
                 });
+            }
+        });
+
+        bckToMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent backIntent = new Intent(RevierSketch.this,RevierKarte.class);
+                startActivity(backIntent);
             }
         });
     }

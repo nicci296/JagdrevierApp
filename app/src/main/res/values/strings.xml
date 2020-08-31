@@ -95,6 +95,12 @@
     <string name="undo">undo</string>
     <string name="save">save</string>
     <string name="revier_sketch_hint">"Revierreferenz, z.B 1, Revier1, Hasenhöhle …"</string>
+    <string name="back_to_map">Zurück zur Revierkarte</string>
+    <string name="rev_save_text">Revier speichern</string>
+    <string name="draw_text">Abstecken</string>
+    <string name="clear_text">Neu starten</string>
+    <string name="rev_name_req">Zum Speichern bitte Revierreferenz angeben!</string>
+    <string name="poly_empty">Bitte noch das Revier abstecken.</string>
 
     <!-- AddJagdEinrPop -->
     <string name="WaidmannGrussModern">Waihei, </string>
