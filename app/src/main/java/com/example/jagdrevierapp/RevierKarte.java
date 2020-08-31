@@ -235,7 +235,9 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
                                         poly.add(latLng);
                                         dbHochsitze = dbReviere.document(polySpin.getItemAtPosition(position).toString()).collection(COLLECTION_HS_KEY);
                                     }
+                                    jagdrevierMap.clear();
                                     jagdrevierMap.addPolygon(poly);
+                                    jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLngZoom(poly.getPoints().get(1),11));
                                     dbHochsitze.get()
                                             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                                 @Override
@@ -313,9 +315,7 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
                     Toast.makeText(RevierKarte.this, R.string.nameReq, Toast.LENGTH_LONG).show();
                     return;
                 }
-
-                /*LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-                String locationProvider = LocationManager.NETWORK_PROVIDER;*/
+                //Koordinaten der aktuellen GPS-Position erhalten
                 Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
                 final GeoPoint current = new GeoPoint(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
                 final LatLng latLng = new LatLng(current.getLatitude(),current.getLongitude());
@@ -537,8 +537,13 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
         jagdrevierMap.setOnMyLocationButtonClickListener(this);
         jagdrevierMap.setOnMyLocationClickListener(this);
         enableMyLocation();
+        final LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        final String locationProvider = LocationManager.NETWORK_PROVIDER;
+        //Koordinaten der aktuellen GPS-Position erhalten
+        Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
+        final LatLng current = new LatLng(lastKnownLocation.getLatitude(),lastKnownLocation.getLongitude());
         //Config der Karte - Typ Satellit, Zoom per Click&Touch, Compass auf Karte
-        jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLngZoom(start, 13));
+        jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLngZoom(current, 13));
         jagdrevierMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
         jagdrevierMap.getUiSettings().setZoomControlsEnabled(true);
         jagdrevierMap.getUiSettings().setZoomGesturesEnabled(true);
