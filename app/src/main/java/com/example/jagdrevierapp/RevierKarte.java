@@ -81,7 +81,7 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
     TextView spinnerItem;
     List<String> reviere = new ArrayList<>();
     private GoogleMap jagdrevierMap;
-    LatLng start = new LatLng(48.854296, 11.239171);
+
 
     //##########################################################
     //###    Firebase - Authentication
@@ -203,9 +203,10 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         String subject = document.getString("revName");
+                        adapter.setNotifyOnChange(true);
                         reviere.add(subject);
-                    }
-                }adapter.notifyDataSetChanged();
+                    }adapter.notifyDataSetChanged();
+                }
             }
         });
         //Create polygon from Spinner-item and show on Map
@@ -279,6 +280,10 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
             }
             @Override
             public void onNothingSelected(AdapterView<?> polySpin) {
+                //Koordinaten der aktuellen GPS-Position erhalten
+                Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
+                final LatLng current = new LatLng(lastKnownLocation.getLatitude(),lastKnownLocation.getLongitude());
+                jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLngZoom(current, 13));
             }
         });
 
@@ -487,7 +492,11 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
                                                     .position(latLng)
                                                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
                                                     .title(kanzel.getHochsitzName()));
-                                            jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLngZoom(start, 13));
+                                            Location lastKnownLocation = locationManager
+                                                    .getLastKnownLocation(locationProvider);
+                                            final LatLng current = new LatLng(lastKnownLocation.getLatitude(),
+                                                    lastKnownLocation.getLongitude());
+                                            jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLngZoom(current, 13));
                                         }
                                     }
                                     Toast.makeText
@@ -521,6 +530,7 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
             }
         });
     }
+
     /**
      * WICHTIG: Das Endgerät muss Google Play Services installiert haben, damit die Activity genutzt werden kann.
      * Dieser Callback wird nur ausgelöst, wenn die Map bereit zur Nutzung ist..
@@ -537,13 +547,8 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
         jagdrevierMap.setOnMyLocationButtonClickListener(this);
         jagdrevierMap.setOnMyLocationClickListener(this);
         enableMyLocation();
-        final LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        final String locationProvider = LocationManager.NETWORK_PROVIDER;
-        //Koordinaten der aktuellen GPS-Position erhalten
-        Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-        final LatLng current = new LatLng(lastKnownLocation.getLatitude(),lastKnownLocation.getLongitude());
+
         //Config der Karte - Typ Satellit, Zoom per Click&Touch, Compass auf Karte
-        jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLngZoom(current, 13));
         jagdrevierMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
         jagdrevierMap.getUiSettings().setZoomControlsEnabled(true);
         jagdrevierMap.getUiSettings().setZoomGesturesEnabled(true);
