@@ -2,10 +2,12 @@ package com.example.jagdrevierapp;
 
 import android.icu.text.SimpleDateFormat;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,6 +18,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jagdrevierapp.data.model.Pachter;
 import com.example.jagdrevierapp.data.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -37,8 +40,13 @@ public class RegisterActivity extends AppCompatActivity {
      * Also von Grpß- auf Kleinbuchstabe geändert.
      * ++++++++++++++++++++++++++++++++++++++++++++++++++
      */
-    private static final String TAG = "RegisterActivity";
-    private static final String COLLECTION_KEY = "User";
+
+
+
+    private static final String TAG = "RegisterActivity";    private static final String COLLECTION_HS_KEY ="Hochsitze";
+    private static final String COLLECTION_US_KEY ="User";
+    private static final String COLLECTION_REV_KEY="Reviere";
+    private static final String COLLECTION_PA_KEY="Pachter";
     private static final String NICK = "nick";
     private static final String PAECHTER = "paechter";
     private static final String REGISTERED = "registered";
@@ -48,6 +56,15 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+
+        //##########################################################
+        //###    Firebase - Firestore
+        //##########################################################
+        //Initialize FireStore - Collection User
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        final CollectionReference dbPachter = db.collection(COLLECTION_PA_KEY);
+
 
         //##########################################################
         //###    Buttons - Handling Main Functions
@@ -63,6 +80,10 @@ public class RegisterActivity extends AppCompatActivity {
                     Switch pachter = findViewById(R.id.switch1);
                     if (validateForm(email.getText().toString().trim(), mPwd.getText().toString().trim(), mUser.getText().toString().trim())) {
                         createAccount(email.getText().toString().trim(), mPwd.getText().toString().trim(), mUser.getText().toString().trim(), pachter.isChecked());
+                        if(pachter.isChecked()) {
+                            String mail = email.getText().toString().trim();
+                            createPachter(mail);
+                        }
                     } else {
                         Toast.makeText(RegisterActivity.this, "Bitte alle Felder ausfüllen.", Toast.LENGTH_SHORT).show();
                     }
@@ -86,18 +107,14 @@ public class RegisterActivity extends AppCompatActivity {
     //##########################################################
 
     // Method to create Account in Firebase-Authentication
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void createAccount (String mail, String pwd, String user, boolean paechter) {
 
         // Für später falls wir ProgressBar noch schaffen beim "hübsch machen"
         //showProgressBar();
 
 
-        //##########################################################
-        //###    Firebase - Firestore
-        //##########################################################
-        //Initialize FireStore - Collection User
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference colUser = db.collection(COLLECTION_KEY);
+
 
         /**
          * *********UPDATE 25.08.20 Nico ***********************
@@ -118,8 +135,11 @@ public class RegisterActivity extends AppCompatActivity {
                 format(new Date());
         User userJaeger = new User(mail,user,paechter,registerDate);
 
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        final CollectionReference dbPachter = db.collection(COLLECTION_PA_KEY);
+        final CollectionReference dbUser = db.collection(COLLECTION_US_KEY);
 
-        colUser.document(mail).set(userJaeger)
+        dbUser.document(mail).set(userJaeger)
                 .addOnSuccessListener(new OnSuccessListener<Void>(){
                     public void onSuccess(Void aVoid) {
                         Toast.makeText(RegisterActivity.this,
@@ -141,6 +161,8 @@ public class RegisterActivity extends AppCompatActivity {
         //##########################################################
         //Firebase instance variables
         final FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
+
+
 
         // Create User with Mail
         mFirebaseAuth.createUserWithEmailAndPassword(mail, pwd)
@@ -164,6 +186,34 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 });
     }
+
+
+    // Method to create Pächter in Firestore-Database
+    private void createPachter(String mail){
+
+
+        final FirebaseFirestore db = FirebaseFirestore.getInstance();
+        final CollectionReference dbPachter = db.collection(COLLECTION_PA_KEY);
+        Pachter pachter = new Pachter(mail);
+        dbPachter.document(mail).set(pachter)
+                .addOnSuccessListener(new OnSuccessListener<Void>(){
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(RegisterActivity.this,
+                                "Jäger wurde angelegt!",
+                                Toast.LENGTH_LONG).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    public void onFailure(@NonNull Exception e){
+                        Toast.makeText(RegisterActivity.this,
+                                "Jäger konnte nicht angelegt werden!",
+                                Toast.LENGTH_LONG).show();
+                        Log.d(TAG, e.toString());
+                    }
+                });
+    }
+
+
 
     // Method to validate the Views on Layout
     private boolean validateForm(String mail, String pwd, String user) {

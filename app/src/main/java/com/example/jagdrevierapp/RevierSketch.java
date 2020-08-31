@@ -49,12 +49,15 @@ public class RevierSketch extends FragmentActivity implements OnMapReadyCallback
     ArrayList<GeoPoint> geoList = new ArrayList<>();
     LatLng start = new LatLng(48.854296, 11.239171);
 
+
     //##########################################################
     //###    Firebase - Authentication
     //##########################################################
     //Initialize Firebase Auth
     final FirebaseAuth mAuth = FirebaseAuth.getInstance();
     final FirebaseUser mFirebaseUser = mAuth.getCurrentUser();
+
+
     //##########################################################
     //###    Firebase - Firestore
     //##########################################################
@@ -83,8 +86,8 @@ public class RevierSketch extends FragmentActivity implements OnMapReadyCallback
             /*dbHochsitze = dbReviere.document(COLLECTION_REV_KEY).collection(COLLECTION_HS_KEY);*/
         }
 
-        //Assign Variable
 
+        //Assign Variable
         drawBtn = findViewById(R.id.draw_button);
         clearBtn = findViewById(R.id.clear_button);
         saveBtn = findViewById(R.id.save_revier_button);
@@ -105,7 +108,6 @@ public class RevierSketch extends FragmentActivity implements OnMapReadyCallback
                 polygon = mMap.addPolygon(polygonOptions);
                 //Polygon Stroke Color
                 polygon.setStrokeColor(Color.WHITE);
-
             }
         });
 

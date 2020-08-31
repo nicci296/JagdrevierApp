@@ -9,57 +9,76 @@
 
 
     <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/sketchMap"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:name="com.google.android.gms.maps.SupportMapFragment"/>
+        android:id="@+id/sketchMap"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <RelativeLayout
-            android:layout_width="match_parent" android:layout_height="282dp"
-            android:orientation="vertical" android:padding="10dp" android:layout_alignParentBottom="true"
-            android:id="@+id/sketch_layout"
-            android:background="@drawable/background">
+        android:id="@+id/sketch_layout"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/background"
+        android:orientation="vertical"
+        android:padding="10dp">
 
 
         <ImageButton
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:id="@+id/draw_button"
-                android:src="@drawable/baseline_create_white_36"
-                android:layout_marginTop="5dp" android:layout_marginStart="15dp"
-                android:background="@android:color/transparent" android:tint="#FFEB3B"
-                android:contentDescription="@string/draw"/>
+            android:id="@+id/draw_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="5dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/draw"
+            android:src="@drawable/baseline_create_white_36"
+            android:tint="#FFEB3B" />
 
-        <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
-                     android:id="@+id/clear_button"
-                     android:src="@drawable/baseline_undo_white_36"
-                     android:layout_marginTop="5dp"
-                     android:layout_toEndOf="@+id/draw_button" android:layout_marginStart="20dp"
-                     android:background="@android:color/transparent"
-                     android:tint="#F85A4F" android:contentDescription="@string/undo"/>
+        <ImageButton
+            android:id="@+id/clear_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@+id/draw_button"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/undo"
+            android:src="@drawable/baseline_undo_white_36"
+            android:tint="#F85A4F" />
 
         <RelativeLayout
-                android:layout_width="wrap_content" android:layout_height="106dp"
-                android:orientation="horizontal" android:layout_marginTop="10dp"
-                android:layout_below="@+id/draw_button" android:id="@+id/command_layout">
+            android:id="@+id/command_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="106dp"
+            android:layout_below="@+id/draw_button"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
 
-            <EditText android:layout_width="wrap_content" android:layout_height="wrap_content"
-                      android:id="@+id/revier_ref"
-                      android:inputType="text"
-                      android:autofillHints=""
-                      android:hint="@string/revier_sketch_hint"
-                      android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                      android:textColor="#FFFFFF"
-                      android:textColorHint="#FFFFFF"
-                      android:layout_alignParentStart="true"
-                      android:layout_marginStart="15dp"/>
+            <EditText
+                android:id="@+id/revier_ref"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="15dp"
+                android:autofillHints=""
+                android:hint="@string/revier_sketch_hint"
+                android:inputType="text"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#FFFFFF" />
 
-            <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
-                         android:id="@+id/save_revier_button"
-                         android:src="@drawable/baseline_check_box_white_36"
-                         android:layout_below="@+id/revier_ref" android:layout_marginTop="10dp"
-                         android:layout_marginStart="10dp"
-                         android:background="@android:color/transparent"
-                         android:tint="#2196F3" android:contentDescription="@string/save"/>
+            <ImageButton
+                android:id="@+id/save_revier_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/revier_ref"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/save"
+                android:src="@drawable/baseline_check_box_white_36"
+                android:tint="#2196F3" />
 
         </RelativeLayout>
 

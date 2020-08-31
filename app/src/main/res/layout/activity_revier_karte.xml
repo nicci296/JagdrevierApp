@@ -22,100 +22,45 @@
                     android:layout_below="@+id/revier">
 
         <Spinner
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/revier_spin"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="10dp"
-                android:backgroundTint="#FFFFFF" android:spinnerMode="dropdown"/>
+            android:id="@+id/revier_spin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="97dp"
+            android:layout_marginTop="77dp"
+            android:backgroundTint="#FFFFFF"
+            android:spinnerMode="dropdown" />
 
         <ImageButton
-                android:id="@+id/jgdein_Add_Btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:clickable="true"
-                android:contentDescription="@string/add_Jagdeinrichtung"
-                android:focusable="true"
-                android:src="@drawable/outline_add_location_alt_white_36"
-                android:tint="#2196F3"
-                android:layout_alignParentStart="true"
-                android:layout_below="@id/revier_spin"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="20dp"/>
+            android:id="@+id/add_Revier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="175dp"
+            android:layout_marginTop="54dp"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/baseline_edit_location_white_48"
+            android:tint="#2196F3" />
 
         <ImageButton
-                android:id="@+id/jgdein_Del_Btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                android:tint="#F85A4F"
-                android:background="@android:color/transparent"
-                android:src="@drawable/outline_wrong_location_white_36"
-                android:contentDescription="@string/del_Jagdeinrichtung"
-                android:layout_marginStart="15dp"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="30dp"
-                android:layout_below="@id/jgdein_Add_Btn"/>
-
-        <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/jgdeinNameInput"
-                android:hint="@string/add_Jagdeinrichtung"
-                android:autofillHints=""
-                android:inputType="text"
-                android:freezesText="false"
-                android:textSize="14sp"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#FFFFFF"
-                android:layout_toEndOf="@id/jgdein_Add_Btn"
-                android:layout_marginStart="20dp"
-                android:layout_below="@id/revier_spin"
-                android:layout_marginTop="20dp"/>
-
-        <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/jgdeinNameInputOut"
-                android:hint="@string/del_Jagdeinrichtung"
-                android:autofillHints=""
-                android:inputType="text"
-                android:textSize="14sp"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#FFFFFF"
-                android:layout_toEndOf="@id/jgdein_Del_Btn"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="25dp"
-                android:layout_below="@id/jgdeinNameInput"/>
-
-        <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/add_Revier"
-                android:clickable="true"
-                android:focusable="true"
-                android:layout_below="@id/jgdein_Del_Btn"
-                android:layout_marginTop="20dp"
-                android:src="@drawable/baseline_edit_location_white_48"
-                android:background="@android:color/transparent"
-                android:tint="#2196F3"/>
-
-        <ImageButton
-                android:id="@+id/refresh_Btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:clickable="true"
-                android:contentDescription="@string/refresh_Btn"
-                android:contextClickable="true"
-                android:focusable="true"
-                android:src="@drawable/outline_refresh_white_36"
-                android:tint="#A2E654"
-                android:layout_toEndOf="@+id/jgdeinNameInput"
-                android:layout_marginStart="130dp"/>
+            android:id="@+id/refresh_Btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="276dp"
+            android:layout_marginTop="72dp"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:contentDescription="@string/refresh_Btn"
+            android:contextClickable="true"
+            android:focusable="true"
+            android:src="@drawable/outline_refresh_white_36"
+            android:tint="#A2E654" />
 
     </RelativeLayout>
 

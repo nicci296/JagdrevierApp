@@ -168,9 +168,6 @@ public class AddJagdEinrPop extends AppCompatActivity {
                 //##########################################################
                 //###  Value Radiobuttons
                 //##########################################################
-
-
-
                 RadioGroup radiobtngrp = findViewById(R.id.radioGroup2);
                 int radioButtonID = radiobtngrp.getCheckedRadioButtonId();
                 View radioButton = radiobtngrp.findViewById(radioButtonID);
@@ -179,12 +176,9 @@ public class AddJagdEinrPop extends AppCompatActivity {
                 String jagdeinrichtungType = r.getText().toString();
 
 
-
-
                 //##########################################################
                 //###  Meet Firestore
                 //##########################################################
-
                 //Bekanntmachen der View zur Texteingabe und Abruf der Eingabe als String
                 final EditText jgdeinName = findViewById(R.id.txtSitzName);
                 final String inputText = jgdeinName.getText().toString();

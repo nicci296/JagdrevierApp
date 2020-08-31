@@ -18,6 +18,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,6 +28,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jagdrevierapp.data.model.Revier;
 import com.example.jagdrevierapp.data.model.User;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -44,6 +46,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import com.example.jagdrevierapp.data.model.Hochsitz;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -69,12 +72,15 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
     private static final String COLLECTION_PA_KEY="Pachter";
 
 
+
     //##########################################################
     //###    Firebase - Authentication
     //##########################################################
     //Initialize Firebase Auth
     final FirebaseAuth mAuth = FirebaseAuth.getInstance();
     final FirebaseUser mFirebaseUser = mAuth.getCurrentUser();
+
+
 
     //##########################################################
     //###    Firebase - Firestore
@@ -87,6 +93,7 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
     private CollectionReference dbReviere;
 
 
+
     //##########################################################
     //###    General Declarations
     //##########################################################
@@ -95,9 +102,10 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
     private HochsitzAdapter adapter;
     private User currentUser;
 
-    // Variable-declaraations
+    // Variable-declarations
     List<String> reviere = new ArrayList<>();
-
+    Revier revier;
+    RecyclerView hochsitzView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,7 +124,6 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
             //general variables
             String mUsername = mFirebaseUser.getDisplayName();
             dbReviere = dbPachter.document(mFirebaseUser.getEmail()).collection(COLLECTION_REV_KEY);
-            dbHochsitze = dbReviere.document(COLLECTION_REV_KEY).collection(COLLECTION_HS_KEY);
         }
 
 
@@ -216,10 +223,11 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
         //##########################################################
         //###   Spinner for Reviere in Infobar
         //##########################################################
-        Spinner revSpinner = findViewById(R.id.reviere_spinner);
+
+        final Spinner revSpinner = findViewById(R.id.reviere_spinner);
         //populate spinner with docs from Revier-collection
         final ArrayAdapter<String> revAdapter = new ArrayAdapter<String>(getApplicationContext(),
-                android.R.layout.simple_spinner_item, reviere);
+                R.layout.spinner_item, reviere);
         revAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         revSpinner.setAdapter(revAdapter);
 
@@ -227,12 +235,11 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        String subject = document.getString("revName");
-                        reviere.add(subject);
+                    for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
+                        String kaesekuchen = document.getString("revName");
+                        reviere.add(kaesekuchen);
                     }
                 }
-
                 revAdapter.notifyDataSetChanged();
             }
         });
@@ -243,21 +250,55 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
         //###   List of all Hochsitzen in RecylcerView
         //##########################################################
 
-        //Get all Docs from Collection Hochsitze and sort by Name ascending (A-Z)
-        final Query hochsitzQuery = dbHochsitze.orderBy("hochsitzName", Query.Direction.ASCENDING);
+        // Anlagen des OnItemSelected-Listeners --> Je nachdem was für ein Item in Spinner ausgewählt wurde
+        //Entscheidung, welche Hochsitze angezeigt werden sollen.
 
-        //set up connection between Query and class Hochsitz
-        FirestoreRecyclerOptions<Hochsitz> options = new FirestoreRecyclerOptions.Builder<Hochsitz>()
-                .setQuery(hochsitzQuery, Hochsitz.class)
-                .build();
+        revSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                                 @Override
+                                                 public void onItemSelected(AdapterView<?> adapterView, View view, final int i, long l) {
+                                                     final String selectedItem = revSpinner.getItemAtPosition(i).toString();
+                                                     dbReviere.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                         @Override
+                                                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                             if (task.isSuccessful()) {
+                                                                 for(QueryDocumentSnapshot document : task.getResult()) {
+                                                                     if (selectedItem.equals(document.getString("revName"))) {
+                                                                         revier = document.toObject(Revier.class);
+                                                                         dbHochsitze = dbReviere.document(revSpinner.getItemAtPosition(i).toString()).collection(COLLECTION_HS_KEY);
+                                                                         //##########################################################
+                                                                         //###   Aufbau RecyclerView
+                                                                         //##########################################################
+                                                                         //Get all Docs from Collection Hochsitze and sort by Name ascending (A-Z)
 
-        //Instanciate Adapter
-        adapter = new HochsitzAdapter(options);
-        //Creating RecyclerView with List of Hochsitzen by registrating HochsitzAdapter-Objects
-        RecyclerView hochsitzView = findViewById(R.id.jw_recycler_View);
-        hochsitzView.setHasFixedSize(false);
-        hochsitzView.setLayoutManager( new LinearLayoutManager(this));
-        hochsitzView.setAdapter(adapter);
+                                                                         final Query hochsitzQuery = dbHochsitze.orderBy("hochsitzName", Query.Direction.ASCENDING);
+
+                                                                         //set up connection between Query and class Hochsitz
+                                                                         FirestoreRecyclerOptions<Hochsitz> options = new FirestoreRecyclerOptions.Builder<Hochsitz>()
+                                                                                 .setQuery(hochsitzQuery, Hochsitz.class)
+                                                                                 .build();
+
+                                                                         //Instanciate Adapter
+                                                                         adapter = new HochsitzAdapter(options);
+                                                                         //Creating RecyclerView with List of Hochsitzen by registrating HochsitzAdapter-Objects
+                                                                         hochsitzView = findViewById(R.id.jw_recycler_View);
+                                                                         hochsitzView.setHasFixedSize(false);
+                                                                         hochsitzView.setLayoutManager(new LinearLayoutManager(JagdeinrichtungenVerwalten.this));
+                                                                         hochsitzView.setAdapter(adapter);
+                                                                     }
+                                                                 }
+                                                             }
+                                                         }
+                                                     });
+
+                                                 }
+                                                 @Override
+                                                 public void onNothingSelected(AdapterView<?> adapterView) {
+                                                     //bleibt leer erstmal
+                                                 }
+        });
+
+
+
 
 
 
@@ -300,14 +341,18 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        adapter.startListening();
+        if (adapter != null) {
+            adapter.startListening();
+        }
     }
 
     //if app in background: listener to adapter/ db is inactive
     @Override
     protected void onStop() {
         super.onStop();
-        adapter.stopListening();
+        if (adapter != null) {
+            adapter.stopListening();
+        }
     }
 
 
