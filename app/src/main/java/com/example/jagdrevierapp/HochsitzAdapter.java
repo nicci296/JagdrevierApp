@@ -73,16 +73,17 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
     //###    general variables
     //##########################################################
      private User currentUser;
-
+    private String revierName;
 
 
     //##########################################################
     //###    Consturctors
     //##########################################################
     // Constructor of Superclass
-    public HochsitzAdapter(FirestoreRecyclerOptions<Hochsitz> options, CollectionReference dbHochsitze) {
+    public HochsitzAdapter(FirestoreRecyclerOptions<Hochsitz> options, CollectionReference dbHochsitze, String revierName) {
         super(options);
         this.dbHochsitze = dbHochsitze;
+        this.revierName = revierName;
     }
 
 
@@ -185,6 +186,7 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
                 Intent intent = new Intent(view.getContext(), StatusPop.class);
                 Bundle extras = new Bundle();
                 extras.putString("sitzname", hochsitz.getHochsitzName());
+                extras.putString("reviername", revierName);
                 intent.putExtras(extras);
                 view.getContext().startActivity(intent);
             }

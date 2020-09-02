@@ -235,7 +235,7 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
                                 FirestoreRecyclerOptions<Hochsitz> options = new FirestoreRecyclerOptions.Builder<Hochsitz>()
                                         .setQuery(hochsitzQuery, Hochsitz.class)
                                         .build();
-                                adapter = new HochsitzAdapter(options, dbHochsitze);
+                                adapter = new HochsitzAdapter(options, dbHochsitze, revierName);
                                 hochsitzView.setAdapter(adapter);
                                 hochsitzView.setHasFixedSize(true);
                                 hochsitzView.setLayoutManager( new LinearLayoutManager(hochsitzView.getContext()));
