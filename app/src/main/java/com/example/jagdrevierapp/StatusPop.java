@@ -69,7 +69,6 @@ public class StatusPop extends Activity {
         final TextView txtGebucht = findViewById(R.id.statusHochsitzgebucht);
         final TextView txtGesperrt = findViewById(R.id.textHochsitzgesperrt);
 
-        Snackbar.make(findViewById(R.id.myConstraintStatLayout), "Das war nichts" + revierName, Snackbar.LENGTH_LONG).show();
         if(revierName != null) {
             CollectionReference dbHochsitze = dbReviere.document(revierName).collection(COLLECTION_HS_KEY);
 
