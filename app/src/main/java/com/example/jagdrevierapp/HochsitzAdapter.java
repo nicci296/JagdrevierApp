@@ -46,7 +46,7 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
     private static final String COLLECTION_US_KEY ="User";
     private static final String COLLECTION_REV_KEY="Reviere";
     private static final String COLLECTION_PA_KEY="Pachter";
-
+    public static final String SITZNAME = "sitzname";
 
 
     //##########################################################
@@ -66,7 +66,7 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
     private final CollectionReference dbUser = db.collection(COLLECTION_US_KEY);
     private final CollectionReference dbPachter = db.collection(COLLECTION_PA_KEY);
     CollectionReference dbReviere = dbPachter.document(mFirebaseUser.getEmail()).collection(COLLECTION_REV_KEY);
-    CollectionReference dbHochsitze = dbReviere.document(COLLECTION_HS_KEY).collection(COLLECTION_HS_KEY);
+    CollectionReference dbHochsitze = dbReviere.document().collection(COLLECTION_HS_KEY);
     private OnHochsitzClickListener listener;
 
 
@@ -179,7 +179,7 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), StatusPop.class);
                 Bundle extras = new Bundle();
-                extras.putString("sitzname", hochsitz.getHochsitzName());
+                extras.putString(SITZNAME, hochsitz.getHochsitzName());
                 intent.putExtras(extras);
                 view.getContext().startActivity(intent);
             }

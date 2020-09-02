@@ -63,7 +63,6 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
     //##########################################################
     private static final String TAG = "Revierkarte";
     private static final String COLLECTION_HS_KEY ="Hochsitze";
-    private static final String COLLECTION_US_KEY ="User";
     private static final String COLLECTION_REV_KEY="Reviere";
     private static final String COLLECTION_PA_KEY="Pachter";
     public final String LATITUDE = "latitude";
@@ -82,7 +81,7 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
     TextView spinnerItem;
     List<String> reviere = new ArrayList<>();
     private GoogleMap jagdrevierMap;
-    LatLng start = new LatLng(48.854296, 11.239171);
+
 
     //##########################################################
     //###    Firebase - Authentication
@@ -136,8 +135,12 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
         //Bekanntmachen der Views
         polySpin = findViewById(R.id.revier_spin);
         spinnerItem =findViewById(R.id.spinner_item);
+        jgdeinName = findViewById(R.id.jgdeinNameInput);
+        jgdEinAdd = findViewById(R.id.jgdein_Add_Btn);
+        jgdEinDel = findViewById(R.id.jgdein_Del_Btn);
         refresh = findViewById(R.id.refresh_Btn);
         addRevier = findViewById(R.id.add_Revier);
+        jgdeinOut = findViewById(R.id.jgdeinNameInputOut);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -201,9 +204,10 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         String subject = document.getString("revName");
+                        adapter.setNotifyOnChange(true);
                         reviere.add(subject);
-                    }
-                }adapter.notifyDataSetChanged();
+                    }adapter.notifyDataSetChanged();
+                }
             }
         });
         //Create polygon from Spinner-item and show on Map
@@ -233,7 +237,9 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
                                         poly.add(latLng);
                                         dbHochsitze = dbReviere.document(polySpin.getItemAtPosition(position).toString()).collection(COLLECTION_HS_KEY);
                                     }
+                                    jagdrevierMap.clear();
                                     jagdrevierMap.addPolygon(poly);
+                                    jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLngZoom(poly.getPoints().get(1),11));
                                     dbHochsitze.get()
                                             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                                 @Override
@@ -275,9 +281,164 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
             }
             @Override
             public void onNothingSelected(AdapterView<?> polySpin) {
+                //Koordinaten der aktuellen GPS-Position erhalten
+                Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
+                final LatLng current = new LatLng(lastKnownLocation.getLatitude(),lastKnownLocation.getLongitude());
+                jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLngZoom(current, 13));
             }
         });
 
+        /**
+         * ****************20.08.20 Nico********************************************************************
+         * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+         *
+         * Methode zum Speichern eines Hochsitzes an der aktuellen GPS-Position im Firestore.
+         * Speichert ein Object der Modelklasse Hochsitz in der Collection dbHochsitz.
+         * Über .document(inputText).set(kanzel) wird die ID in der DB mit dem Text aus dem EditText gefüllt.
+         * Soll Firebase eine eigene ID generieren, müsste auf dbHochsitz.add(kanzel) geändert werden.
+         * OnSuccessListener: Wenn das Objekt erfolgreich gespeichert werden konnte, wird ein Marker an der
+         * aktuellen Position (currentLoc) auf der Karte gesetzt und die Kamera schwenkt zum neuen Marker rüber.
+         * Abschließend wird die EditText-View wieder geleert.
+         * OnFailureListener: Toast weist auf fehlgeschlagenes Speichern hin
+         *
+         * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+         * ***************UPDATE 22.08.20 Nico**************************************************************
+         * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+         *
+         * Bevor der Datensatz gespeichert wird, wird über einen Datenabruf (.get()) mittels einer Query getestest,
+         * ob bereits ein Revier mit dem eingegebenen Namen in der Firebase existiert.
+         * Ist ein solches Document bereits vorhanden, wird ein Toast ausgegeben und return ausgelöst.
+         * Im Anschluss erfolgt das oben beschriebene Speichern.
+         *
+         * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+         */
+        jgdEinAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final String inputText = jgdeinName.getText().toString();
+                //Toast, falls kein Name im Feld, und return, damit keine Einrichtung namenlos gespeichert wird
+                if (inputText.isEmpty()) {
+                    Toast.makeText(RevierKarte.this, R.string.nameReq, Toast.LENGTH_LONG).show();
+                    return;
+                }
+                //Koordinaten der aktuellen GPS-Position erhalten
+                Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
+                final GeoPoint current = new GeoPoint(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+                final LatLng latLng = new LatLng(current.getLatitude(),current.getLongitude());
+                /*
+                 * Festlegung der Eigenschaften des anzuzeigenden Markers.
+                 * .position zieht die Koordinaten aus dem LatLng-Objekt latLng.
+                 * .icon legt das Farbschema des Markers fest und greift dazu auf ein vordefiniertes Farbschema aus der
+                 * BitMapDescriptionFactory zurück.
+                 */
+                final MarkerOptions currentLoc = new MarkerOptions()
+                        .position(latLng)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
+                        .title(inputText);
+                /*
+                 *Initialisierung des in der Firebase zu speichernden Objekts vom Typ Hochsitz mit denen im Klassen-Constructor
+                 *festgelegten Attributen.
+                 */
+                final Hochsitz kanzel = new Hochsitz
+                        (currentLoc.getTitle(), current, false,"TBA",false,
+                                false,"Hochsitz");
+                //Start der Datenbank-Operation
+                Query query = dbHochsitze.whereEqualTo("hochsitzName", inputText);
+                query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Toast.makeText(RevierKarte.this, "Jagdeinrichtung existiert bereits",
+                                        Toast.LENGTH_LONG).show();
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                jgdeinName.getText().clear();
+                                return;
+                            }
+                        }
+                        dbHochsitze.document(inputText).set(kanzel)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Toast.makeText(RevierKarte.this, "Jagdeinrichtung hinzugefügt",
+                                                Toast.LENGTH_LONG).show();
+                                        jagdrevierMap.addMarker(currentLoc);
+                                        jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                                        jgdeinName.getText().clear();
+
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(RevierKarte.this, "Jagdeinrichtung konnte nicht hinzugefügt werden",
+                                                Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                    }
+                });
+
+            }
+        });
+
+        /**
+         * *******************22.08.20 Nico************************************************************
+         * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+         *
+         * OnClickListener zum Löschen von Hochsitzen.
+         * Wie beim Hinzufügen wird im onComplete-Callback zuerst über eine Query ein
+         * document aus der firebase geholt, welches im field hochsitzName den Wert aus dem EditText hat.
+         * Liegt ein solches Document in der Firebase, wird es per .delete() gelöscht und ein return
+         * ausgelöst.
+         * Wird der Task aus dem Callback nicht erfolgreich beendet, wird ein Toast augerufen, welcher auf ein
+         * nicht existentes Document hinweist.
+         *
+         * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+         */
+        jgdEinDel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final String inputTextOut = jgdeinOut.getText().toString();
+                //Toast, falls kein Name im Feld, und return, damit keine Einrichtung ohne Namen gelöscht wird
+                if (inputTextOut.isEmpty()) {
+                    Toast.makeText(RevierKarte.this, R.string.nameReq, Toast.LENGTH_LONG).show();
+                    return;
+                }
+                Query query = dbHochsitze.whereEqualTo("hochsitzName", inputTextOut);
+                query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                dbHochsitze.document(inputTextOut)
+                                        .delete()
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                                                Toast.makeText
+                                                        (RevierKarte.this, R.string.data_Del_Success,
+                                                                Toast.LENGTH_LONG).show();
+                                                jgdeinOut.getText().clear();
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.w(TAG, "Error deleting document", e);
+                                            }
+                                        });
+                                return;
+                            }
+                        }
+                        Toast.makeText
+                                (RevierKarte.this, R.string.data_Del_Fail,
+                                        Toast.LENGTH_LONG).show();
+                        jgdeinOut.getText().clear();
+                    }
+                });
+            }
+        });
 
         /**
          * **************************22.08.20 Nico*****************************************************************
@@ -332,7 +493,11 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
                                                     .position(latLng)
                                                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
                                                     .title(kanzel.getHochsitzName()));
-                                            jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLngZoom(start, 13));
+                                            Location lastKnownLocation = locationManager
+                                                    .getLastKnownLocation(locationProvider);
+                                            final LatLng current = new LatLng(lastKnownLocation.getLatitude(),
+                                                    lastKnownLocation.getLongitude());
+                                            jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLngZoom(current, 13));
                                         }
                                     }
                                     Toast.makeText
@@ -366,6 +531,7 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
             }
         });
     }
+
     /**
      * WICHTIG: Das Endgerät muss Google Play Services installiert haben, damit die Activity genutzt werden kann.
      * Dieser Callback wird nur ausgelöst, wenn die Map bereit zur Nutzung ist..
@@ -382,8 +548,8 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
         jagdrevierMap.setOnMyLocationButtonClickListener(this);
         jagdrevierMap.setOnMyLocationClickListener(this);
         enableMyLocation();
+
         //Config der Karte - Typ Satellit, Zoom per Click&Touch, Compass auf Karte
-        jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLngZoom(start, 13));
         jagdrevierMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
         jagdrevierMap.getUiSettings().setZoomControlsEnabled(true);
         jagdrevierMap.getUiSettings().setZoomGesturesEnabled(true);

@@ -54,6 +54,7 @@ public class AddJagdEinrPop extends AppCompatActivity {
     private static final String COLLECTION_US_KEY ="User";
     private static final String COLLECTION_HS_KEY="Hochsitze";
     private static final String COLLECTION_REV_KEY="Reviere";
+    public static final String SELECTED_REVIER = "selected revier";
 
 
     //##########################################################
@@ -74,7 +75,7 @@ public class AddJagdEinrPop extends AppCompatActivity {
     private final CollectionReference dbPachter = db.collection(COLLECTION_PA_KEY);
     private final CollectionReference dbUser = db.collection(COLLECTION_US_KEY);
     CollectionReference dbReviere = dbPachter.document(mFirebaseUser.getEmail()).collection(COLLECTION_REV_KEY);
-    CollectionReference dbHochsitze = dbReviere.document(COLLECTION_REV_KEY).collection(COLLECTION_HS_KEY);
+    CollectionReference dbHochsitze;
 
     //Initialisierung eines neuen HochsitzAdapter-Objekts
     private HochsitzAdapter adapter;
@@ -165,9 +166,11 @@ public class AddJagdEinrPop extends AppCompatActivity {
             @Override
             public void onClick(final View view) {
 
+                String rev = getIntent().getStringExtra(SELECTED_REVIER);
                 //##########################################################
                 //###  Value Radiobuttons
                 //##########################################################
+
                 RadioGroup radiobtngrp = findViewById(R.id.radioGroup2);
                 int radioButtonID = radiobtngrp.getCheckedRadioButtonId();
                 View radioButton = radiobtngrp.findViewById(radioButtonID);
@@ -175,10 +178,10 @@ public class AddJagdEinrPop extends AppCompatActivity {
                 RadioButton r = (RadioButton) radiobtngrp.getChildAt(idx);
                 String jagdeinrichtungType = r.getText().toString();
 
-
                 //##########################################################
                 //###  Meet Firestore
                 //##########################################################
+
                 //Bekanntmachen der View zur Texteingabe und Abruf der Eingabe als String
                 final EditText jgdeinName = findViewById(R.id.txtSitzName);
                 final String inputText = jgdeinName.getText().toString();
@@ -198,12 +201,11 @@ public class AddJagdEinrPop extends AppCompatActivity {
                 Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
                 assert lastKnownLocation != null;
                 final GeoPoint current = new GeoPoint(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
-                final LatLng latLng = new LatLng(current.getLatitude(),current.getLongitude());
 
                  final Hochsitz kanzel = new Hochsitz
                         (inputText, current, false,"",false,false, jagdeinrichtungType);
 
-
+                dbHochsitze = dbReviere.document(rev).collection(COLLECTION_HS_KEY);
                 Query query = dbHochsitze.whereEqualTo("hochsitzName", inputText);
                 query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
