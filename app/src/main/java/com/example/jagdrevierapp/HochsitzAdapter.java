@@ -179,7 +179,7 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), StatusPop.class);
                 Bundle extras = new Bundle();
-                extras.putString(SITZNAME, hochsitz.getHochsitzName());
+                extras.putString("sitzname", hochsitz.getHochsitzName());
                 intent.putExtras(extras);
                 view.getContext().startActivity(intent);
             }

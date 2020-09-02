@@ -135,12 +135,12 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
         //Bekanntmachen der Views
         polySpin = findViewById(R.id.revier_spin);
         spinnerItem =findViewById(R.id.spinner_item);
-        jgdeinName = findViewById(R.id.jgdeinNameInput);
-        jgdEinAdd = findViewById(R.id.jgdein_Add_Btn);
-        jgdEinDel = findViewById(R.id.jgdein_Del_Btn);
+        //jgdeinName = findViewById(R.id.jgdeinNameInput);
+        //jgdEinAdd = findViewById(R.id.jgdein_Add_Btn);
+        //jgdEinDel = findViewById(R.id.jgdein_Del_Btn);
         refresh = findViewById(R.id.refresh_Btn);
         addRevier = findViewById(R.id.add_Revier);
-        jgdeinOut = findViewById(R.id.jgdeinNameInputOut);
+        //jgdeinOut = findViewById(R.id.jgdeinNameInputOut);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()

@@ -177,6 +177,12 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
                         currentUser = document.toObject(User.class);
                         if(currentUser.getMail() != null) {
 
+                            //##########################################################
+                            //###   Welcome-Notice in Infobar
+                            //##########################################################
+                            //Initialize TextView for welcoming user
+                            final TextView helloUser = findViewById(R.id.helloUser);
+                            helloUser.setText("WaiHei, " + currentUser.getNick());
                         }
                     }
                 } else {
@@ -186,18 +192,6 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
             }
         });
 
-        //##########################################################
-        //###   Welcome-Notice in Infobar
-        //##########################################################
-
-        //Initialize TextView for welcoming user
-
-        final TextView helloUser = findViewById(R.id.helloUser);
-        //if(currentUser.getNick() != null) {
-        //    helloUser.setText("WaiHei, " + currentUser.getNick());
-        //} else {
-            helloUser.setText("Hallo Jager!");
-        //}
 
 
         //##########################################################
