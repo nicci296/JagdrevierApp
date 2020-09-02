@@ -66,21 +66,27 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
     private final CollectionReference dbUser = db.collection(COLLECTION_US_KEY);
     private final CollectionReference dbPachter = db.collection(COLLECTION_PA_KEY);
     CollectionReference dbReviere = dbPachter.document(mFirebaseUser.getEmail()).collection(COLLECTION_REV_KEY);
-    CollectionReference dbHochsitze = dbReviere.document().collection(COLLECTION_HS_KEY);
+    CollectionReference dbHochsitze;
     private OnHochsitzClickListener listener;
+
+    //##########################################################
+    //###    general variables
+    //##########################################################
+     private User currentUser;
+
 
 
     //##########################################################
     //###    Consturctors
     //##########################################################
     // Constructor of Superclass
-    public HochsitzAdapter(FirestoreRecyclerOptions<Hochsitz> options) {
+    public HochsitzAdapter(FirestoreRecyclerOptions<Hochsitz> options, CollectionReference dbHochsitze) {
         super(options);
+        this.dbHochsitze = dbHochsitze;
     }
 
 
 
-    private User currentUser;
 
 
 
@@ -119,7 +125,6 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
                 }
             }
         });
-
 
 
 
@@ -357,7 +362,7 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
     }
 
 
-    class HochsitzHolder extends RecyclerView.ViewHolder {
+    public class HochsitzHolder extends RecyclerView.ViewHolder {
         Button btnStatus;
         TextView txtHochsitzName;
         Button btnBook;

@@ -223,31 +223,28 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
                 final RecyclerView hochsitzView = findViewById(R.id.jw_recycler_View);
                 final String selectedItem = revSpinner.getItemAtPosition(position).toString();
 
-                dbReviere.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                if(selectedItem.equals(document.getString("revName"))) {
-                                    dbHochsitze = dbReviere.document(revSpinner.getItemAtPosition(position).toString())
-                                            .collection(COLLECTION_HS_KEY);
-                                    Revier revier = document.toObject(Revier.class);
-                                    String revierName = revier.getRevName();
-                                    Query hochsitzQuery = dbHochsitze;
-                                    FirestoreRecyclerOptions<Hochsitz> options = new FirestoreRecyclerOptions.Builder<Hochsitz>()
-                                            .setQuery(hochsitzQuery, Hochsitz.class)
-                                            .build();
-                                    adapter = new HochsitzAdapter(options);
-                                    hochsitzView.setAdapter(adapter);
-                                    hochsitzView.setHasFixedSize(true);
-                                    hochsitzView.setLayoutManager( new LinearLayoutManager(hochsitzView.getContext()));
-                                    adapter.notifyDataSetChanged();
-                                    myGigLiveData.setValue(adapter);
+                dbReviere.get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            if(selectedItem.equals(document.getString("revName"))) {
+                                dbHochsitze = dbReviere.document(revSpinner.getItemAtPosition(position).toString())
+                                        .collection(COLLECTION_HS_KEY);
+                                Revier revier = document.toObject(Revier.class);
+                                String revierName = revier.getRevName();
+                                Query hochsitzQuery = dbHochsitze;
+                                FirestoreRecyclerOptions<Hochsitz> options = new FirestoreRecyclerOptions.Builder<Hochsitz>()
+                                        .setQuery(hochsitzQuery, Hochsitz.class)
+                                        .build();
+                                adapter = new HochsitzAdapter(options, dbHochsitze);
+                                hochsitzView.setAdapter(adapter);
+                                hochsitzView.setHasFixedSize(true);
+                                hochsitzView.setLayoutManager( new LinearLayoutManager(hochsitzView.getContext()));
+                                adapter.notifyDataSetChanged();
+                                myGigLiveData.setValue(adapter);
 
-                                    Intent revierIntent = new Intent(STATUS_INTENT);
-                                    revierIntent.putExtra(DB_HOCHSITZE, revierName);
-                                    LocalBroadcastManager.getInstance(JagdeinrichtungenVerwalten.this).sendBroadcast(revierIntent);
-                                }
+                                Intent revierIntent = new Intent(STATUS_INTENT);
+                                revierIntent.putExtra(DB_HOCHSITZE, revierName);
+                                LocalBroadcastManager.getInstance(JagdeinrichtungenVerwalten.this).sendBroadcast(revierIntent);
                             }
                         }
                     }
@@ -269,7 +266,7 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String selectedItem = revSpinner.getSelectedItem().toString();
-                        Intent intent = new Intent(JagdeinrichtungenVerwalten.this, AddJagdEinrPop.class);
+                Intent intent = new Intent(JagdeinrichtungenVerwalten.this, AddJagdEinrPop.class);
                 intent.putExtra(SELECTED_REVIER, selectedItem);
                 startActivity(intent);
             }
