@@ -1,60 +1,42 @@
 package com.example.jagdrevierapp;
 
+
+import android.graphics.Path;
+import android.os.Parcelable;
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
+
+import androidx.lifecycle.MutableLiveData;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.text.Layout;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.jagdrevierapp.data.model.User;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+
+import com.example.jagdrevierapp.data.model.Revier;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.common.io.LittleEndianDataInputStream;
+
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.*;
 
 import com.example.jagdrevierapp.data.model.Hochsitz;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.SetOptions;
+import com.example.jagdrevierapp.data.model.User;
+import com.google.firebase.firestore.core.OrderBy;
 
-import org.xmlpull.v1.XmlPullParser;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 
@@ -67,6 +49,9 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
     private static final String COLLECTION_US_KEY ="User";
     private static final String COLLECTION_REV_KEY="Reviere";
     private static final String COLLECTION_PA_KEY="Pachter";
+    public static final String DB_HOCHSITZE = "dbHochsitze";
+    public static final String STATUS_INTENT = "Status_Intent";
+    public static final String SELECTED_REVIER = "selected revier";
 
 
     //##########################################################
@@ -95,15 +80,19 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
     private HochsitzAdapter adapter;
     private User currentUser;
 
+    //LiveData Declaration
+    private MutableLiveData<HochsitzAdapter> myGigLiveData;
+
     // Variable-declaraations
     List<String> reviere = new ArrayList<>();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_jagdeinrichtungen_verwalten);
 
+
+        myGigLiveData = new MutableLiveData<>();
 
         //##########################################################
         //###    User-Validation
@@ -116,10 +105,11 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
             //general variables
             String mUsername = mFirebaseUser.getDisplayName();
             dbReviere = dbPachter.document(mFirebaseUser.getEmail()).collection(COLLECTION_REV_KEY);
-            dbHochsitze = dbReviere.document(COLLECTION_REV_KEY).collection(COLLECTION_HS_KEY);
+            /*dbHochsitze = dbReviere.document(COLLECTION_REV_KEY).collection(COLLECTION_HS_KEY);*/
         }
 
 
+        RecyclerView hochsitzView = findViewById(R.id.jw_recycler_View);
 
         //##########################################################
         //###   Nav-Header and Nav-Buttons
@@ -152,19 +142,6 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
             }
         });
 
-        //##########################################################
-        //###   FloatingBtn for Adding JagdEinr
-        //##########################################################
-        FloatingActionButton addJagdEinr = findViewById(R.id.btnAddHochsitz);
-        addJagdEinr.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(JagdeinrichtungenVerwalten.this, AddJagdEinrPop.class);
-                startActivity(intent);
-            }
-        });
-
-
 
         //##########################################################
         //###   User aus Datenbank extrahieren
@@ -196,8 +173,6 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
             }
         });
 
-
-
         //##########################################################
         //###   Welcome-Notice in Infobar
         //##########################################################
@@ -212,11 +187,10 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
         //}
 
 
-
         //##########################################################
         //###   Spinner for Reviere in Infobar
         //##########################################################
-        Spinner revSpinner = findViewById(R.id.reviere_spinner);
+        final Spinner revSpinner = findViewById(R.id.reviere_spinner);
         //populate spinner with docs from Revier-collection
         final ArrayAdapter<String> revAdapter = new ArrayAdapter<String>(getApplicationContext(),
                 android.R.layout.simple_spinner_item, reviere);
@@ -237,27 +211,64 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
             }
         });
 
+        revSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(final AdapterView<?> polySpin, View view, final int position, final long id) {
+                final RecyclerView hochsitzView = findViewById(R.id.jw_recycler_View);
+                final String selectedItem = revSpinner.getItemAtPosition(position).toString();
+
+                dbReviere.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if(selectedItem.equals(document.getString("revName"))) {
+                                    dbHochsitze = dbReviere.document(revSpinner.getItemAtPosition(position).toString())
+                                            .collection(COLLECTION_HS_KEY);
+                                    Revier revier = document.toObject(Revier.class);
+                                    String revierName = revier.getRevName();
+                                    Query hochsitzQuery = dbHochsitze;
+                                    FirestoreRecyclerOptions<Hochsitz> options = new FirestoreRecyclerOptions.Builder<Hochsitz>()
+                                            .setQuery(hochsitzQuery, Hochsitz.class)
+                                            .build();
+                                    adapter = new HochsitzAdapter(options);
+                                    hochsitzView.setAdapter(adapter);
+                                    hochsitzView.setHasFixedSize(true);
+                                    hochsitzView.setLayoutManager( new LinearLayoutManager(hochsitzView.getContext()));
+                                    adapter.notifyDataSetChanged();
+                                    myGigLiveData.setValue(adapter);
+
+                                    Intent revierIntent = new Intent(STATUS_INTENT);
+                                    revierIntent.putExtra(DB_HOCHSITZE, revierName);
+                                    LocalBroadcastManager.getInstance(JagdeinrichtungenVerwalten.this).sendBroadcast(revierIntent);
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> polySpin) {
+
+            }
+        });
 
 
         //##########################################################
-        //###   List of all Hochsitzen in RecylcerView
+        //###   FloatingBtn for Adding JagdEinr
         //##########################################################
+        FloatingActionButton addJagdEinr = findViewById(R.id.btnAddHochsitz);
+        addJagdEinr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String selectedItem = revSpinner.getSelectedItem().toString();
+                        Intent intent = new Intent(JagdeinrichtungenVerwalten.this, AddJagdEinrPop.class);
+                intent.putExtra(SELECTED_REVIER, selectedItem);
+                startActivity(intent);
+            }
+        });
 
-        //Get all Docs from Collection Hochsitze and sort by Name ascending (A-Z)
-        final Query hochsitzQuery = dbHochsitze.orderBy("hochsitzName", Query.Direction.ASCENDING);
-
-        //set up connection between Query and class Hochsitz
-        FirestoreRecyclerOptions<Hochsitz> options = new FirestoreRecyclerOptions.Builder<Hochsitz>()
-                .setQuery(hochsitzQuery, Hochsitz.class)
-                .build();
-
-        //Instanciate Adapter
-        adapter = new HochsitzAdapter(options);
-        //Creating RecyclerView with List of Hochsitzen by registrating HochsitzAdapter-Objects
-        RecyclerView hochsitzView = findViewById(R.id.jw_recycler_View);
-        hochsitzView.setHasFixedSize(false);
-        hochsitzView.setLayoutManager( new LinearLayoutManager(this));
-        hochsitzView.setAdapter(adapter);
 
 
 
@@ -300,7 +311,12 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        adapter.startListening();
+        myGigLiveData.observe(this, adapterList ->{
+            adapter.startListening();
+        });
+
+
+
     }
 
     //if app in background: listener to adapter/ db is inactive
@@ -309,7 +325,6 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
         super.onStop();
         adapter.stopListening();
     }
-
 
 
     //////////////////////
