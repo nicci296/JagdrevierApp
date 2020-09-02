@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 
@@ -14,139 +15,136 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/sketch_layout"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@drawable/background"
-        android:orientation="vertical"
         android:padding="10dp">
 
+
+        <TextView
+            android:id="@+id/clear_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="@string/clear_text"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/clear_button" />
 
         <ImageButton
             android:id="@+id/draw_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginStart="32dp"
             android:background="@android:color/transparent"
             android:contentDescription="@string/draw"
             android:src="@drawable/baseline_create_white_36"
-            android:tint="#FFEB3B" />
+            android:tint="#FFEB3B"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/clear_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="5dp"
-            android:layout_toEndOf="@+id/draw_button"
+            android:layout_marginEnd="32dp"
             android:background="@android:color/transparent"
             android:contentDescription="@string/undo"
             android:src="@drawable/baseline_undo_white_36"
-            android:tint="#F85A4F" />
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                  android:id="@+id/draw_text"
-                  android:layout_below="@id/draw_button" android:text="@string/draw_text"
-                  android:textColor="#FFFFFF"
-                  android:textSize="12sp" android:layout_marginStart="5dp"/>
+            android:tint="#F85A4F"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton android:layout_width="wrap_content" android:layout_height="wrap_content"
-                     android:id="@+id/clear_button"
-                     android:src="@drawable/baseline_undo_white_36"
-                     android:layout_marginTop="5dp"
-                     android:layout_toEndOf="@+id/draw_button" android:layout_marginStart="25dp"
-                     android:background="@android:color/transparent"
-                     android:tint="#F85A4F" android:contentDescription="@string/undo"/>
-
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                  android:layout_below="@id/clear_button" android:layout_toEndOf="@id/draw_text"
-                  android:id="@+id/clear_text"
-                  android:text="@string/clear_text"
-                  android:textColor="#FFFFFF"
-                  android:textSize="12sp" android:layout_marginStart="10dp"/>
-
-        <RelativeLayout
-            android:id="@+id/command_layout"
+        <TextView
+            android:id="@+id/draw_text"
             android:layout_width="wrap_content"
-            android:layout_height="106dp"
-            android:layout_below="@+id/draw_button"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
-                android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:orientation="horizontal" android:layout_marginTop="30dp"
-                android:layout_below="@+id/draw_button" android:id="@+id/command_layout">
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:text="@string/draw_text"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/draw_button" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/command_layout"
+            android:layout_width="372dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <EditText
                 android:id="@+id/revier_ref"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="15dp"
+                android:layout_marginTop="8dp"
                 android:autofillHints=""
                 android:hint="@string/revier_sketch_hint"
                 android:inputType="text"
+                android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="#FFFFFF"
-                android:textColorHint="#FFFFFF" />
-            <EditText android:layout_width="wrap_content" android:layout_height="wrap_content"
-                      android:id="@+id/revier_ref"
-                      android:inputType="text"
-                      android:autofillHints=""
-                      android:hint="@string/revier_sketch_hint"
-                      android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                      android:textStyle="italic"
-                      android:textColor="#FFFFFF"
-                      android:textColorHint="#BFB9B9"
-                      android:layout_alignParentStart="true"
-                      android:layout_marginStart="15dp"/>
+                android:textColorHint="#BFB9B9"
+                android:textStyle="italic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
                 android:id="@+id/save_revier_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/revier_ref"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginStart="48dp"
+                android:layout_marginTop="8dp"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/save"
                 android:src="@drawable/baseline_check_box_white_36"
-                android:tint="#2196F3" />
-            <ImageButton
-                      android:layout_width="wrap_content" android:layout_height="wrap_content"
-                      android:id="@+id/save_revier_button"
-                      android:src="@drawable/baseline_check_box_white_36"
-                      android:layout_below="@+id/revier_ref" android:layout_marginTop="10dp"
-                      android:layout_marginStart="10dp"
-                      android:background="@android:color/transparent"
-                      android:tint="#2196F3" android:contentDescription="@string/save"/>
+                android:tint="#2196F3"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/revier_ref" />
 
             <TextView
-                      android:layout_width="wrap_content" android:layout_height="wrap_content"
-                      android:id="@+id/rev_save_text"
-                      android:layout_below="@id/revier_ref" android:layout_toEndOf="@id/save_revier_button"
-                      android:layout_marginTop="15dp" android:layout_marginStart="10dp"
-                      android:text="@string/rev_save_text" android:textColor="#FFFFFF"/>
+                android:id="@+id/rev_save_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/rev_save_text"
+                android:textColor="#FFFFFF"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/save_revier_button" />
 
             <ImageButton
-                    android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:id="@+id/backTo_map_button"
-                    android:src="@drawable/baseline_map_white_36"
-                    android:layout_below="@+id/save_revier_button" android:layout_marginTop="10dp"
-                    android:layout_marginStart="10dp"
-                    android:background="@android:color/transparent"
-                    android:tint="#FB3F31" android:contentDescription="@string/save"/>
+                android:id="@+id/backTo_map_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="76dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/save"
+                android:src="@drawable/baseline_map_white_36"
+                android:tint="#FB3F31"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/revier_ref" />
 
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                      android:layout_below="@id/rev_save_text" android:layout_toEndOf="@id/backTo_map_button"
-                      android:layout_marginTop="25dp" android:layout_marginStart="10dp"
-                      android:text="@string/back_to_map" android:textColor="#FFFFFF"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="@string/back_to_map"
+                android:textColor="#FFFFFF"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/backTo_map_button" />
 
-        </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 

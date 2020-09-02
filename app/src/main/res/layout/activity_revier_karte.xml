@@ -9,59 +9,63 @@
         android:background="@drawable/background">
 
     <androidx.fragment.app.FragmentContainerView
-            android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:id="@+id/revier"
-            tools:context=".RevierKarte"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+        android:id="@+id/revier"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        tools:context=".RevierKarte" />
 
-    <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                    android:orientation="vertical" android:padding="10dp" android:layout_alignParentBottom="true"
-                    android:layout_below="@+id/revier">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/revier"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="0dp"
+        android:padding="10dp">
 
         <Spinner
             android:id="@+id/revier_spin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="97dp"
-            android:layout_marginTop="77dp"
+            android:layout_marginTop="16dp"
             android:backgroundTint="#FFFFFF"
-            android:spinnerMode="dropdown" />
+            android:spinnerMode="dropdown"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/add_Revier"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="175dp"
-            android:layout_marginTop="54dp"
+            android:layout_marginStart="112dp"
+            android:layout_marginTop="16dp"
             android:background="@android:color/transparent"
             android:clickable="true"
+            android:contentDescription="TODO"
             android:focusable="true"
             android:src="@drawable/baseline_edit_location_white_48"
-            android:tint="#2196F3" />
+            android:tint="#2196F3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/revier_spin" />
 
         <ImageButton
             android:id="@+id/refresh_Btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="276dp"
-            android:layout_marginTop="72dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="136dp"
             android:background="@android:color/transparent"
             android:clickable="true"
             android:contentDescription="@string/refresh_Btn"
             android:contextClickable="true"
             android:focusable="true"
             android:src="@drawable/outline_refresh_white_36"
-            android:tint="#A2E654" />
+            android:tint="#A2E654"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/revier_spin" />
 
-    </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </RelativeLayout>

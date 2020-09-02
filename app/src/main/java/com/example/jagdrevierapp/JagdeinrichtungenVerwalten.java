@@ -326,7 +326,9 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        adapter.stopListening();
+        if(adapter != null) {
+            adapter.stopListening();
+        }
     }
 
 
