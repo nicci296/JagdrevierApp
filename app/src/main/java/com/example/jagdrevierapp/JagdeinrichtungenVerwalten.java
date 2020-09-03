@@ -1,18 +1,14 @@
 package com.example.jagdrevierapp;
 
 
-import android.graphics.Path;
-import android.os.Parcelable;
 import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.lifecycle.MutableLiveData;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,16 +16,13 @@ import android.util.Log;
 import android.view.View;
 
 import com.example.jagdrevierapp.data.model.Revier;
-import com.example.jagdrevierapp.data.model.Revier;
 import com.example.jagdrevierapp.data.model.User;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.*;
@@ -38,13 +31,10 @@ import com.example.jagdrevierapp.data.model.Hochsitz;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.SetOptions;
-
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
 
 public class JagdeinrichtungenVerwalten extends AppCompatActivity {
     //##########################################################
@@ -55,11 +45,7 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
     private static final String COLLECTION_US_KEY ="User";
     private static final String COLLECTION_REV_KEY="Reviere";
     private static final String COLLECTION_PA_KEY="Pachter";
-    public static final String DB_HOCHSITZE = "dbHochsitze";
-    public static final String STATUS_INTENT = "Status_Intent";
     public static final String SELECTED_REVIER = "selected revier";
-
-
 
     //##########################################################
     //###    Firebase - Authentication
@@ -67,8 +53,6 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
     //Initialize Firebase Auth
     final FirebaseAuth mAuth = FirebaseAuth.getInstance();
     final FirebaseUser mFirebaseUser = mAuth.getCurrentUser();
-
-
 
     //##########################################################
     //###    Firebase - Firestore
@@ -80,8 +64,6 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
     private CollectionReference dbHochsitze;
     private CollectionReference dbReviere;
 
-
-
     //##########################################################
     //###    General Declarations
     //##########################################################
@@ -91,22 +73,18 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
     private User currentUser;
 
     //LiveData Declaration
-    private MutableLiveData<HochsitzAdapter> myGigLiveData;
+    private MutableLiveData<HochsitzAdapter> myRevierLiveData;
 
-    // Variable-declaraations
     // Variable-declarations
     List<String> reviere = new ArrayList<>();
-    Revier revier;
-    RecyclerView hochsitzView;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_jagdeinrichtungen_verwalten);
 
-
-        myGigLiveData = new MutableLiveData<>();
+        //Initialize of MutableLiveData-Object for onItemSelected Method
+        myRevierLiveData = new MutableLiveData<>();
 
         //##########################################################
         //###    User-Validation
@@ -121,7 +99,7 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
             dbReviere = dbPachter.document(mFirebaseUser.getEmail()).collection(COLLECTION_REV_KEY);
         }
 
-
+        //Initialize RecyclerView
         RecyclerView hochsitzView = findViewById(R.id.jw_recycler_View);
 
         //##########################################################
@@ -154,7 +132,6 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
                 startActivity(new Intent(JagdeinrichtungenVerwalten.this, Schussjournal.class));
             }
         });
-
 
         //##########################################################
         //###   User aus Datenbank extrahieren
@@ -193,7 +170,6 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
         });
 
 
-
         //##########################################################
         //###   Spinner for Reviere in Infobar
         //##########################################################
@@ -217,6 +193,30 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
             }
         });
 
+        /**
+         * *******************02.09.20 Nico ******************************
+         * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+         *
+         * onItemSelected-Methode des Spinner-Objects revSpinner.
+         * Wandelt aktuell ausgewähltes Item in String und gleicht diesen
+         * in einer Datenbankabfrage der dbRevier-CollectionReference mit
+         * gespeicherten Reviernamen ab.
+         *
+         * Bei Erfolg kann dbHochsitzCollection initialisiert werden, um auf
+         * die korrekte Subcollection an Hochsitzen zugreifen zu können.
+         * Diese wird vom HochsitzAdapter-Object adapter in den zugehörigen
+         * FirestoreRecyclerOptions als Query gespeichert, damit der adapter
+         * die korrekte Liste an Hochsitzen an die ReyclerView geben kann.
+         *
+         * Ein MutabelLiveData-Object myRevierLiveData nimmt den aktuellen
+         * adapter und seine options auf, damit im onStart-Callback auch das
+         * aktuellste adapter-Objekt vorliegt, da es sonst zu einer Null-
+         * PointerException führen würde.
+         *
+         * Ist kein Item selektiert, werden keine Aktionen ausgeführt
+         *
+         * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+         */
         revSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(final AdapterView<?> polySpin, View view, final int position, final long id) {
@@ -240,11 +240,7 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
                                 hochsitzView.setHasFixedSize(true);
                                 hochsitzView.setLayoutManager( new LinearLayoutManager(hochsitzView.getContext()));
                                 adapter.notifyDataSetChanged();
-                                myGigLiveData.setValue(adapter);
-
-                                Intent revierIntent = new Intent(STATUS_INTENT);
-                                revierIntent.putExtra(DB_HOCHSITZE, revierName);
-                                LocalBroadcastManager.getInstance(JagdeinrichtungenVerwalten.this).sendBroadcast(revierIntent);
+                                myRevierLiveData.setValue(adapter);
                             }
                         }
                     }
@@ -253,10 +249,8 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> polySpin) {
-
             }
         });
-
 
         //##########################################################
         //###   FloatingBtn for Adding JagdEinr
@@ -265,14 +259,13 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
         addJagdEinr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //Übergabe des Reviernamens, damit JgdEinr in der korrekten Collection gespiechert wird
                 String selectedItem = revSpinner.getSelectedItem().toString();
                 Intent intent = new Intent(JagdeinrichtungenVerwalten.this, AddJagdEinrPop.class);
                 intent.putExtra(SELECTED_REVIER, selectedItem);
                 startActivity(intent);
             }
         });
-
-
 
 
         //##########################################################
@@ -296,7 +289,6 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
                 //onSwipe definiert, was ein Swipe auslöst. In diesem Fall die deleteItem-Methode aus dem JournalAdapter
                 @Override
                 public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                    int position = viewHolder.getAdapterPosition();
 
                     View view = findViewById(R.id.theGrandView);
                     final int pos = viewHolder.getAdapterPosition();
@@ -309,19 +301,24 @@ public class JagdeinrichtungenVerwalten extends AppCompatActivity {
             }).attachToRecyclerView(hochsitzView);
         }
 
-
+    /**
+     * *******************02.09.20 Nico ******************************
+     * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     *
+     * MutableLiveData-Object myRevierLiveData oberserviert Änderungen
+     * am Hochsitzadapter-Objekt adapter aus der onItemSelected Methode
+     * des Spinner-Objekts revSpinner.
+     *
+     * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     */
     //If app forwarded: listener to adapter/ db is active
     @Override
     protected void onStart() {
         super.onStart();
-        myGigLiveData.observe(this, adapterList ->{
+        myRevierLiveData.observe(this, adapterList ->{
             adapter.startListening();
         });
-
-
-
     }
-
     //if app in background: listener to adapter/ db is inactive
     @Override
     protected void onStop() {

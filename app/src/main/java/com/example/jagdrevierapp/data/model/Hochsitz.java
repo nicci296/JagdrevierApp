@@ -7,7 +7,8 @@ import com.google.firebase.firestore.GeoPoint;
 
 public class Hochsitz {
     /**
-     * Nico - 22.08.20
+     * ****************22.08.20 Nico *******************************************************************************
+     * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
      *
      *Damit eine Hochsitz-Objekt korrekt in der DB mit Standort gespeichert und hinter effizient wieder abgerufen
      * werden kann, habe ich die doubles lat und lng durch einen GeoPoint ersetzt.
@@ -15,6 +16,8 @@ public class Hochsitz {
      * zum Speichern und Abrufen gebraucht hätte.
      * Problem bei diesen ist aber, dass diese Android-Klassen keinen leeren Constructor definieren, welcher aber von
      * Firebase gefordert wird, sonst gibt es einen Crash.
+     *
+     * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
      */
     private String hochsitzName;
     private GeoPoint gps;

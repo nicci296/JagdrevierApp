@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.os.Bundle;
 
+import com.example.jagdrevierapp.data.PermissionUtils;
 import com.example.jagdrevierapp.data.model.Hochsitz;
 
 
@@ -29,8 +30,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.*;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -75,13 +74,11 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
     //Initialize Variables
-    private ImageButton jgdEinAdd, jgdEinDel, refresh, addRevier;
+    private ImageButton refresh, addRevier;
     private Spinner polySpin;
-    private EditText jgdeinName, jgdeinOut;
     TextView spinnerItem;
     List<String> reviere = new ArrayList<>();
     private GoogleMap jagdrevierMap;
-
 
     //##########################################################
     //###    Firebase - Authentication
@@ -212,6 +209,7 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
             public void onItemSelected(final AdapterView<?> polySpin, View view, final int position, long id) {
 
                 final String selectedItem = polySpin.getItemAtPosition(position).toString();
+                //Abfrage der Revier-Collection zum zeichnen des aktuell gewählten Reviers als Polygon
                 dbReviere.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -224,6 +222,7 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
                                     if (length == 0) {
                                         return;
                                     }
+                                    //Polygon bekommt Styling und Koordinaten
                                     PolygonOptions poly = new PolygonOptions();
                                     poly.strokeColor(Color.WHITE);
                                     for (GeoPoint point : points) {
@@ -231,11 +230,30 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
                                         double lng = point.getLongitude();
                                         LatLng latLng = new LatLng(lat, lng);
                                         poly.add(latLng);
-                                        dbHochsitze = dbReviere.document(polySpin.getItemAtPosition(position).toString()).collection(COLLECTION_HS_KEY);
+                                        dbHochsitze = dbReviere.document(polySpin.getItemAtPosition(position)
+                                                .toString()).collection(COLLECTION_HS_KEY);
                                     }
                                     jagdrevierMap.clear();
+                                    //Polygon wird gezeichnet
                                     jagdrevierMap.addPolygon(poly);
-                                    jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLngZoom(poly.getPoints().get(1),11));
+                                    //Kamera bewegt die Kartenansicht zu einem Punkt aus dem Revier mit Zoomfaktor 11
+                                    jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLngZoom(poly.getPoints()
+                                            .get(1),11));
+
+                                    /*Empfangen des Intents aus Schussjournal-Activity, um einen Marker an der Stelle
+                                    des Journaleintrags zu setzen
+                                     */
+                                    Bundle extras = getIntent().getExtras();
+                                    if(extras != null){
+                                        double intentLat = extras.getDouble(LATITUDE);
+                                        double intentLng = extras.getDouble(LONGITUDE);
+                                        LatLng intentLoc = new LatLng(intentLat,intentLng);
+
+                                        jagdrevierMap.addMarker(new MarkerOptions().position(intentLoc)
+                                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)));
+                                        jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLngZoom(intentLoc,17));
+                                    }
+                                    //Abfrage der Hochsitz-Collection zum Setzen aller Marker des Reviers
                                     dbHochsitze.get()
                                             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                                 @Override
@@ -284,7 +302,6 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
             }
         });
 
-
         /**
          * **************************22.08.20 Nico*****************************************************************
          * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -304,6 +321,16 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
          * Aus Platz- und Nutzungsgründen wird Inhalt der onClickShowAll-Methode im onMapReady-Callback automatisch
          * ausgelöst, damit von Beginn der Activity an alle Hochsitze sichtbar sind.
          * Alternaiv wird ein jetzt Refresh-Button mit onClickListener in OnCreate registriert.
+         *
+         * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+         * *************************UPDATE 27.08.20 Nico ***********************************************************
+         * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+         *
+         * Empfangen des Intents aus Schussjournal-Activity.
+         * Die aus den Extras gewonnenen double-Werte werden in einem
+         * LatLng Objekt gespeichert und als Marker auf der Map angezeigt.
+         * Farblich von den Hochsitz-Markern abgehoben.
+         * Über den RefreshButton kann wieder das selektierte Revier angezeigt werden.
          *
          * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
          * *************************UPDATE 30.08.20 Nico ***********************************************************
@@ -426,27 +453,6 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
                 ));
         revierGrenze.setTag("Revier");
         stylePolygon(revierGrenze);*/
-        /**
-         * ************27.08.20 Nico ******************************
-         * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-         *
-         * Empfangen des Intents aus Schussjournal-Activity.
-         * Die aus den Extras gewonnenen double-Werte werden in einem
-         * LatLng Objekt gespeichert und als Marker auf der Map angezeigt.
-         * Farblich von den Hochsitz-Markern abgehoben.
-         *
-         * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-         */
-        Bundle extras = getIntent().getExtras();
-        if(extras != null){
-            double intentLat = extras.getDouble(LATITUDE);
-            double intentLng = extras.getDouble(LONGITUDE);
-            LatLng intentLoc = new LatLng(intentLat,intentLng);
-
-            jagdrevierMap.addMarker(new MarkerOptions().position(intentLoc)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)));
-            jagdrevierMap.moveCamera(CameraUpdateFactory.newLatLngZoom(intentLoc,17));
-        }
 
     }
 

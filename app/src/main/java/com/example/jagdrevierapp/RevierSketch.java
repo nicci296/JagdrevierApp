@@ -32,12 +32,28 @@ import com.google.firebase.firestore.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * ******************* 28.08.20 Nico ********************************
+ * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ *
+ * Acivity zum zeichnen eines Polygons, welches ein Jagdrevier abbildet.
+ * Die Koordinaten dieses Polygons können in einem Objekt der Modelklasse
+ * Revier gespeichert und in der Revier-Collection im Firestore abgelegt
+ * werden.
+ * Die Koordinaten werden per Klick/Touch auf das Kartenfragment festgelegt.
+ * Sie dazu die onClick-Methode der Map.
+ *
+ * Wissensbezug von youtube.de:
+ * https://www.youtube.com/watch?v=_Sx45CbBsoA
+ *
+ * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ */
+
 public class RevierSketch extends FragmentActivity implements OnMapReadyCallback,GoogleMap.OnMyLocationButtonClickListener,
         GoogleMap.OnMyLocationClickListener,
         ActivityCompat.OnRequestPermissionsResultCallback {
 
     //Keys
-    private static final String TAG = "RevierSketch";
     private static final String COLLECTION_REV_KEY="Reviere";
     private static final String COLLECTION_PA_KEY="Pachter";
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
@@ -53,14 +69,12 @@ public class RevierSketch extends FragmentActivity implements OnMapReadyCallback
     List<Marker> markerList = new ArrayList<>();
     ArrayList<GeoPoint> geoList = new ArrayList<>();
 
-
     //##########################################################
     //###    Firebase - Authentication
     //##########################################################
     //Initialize Firebase Auth
     final FirebaseAuth mAuth = FirebaseAuth.getInstance();
     final FirebaseUser mFirebaseUser = mAuth.getCurrentUser();
-
 
     //##########################################################
     //###    Firebase - Firestore
@@ -89,7 +103,6 @@ public class RevierSketch extends FragmentActivity implements OnMapReadyCallback
             dbReviere = dbPachter.document(mFirebaseUser.getEmail()).collection(COLLECTION_REV_KEY);
         }
 
-
         //Assign Variable
         drawBtn = findViewById(R.id.draw_button);
         clearBtn = findViewById(R.id.clear_button);
@@ -106,11 +119,11 @@ public class RevierSketch extends FragmentActivity implements OnMapReadyCallback
         drawBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Draw Polyline on Map
-                //Create PolygonOptions
+                //Erstellen der PolygonOptions, welche die Koordinaten speichern
                 PolygonOptions polygonOptions = new PolygonOptions().addAll(latLngList).clickable(true);
+                //Polygon auf Karte zeichnen
                 polygon = mMap.addPolygon(polygonOptions);
-                //Polygon Stroke Color
+                //Polygon Farbe
                 polygon.setStrokeColor(Color.WHITE);
             }
         });
@@ -118,7 +131,7 @@ public class RevierSketch extends FragmentActivity implements OnMapReadyCallback
         clearBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Clear All
+                //Leert die Karte und alle gesetzten Koordinaten
                 if(polygon != null)polygon.remove();
                 for(Marker marker : markerList)marker.remove();
                 latLngList.clear();
@@ -135,13 +148,13 @@ public class RevierSketch extends FragmentActivity implements OnMapReadyCallback
                     Toast.makeText(RevierSketch.this, R.string.rev_name_req, Toast.LENGTH_SHORT).show();
                     return;
                 }
-                //no safe if no polygon drawn
+                //Kein Speichervorgang, wenn kein Polygon gezeichnet wurde
                 if(polygon == null){
                     Toast.makeText(RevierSketch.this, R.string.poly_empty, Toast.LENGTH_SHORT).show();
                     return;
                 }
                 Revier newRevier = new Revier(geoList,revierRef);
-
+                //Speichern des gezeichneten Polygons und anschließendes Leeren der Karte
                 dbReviere.document(revierRef).set(newRevier).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -202,12 +215,18 @@ public class RevierSketch extends FragmentActivity implements OnMapReadyCallback
         mMap.getUiSettings().setZoomGesturesEnabled(true);
         mMap.getUiSettings().setCompassEnabled(true);
 
-
-
+        /*
+        OnClick Methode der Map.
+        Bei jedem Klick auf die Karte werden an der geklickten Stelle Marker gesetzt.
+        Die Koordinaten dieser Marker werden in einer ArrayList latLngList gespeichert,
+        welche das Polygon für seine Eckpunkte nutzt.
+        Außerdem werden die Koordinaten in einer ArrayList geoList gespeichert, welche im
+        Objekt der Modelklasse Revier gespeichert werden kann, da nur so Firestore die
+        Koordinaten verarbeiten kann.
+         */
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latlng) {
-                /*if(polygon != null)polygon.remove();*/
                 //MarkerOptions
                 MarkerOptions markerOptions = new MarkerOptions().position(latlng);
                 //Marker

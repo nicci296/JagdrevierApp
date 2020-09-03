@@ -9,7 +9,6 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -18,8 +17,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.core.app.ActivityCompat;
+
 import com.example.jagdrevierapp.data.model.Journal;
 import com.example.jagdrevierapp.data.model.User;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -28,7 +29,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.*;
 
-
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
@@ -36,7 +36,9 @@ import java.util.Objects;
 /**
  * ****************23.08.20 Nico*************
  * ++++++++++++++++++++++++++++++++++++++++++
+ *
  * Pop-Up für einen neuen Eintrag ins Schussjournal
+ *
  * ++++++++++++++++++++++++++++++++++++++++++
  */
 public class JournalPop extends AppCompatActivity {
@@ -50,7 +52,6 @@ public class JournalPop extends AppCompatActivity {
     //Initialize Firebase Auth
     final FirebaseAuth mAuth = FirebaseAuth.getInstance();
     final FirebaseUser mFirebaseUser = mAuth.getCurrentUser();
-
 
     //Initialize FireStore and References
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -76,7 +77,6 @@ public class JournalPop extends AppCompatActivity {
             //general variables
             String mUsername = mFirebaseUser.getDisplayName();
         }
-
 
         //##########################################################
         //###   Nav-Header and Nav-Buttons
@@ -110,11 +110,12 @@ public class JournalPop extends AppCompatActivity {
         });
 
 
-
         /**
          * ******************23.08.20 Nico ***************************************************
          * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-         * TextView soll den aktuellen Nick vom User in der Überschrift anzeigen.
+         *
+         * TextView soll den aktuellen Nickname vom User in der Überschrift anzeigen.
+         *
          * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
          */
 
@@ -154,18 +155,22 @@ public class JournalPop extends AppCompatActivity {
         //aktuelles Datum mit Uhrzeit
         final String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
 
-        /*//Toast, falls Felder leer, und return, damit keine unvollständigen Einträge angelegt werden.
-        if (aimedTarget.isEmpty()|meansForShot.isEmpty()| shots.getText().toString().isEmpty() |
-                hits.getText().toString().isEmpty() | caliber.getText().toString().isEmpty() ) {
-            Toast.makeText(JournalPop.this, R.string.fields_Req, Toast.LENGTH_LONG).show();
-            return;
-        }*/
+        //Toast, falls Felder leer, und return, damit keine unvollständigen Einträge angelegt werden.
+        /*if (aimedTarget.isEmpty()|meansForShot.isEmpty()| caliberUsed.isEmpty() ) {
+            if(shotsTaken == 0 | hitsLanded == 0){
+                Toast.makeText(JournalPop.this, R.string.fields_Req, Toast.LENGTH_LONG).show();
+                return;
+            }
 
-        //Toast, falls mehr Treffer als Schüsse, weil geht ja nicht...
-        if (hitsLanded > shotsTaken) {
-            Toast.makeText(JournalPop.this, R.string.hits_Over_Shots, Toast.LENGTH_LONG).show();
-            return;
-        }
+        }else{*/
+            //Toast, falls mehr Treffer als Schüsse, weil geht ja nicht...
+            if (hitsLanded > shotsTaken) {
+                Toast.makeText(JournalPop.this, R.string.hits_Over_Shots, Toast.LENGTH_LONG).show();
+                return;
+            }
+       /* }*/
+
+
 
         //Initialisierung eines LocationManagers zur Standortbestimmung für den Geopoint im Journal-Constructor
         LocationManager locManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);

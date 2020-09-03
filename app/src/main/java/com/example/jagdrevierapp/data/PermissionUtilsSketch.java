@@ -9,9 +9,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
-import com.example.jagdrevierapp.PermissionUtils;
 import com.example.jagdrevierapp.R;
-import com.example.jagdrevierapp.RevierKarte;
 import com.example.jagdrevierapp.RevierSketch;
 
 public abstract class PermissionUtilsSketch {

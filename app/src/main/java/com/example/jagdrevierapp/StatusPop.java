@@ -50,9 +50,6 @@ public class StatusPop extends Activity {
     private final CollectionReference dbPachter = db.collection(COLLECTION_PA_KEY);
     CollectionReference dbReviere = dbPachter.document(mFirebaseUser.getEmail()).collection(COLLECTION_REV_KEY);
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstancesState) {
         super.onCreate(savedInstancesState);

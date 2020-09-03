@@ -1,4 +1,4 @@
-package com.example.jagdrevierapp;
+package com.example.jagdrevierapp.data;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -7,10 +7,11 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
 import android.widget.Toast;
+import com.example.jagdrevierapp.R;
+import com.example.jagdrevierapp.RevierKarte;
 
 
 /**

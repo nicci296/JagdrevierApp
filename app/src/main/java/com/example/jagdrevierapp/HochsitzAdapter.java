@@ -46,8 +46,6 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
     private static final String COLLECTION_US_KEY ="User";
     private static final String COLLECTION_REV_KEY="Reviere";
     private static final String COLLECTION_PA_KEY="Pachter";
-    public static final String SITZNAME = "sitzname";
-
 
     //##########################################################
     //###    Firebase - Authentication
@@ -56,23 +54,19 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
     final FirebaseAuth mAuth = FirebaseAuth.getInstance();
     final FirebaseUser mFirebaseUser = mAuth.getCurrentUser();
 
-
-
     //##########################################################
     //###    Firebase - Firestore
     //##########################################################
     //Initialize FireStore and References
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference dbUser = db.collection(COLLECTION_US_KEY);
-    private final CollectionReference dbPachter = db.collection(COLLECTION_PA_KEY);
-    CollectionReference dbReviere = dbPachter.document(mFirebaseUser.getEmail()).collection(COLLECTION_REV_KEY);
     CollectionReference dbHochsitze;
     private OnHochsitzClickListener listener;
 
     //##########################################################
     //###    general variables
     //##########################################################
-     private User currentUser;
+    private User currentUser;
     private String revierName;
 
 
@@ -86,17 +80,11 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
         this.revierName = revierName;
     }
 
-
-
-
-
-
     //##########################################################
     //###   List of all Hochsitzen in RecylcerView
     //##########################################################
     @Override
     protected void onBindViewHolder(final HochsitzHolder hochsitzHolder, int position, final Hochsitz hochsitz) {
-
 
         //##########################################################
         //###   User aus Datenbank extrahieren
@@ -126,8 +114,6 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
                 }
             }
         });
-
-
 
         //##########################################################
         //###  Buttons of Hochsitz auslesen und initialisieren
@@ -160,7 +146,6 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
             hochsitzHolder.btnInsect.setTextColor(Color.parseColor("#354559"));
         }
 
-
         //##########################################################
         //###  Buttons Größe anpassen
         //##########################################################
@@ -176,7 +161,6 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
         hochsitzHolder.btnInsect.setWidth(50);
         hochsitzHolder.btnInsect.setHeight(50);
 
-
         //##########################################################
         //###  Status Button - ruft StatusPopUp auf
         //##########################################################
@@ -191,8 +175,6 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
                 view.getContext().startActivity(intent);
             }
         });
-
-
 
         //##########################################################
         //###  Buchen-Button - toggled ob gebucht oder nicht (Userabhängig)
@@ -341,7 +323,6 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
             }
         });
 
-
         //##########################################################
         //###  Hochsitzbezeichnung in RecyclerView
         //##########################################################
@@ -349,7 +330,6 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
         hochsitzHolder.txtHochsitzName.setTextColor(Color.parseColor("#DCD1D1"));
         hochsitzHolder.txtHochsitzName.setTextSize(20);
     }
-
 
     @NonNull
     @Override
@@ -362,7 +342,6 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
     public void deleteItem(int position){
         getSnapshots().getSnapshot(position).getReference().delete();
     }
-
 
     public class HochsitzHolder extends RecyclerView.ViewHolder {
         Button btnStatus;
@@ -379,7 +358,6 @@ public class HochsitzAdapter extends FirestoreRecyclerAdapter<Hochsitz, Hochsitz
             btnBook = itemView.findViewById(R.id.btnBook);
             btnDamage = itemView.findViewById(R.id.btnDamage);
             btnInsect = itemView.findViewById(R.id.btnInsect);
-
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

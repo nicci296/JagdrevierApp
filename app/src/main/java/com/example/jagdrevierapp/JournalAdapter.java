@@ -1,22 +1,16 @@
 package com.example.jagdrevierapp;
 
-import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.jagdrevierapp.data.model.Journal;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.GeoPoint;
-
 
 /**
  * ***************Nico 24.08.20 ***************************
@@ -67,7 +61,7 @@ public class JournalAdapter extends FirestoreRecyclerAdapter<Journal, JournalAda
         String lng = journal.getLocation().toString().substring(40,50);
         String latLng = "lat: "+lat+" , "+"lng: "+lng;
 
-
+        //Bekanntmachen der zu befüllenden Views
         journalHolder.shotView.setText("Schüsse: " + journal.getShots());
         journalHolder.hitView.setText("Treffer: " + journal.getHits());
         journalHolder.caliberView.setText("Kaliber:" +journal.getCaliber());
@@ -89,10 +83,8 @@ public class JournalAdapter extends FirestoreRecyclerAdapter<Journal, JournalAda
     }
 
     //Methode zum Löschen eines Journaleintrags aus der View und dem Firestore
-    public void deleteItem(int position){
-
+    public void deleteEntry(int position){
         getSnapshots().getSnapshot(position).getReference().delete();
-
     }
 
     /*  Eine eigene ViewHolder-Class, welcher die einzelnen Views der item_layout.xml bekannt gemacht werden.
@@ -107,7 +99,6 @@ public class JournalAdapter extends FirestoreRecyclerAdapter<Journal, JournalAda
        TextView meanView;
        TextView dateView;
        TextView locationView;
-
 
        //super Constructor
        public JournalHolder(View itemView) {

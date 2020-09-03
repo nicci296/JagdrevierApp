@@ -2,7 +2,6 @@ package com.example.jagdrevierapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
@@ -20,19 +19,13 @@ import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.jagdrevierapp.data.model.Hochsitz;
 import com.example.jagdrevierapp.data.model.User;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -56,16 +49,12 @@ public class AddJagdEinrPop extends AppCompatActivity {
     private static final String COLLECTION_REV_KEY="Reviere";
     public static final String SELECTED_REVIER = "selected revier";
 
-
     //##########################################################
     //###    Firebase - Authentication
     //##########################################################
     //Initialize Firebase Auth
     final FirebaseAuth mAuth = FirebaseAuth.getInstance();
     final FirebaseUser mFirebaseUser = mAuth.getCurrentUser();
-
-
-
 
     //##########################################################
     //###    Firebase - Firestore
@@ -77,17 +66,12 @@ public class AddJagdEinrPop extends AppCompatActivity {
     CollectionReference dbReviere = dbPachter.document(mFirebaseUser.getEmail()).collection(COLLECTION_REV_KEY);
     CollectionReference dbHochsitze;
 
-    //Initialisierung eines neuen HochsitzAdapter-Objekts
-    private HochsitzAdapter adapter;
-
     private User currentUser;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_jagd_einr_pop);
-
 
         //##########################################################
         //###   Nav-Header and Nav-Buttons
