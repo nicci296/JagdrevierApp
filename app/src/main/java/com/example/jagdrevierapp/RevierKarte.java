@@ -76,7 +76,7 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
     //Initialize Variables
-    private ImageButton refresh, addRevier;
+    private ImageButton refresh, addRevier, home;
     private Spinner polySpin;
     TextView spinnerItem;
     List<String> reviere = new ArrayList<>();
@@ -136,6 +136,7 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
         spinnerItem =findViewById(R.id.spinner_item);
         refresh = findViewById(R.id.refresh_Btn);
         addRevier = findViewById(R.id.add_Revier);
+        home = findViewById(R.id.home_btn);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -477,6 +478,14 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
             @Override
             public void onClick(View view) {
                 Intent changeIntent = new Intent(RevierKarte.this, RevierSketch.class);
+                startActivity(changeIntent);
+            }
+        });
+
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent changeIntent = new Intent(RevierKarte.this,JagdeinrichtungenVerwalten.class);
                 startActivity(changeIntent);
             }
         });
