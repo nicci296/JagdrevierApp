@@ -312,46 +312,45 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
                                                                 if(kanzel.isBooked() && kanzel.isDamaged()
                                                                         && kanzel.isInsectious()){
                                                                     jagdrevierMap.addMarker(options.icon(hsdIcon)
-                                                                            .title(kanzel.getHochsitzName()
-                                                                                    + R.string.bkd_pest_dmg));
+                                                                            .title(kanzel.getHochsitzName() +" "+ getString(R.string.bkd_pest_dmg)));
 
                                                                 }else if(kanzel.isBooked() && kanzel.isInsectious()
                                                                         | kanzel.isDamaged()){
                                                                     jagdrevierMap.addMarker(options.icon(hscIcon)
-                                                                            .title(kanzel.getHochsitzName()
-                                                                                    + R.string.bkd_or));
+                                                                            .title(kanzel.getHochsitzName() +" "
+                                                                                    + getString(R.string.bkd_or)));
                                                                 }
                                                                 else if (kanzel.isDamaged() && kanzel.isInsectious()) {
                                                                     jagdrevierMap.addMarker(options
                                                                             .icon(BitmapDescriptorFactory.fromResource
                                                                                     (R.drawable.baseline_warning_white_36))
-                                                                            .title(kanzel.getHochsitzName()
-                                                                                    + R.string.pest_dmg));
+                                                                            .title(kanzel.getHochsitzName()+" "
+                                                                                    + getString(R.string.pest_dmg)));
                                                                 }
                                                                 else if (kanzel.isDamaged()) {
                                                                     jagdrevierMap.addMarker(options
                                                                             .icon(BitmapDescriptorFactory.fromResource
                                                                                     (R.drawable.baseline_error_white_36))
-                                                                            .title(kanzel.getHochsitzName()
-                                                                                    + R.string.dmg));
+                                                                            .title(kanzel.getHochsitzName()+" "
+                                                                                    + getString(R.string.dmg)));
                                                                 }
                                                                 else if (kanzel.isInsectious()) {
                                                                     jagdrevierMap.addMarker(options
                                                                             .icon(BitmapDescriptorFactory.fromResource
                                                                                     (R.drawable.baseline_pest_control_white_36))
-                                                                            .title(kanzel.getHochsitzName()
-                                                                                    + R.string.pest));
+                                                                            .title(kanzel.getHochsitzName()+" "
+                                                                                    + getString(R.string.pest)));
                                                                 }
                                                                 else if(kanzel.isBooked()){
                                                                     jagdrevierMap.addMarker(options.icon(hsbIcon)
-                                                                            .title(kanzel.getHochsitzName()
-                                                                                    + R.string.bkd));
+                                                                            .title(kanzel.getHochsitzName()+" "
+                                                                                    + getString(R.string.bkd)));
                                                                 }
                                                                 else {
                                                                     jagdrevierMap.addMarker(options
                                                                             .icon(hsaIcon)
-                                                                            .title(kanzel.getHochsitzName()
-                                                                                    + R.string.free));
+                                                                            .title(kanzel.getHochsitzName()+" "
+                                                                                    + getString(R.string.free)));
                                                                 }
                                                             }
                                                         }
