@@ -61,7 +61,8 @@
                 android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/schussBtn" />
+                app:layout_constraintTop_toBottomOf="@+id/schussBtn"
+                tools:ignore="SmallSp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -102,7 +103,8 @@
                 android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/mapBtn" />
+                app:layout_constraintTop_toBottomOf="@+id/mapBtn"
+                tools:ignore="SmallSp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -122,6 +124,7 @@
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:background="#00354559"
+                android:contentDescription="@string/logoutBtnImg"
                 android:fontFamily="sans-serif-medium"
                 android:src="@drawable/ic_sports_bar_24px"
                 android:text="@string/logOutBtnText"
@@ -141,7 +144,8 @@
                 android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/logoutBtn" />
+                app:layout_constraintTop_toBottomOf="@+id/logoutBtn"
+                tools:ignore="SmallSp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
