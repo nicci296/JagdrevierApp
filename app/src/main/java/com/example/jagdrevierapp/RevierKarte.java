@@ -5,6 +5,8 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
@@ -183,6 +185,22 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
          * Da zu Beginn der Methode die karte geleert wurde, folgt noche eine Abfrage der Hochsitz-
          * Collection, um alle Hochsitzmarker wieder zu setzen.
          *
+         * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+         * *****************03.09.20 Nico ***************************************
+         * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+         *
+         * Marker werden jetzt mit individuellen Icons gemäß ihres Status angezeigt.
+         * Dazu werden mit der BitMapFactory-Klasse die Icons erstellt und anschlie-
+         * ßend in der Hochsitz-Collection-Abfrage in der onItemSelected-Methode des
+         * Spinners entsprechend abgerufen.
+         *
+         * Die Icons für Hochsitze, die frei oder besetzt bzw besetzt und/oder befallen
+         * sind, liegen bereits in den Ressources unter drawables, sind aber für die Map
+         * zu groß.
+         * Damit keine zweite Version gespeichert werden muss, können die Icons
+         * vor Verwendung mit der Klasse BitMapFactory bearbeitet werden.
+         *
+         * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
          */
         //populate spinner with docs from Revier-collection
         polySpin = findViewById(R.id.revier_spin);
@@ -203,6 +221,27 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
                 }
             }
         });
+
+        //Styling der Marker icons für freie, besetzte Hochsitze, um Größe anzupassen.
+        final int hei = 100;
+        final int wid = 100;
+        //Hochsitz frei Icon
+        final Bitmap a = BitmapFactory.decodeResource(getResources(), R.drawable.hochsitz_frei);
+        final Bitmap hsa = Bitmap.createScaledBitmap(a,hei,wid,false);
+        final BitmapDescriptor hsaIcon = BitmapDescriptorFactory.fromBitmap(hsa);
+        //Hochsitz belegt Icon
+        final Bitmap b = BitmapFactory.decodeResource(getResources(), R.drawable.hochsetz_besetzt);
+        final Bitmap hsb = Bitmap.createScaledBitmap(b,hei,wid,false);
+        final BitmapDescriptor hsbIcon = BitmapDescriptorFactory.fromBitmap(hsb);
+        //Hochsitz belegt und beschädigt oder befallen
+        final Bitmap c = BitmapFactory.decodeResource(getResources(), R.drawable.hochsetz_besetzt_dmn);
+        final Bitmap hsc = Bitmap.createScaledBitmap(c,hei,wid,false);
+        final BitmapDescriptor hscIcon = BitmapDescriptorFactory.fromBitmap(hsc);
+        //Hochsitz belegt und bschädigt und befallen
+        final Bitmap d = BitmapFactory.decodeResource(getResources(), R.drawable.hochsetz_besetzt_alert);
+        final Bitmap hsd = Bitmap.createScaledBitmap(d,hei,wid,false);
+        final BitmapDescriptor hsdIcon = BitmapDescriptorFactory.fromBitmap(hsd);
+
         //Create polygon from Spinner-item and show on Map
         polySpin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -219,9 +258,8 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
                                     Revier revier = document.toObject(Revier.class);
                                     ArrayList<GeoPoint> points= revier.getTierPoints();
                                     int length = points.size();
-                                    if (length == 0) {
-                                        return;
-                                    }
+                                    if (length == 0) { return; }
+
                                     //Polygon bekommt Styling und Koordinaten
                                     PolygonOptions poly = new PolygonOptions();
                                     poly.strokeColor(Color.WHITE);
@@ -268,12 +306,53 @@ public class RevierKarte extends FragmentActivity implements OnMapReadyCallback,
                                                                 double lat = kanzel.getGps().getLatitude();
                                                                 double lng = kanzel.getGps().getLongitude();
                                                                 LatLng latLng = new LatLng(lat,lng);
-                                                                jagdrevierMap.addMarker(new MarkerOptions()
-                                                                        .position(latLng)
-                                                                        .icon(BitmapDescriptorFactory
-                                                                                .defaultMarker(BitmapDescriptorFactory
-                                                                                        .HUE_CYAN))
-                                                                        .title(kanzel.getHochsitzName()));
+                                                                MarkerOptions options = new MarkerOptions().
+                                                                        position(latLng);
+                                                                //Statusabfrage für Marker-Icon
+                                                                if(kanzel.isBooked() && kanzel.isDamaged()
+                                                                        && kanzel.isInsectious()){
+                                                                    jagdrevierMap.addMarker(options.icon(hsdIcon)
+                                                                            .title(kanzel.getHochsitzName()
+                                                                                    + R.string.bkd_pest_dmg));
+
+                                                                }else if(kanzel.isBooked() && kanzel.isInsectious()
+                                                                        | kanzel.isDamaged()){
+                                                                    jagdrevierMap.addMarker(options.icon(hscIcon)
+                                                                            .title(kanzel.getHochsitzName()
+                                                                                    + R.string.bkd_or));
+                                                                }
+                                                                else if (kanzel.isDamaged() && kanzel.isInsectious()) {
+                                                                    jagdrevierMap.addMarker(options
+                                                                            .icon(BitmapDescriptorFactory.fromResource
+                                                                                    (R.drawable.baseline_warning_white_36))
+                                                                            .title(kanzel.getHochsitzName()
+                                                                                    + R.string.pest_dmg));
+                                                                }
+                                                                else if (kanzel.isDamaged()) {
+                                                                    jagdrevierMap.addMarker(options
+                                                                            .icon(BitmapDescriptorFactory.fromResource
+                                                                                    (R.drawable.baseline_error_white_36))
+                                                                            .title(kanzel.getHochsitzName()
+                                                                                    + R.string.dmg));
+                                                                }
+                                                                else if (kanzel.isInsectious()) {
+                                                                    jagdrevierMap.addMarker(options
+                                                                            .icon(BitmapDescriptorFactory.fromResource
+                                                                                    (R.drawable.baseline_pest_control_white_36))
+                                                                            .title(kanzel.getHochsitzName()
+                                                                                    + R.string.pest));
+                                                                }
+                                                                else if(kanzel.isBooked()){
+                                                                    jagdrevierMap.addMarker(options.icon(hsbIcon)
+                                                                            .title(kanzel.getHochsitzName()
+                                                                                    + R.string.bkd));
+                                                                }
+                                                                else {
+                                                                    jagdrevierMap.addMarker(options
+                                                                            .icon(hsaIcon)
+                                                                            .title(kanzel.getHochsitzName()
+                                                                                    + R.string.free));
+                                                                }
                                                             }
                                                         }
                                                     } else {

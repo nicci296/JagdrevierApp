@@ -90,6 +90,14 @@
     <string name="lat_line">lat:</string>
     <string name="lng_line">lng:</string>
 
+    <!-- RevierKarte -->
+    <string name="pest">" ist frei, aber hat Insektenbefall!"</string>
+    <string name="dmg">" ist frei, aber beschädigt!"</string>
+    <string name="pest_dmg"> ist frei, aber beschädigt und befallen!</string>
+    <string name="bkd_or"> ist besetzt sowie beschädigt oder befallen!</string>
+    <string name="bkd_pest_dmg"> ist besetzt, beschädigt und befallen!</string>
+    <string name="bkd">ist besetzt!</string>
+    <string name="free"> ist frei!</string>
 
     <!-- Reviersketch -->
     <string name="draw">draw</string>
