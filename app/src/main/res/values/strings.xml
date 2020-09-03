@@ -98,6 +98,16 @@
     <string name="bkd_pest_dmg"> ist besetzt, beschädigt und befallen!</string>
     <string name="bkd"> ist besetzt!</string>
     <string name="free"> ist frei!</string>
+    <string name="add_revier">Revier hinzufügen</string>
+    <string name="legend">Legende</string>
+    <string name="free_txt">frei</string>
+    <string name="bkd_txt">besetzt</string>
+    <string name="pest_txt">Befall</string>
+    <string name="dmg_txt">Schaden</string>
+    <string name="pest_dmn_txt">Schaden+Befall</string>
+    <string name="hs_dmn_txt">besetzt+Schaden/Befall</string>
+    <string name="hs_alert_txt">besetzt+Schaden+Befall</string>
+    <string name="add_revier_txt">+Revier</string>
 
     <!-- Reviersketch -->
     <string name="draw">draw</string>

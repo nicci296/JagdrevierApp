@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/map_layout"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -9,63 +10,220 @@
         android:background="@drawable/background">
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/revier"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        tools:context=".RevierKarte" />
+            android:id="@+id/revier"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            tools:context=".RevierKarte"
+            app:layout_constraintTop_toTopOf="@id/map_layout"
+            app:layout_constraintStart_toStartOf="@id/map_layout"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/revier"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="0dp"
-        android:padding="10dp">
+            android:id="@+id/revier_menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:padding="10dp"
+            app:layout_constraintTop_toBottomOf="@id/revier"
+            app:layout_constraintStart_toStartOf="@id/map_layout">
 
         <Spinner
-            android:id="@+id/revier_spin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="#FFFFFF"
-            android:spinnerMode="dropdown"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+                android:id="@+id/revier_spin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/revier_menu"
+                app:layout_constraintTop_toTopOf="@id/revier_menu"
+                android:backgroundTint="#FFFFFF"
+                android:spinnerMode="dropdown"
+        />
 
         <ImageButton
-            android:id="@+id/add_Revier"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="112dp"
-            android:layout_marginTop="16dp"
-            android:background="@android:color/transparent"
-            android:clickable="true"
-            android:contentDescription="TODO"
-            android:focusable="true"
-            android:src="@drawable/baseline_edit_location_white_48"
-            android:tint="#2196F3"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/revier_spin" />
+                android:id="@+id/add_Revier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:contentDescription="@string/add_revier"
+                android:focusable="true"
+                android:src="@drawable/baseline_edit_location_white_48"
+                android:tint="#2196F3"
+                app:layout_constraintTop_toTopOf="@id/revier_menu"
+                app:layout_constraintStart_toEndOf="@id/revier_spin"
+                android:layout_marginStart="30dp"
+        />
+
+        <TextView
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/add_revier_txt"
+                android:textSize="12sp"
+                android:textColor="#FFFFFF"
+                android:layout_marginStart="35dp"
+                app:layout_constraintTop_toBottomOf="@id/add_Revier"
+                app:layout_constraintStart_toEndOf="@id/revier_spin"/>
 
         <ImageButton
-            android:id="@+id/refresh_Btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="136dp"
-            android:background="@android:color/transparent"
-            android:clickable="true"
-            android:contentDescription="@string/refresh_Btn"
-            android:contextClickable="true"
-            android:focusable="true"
-            android:src="@drawable/outline_refresh_white_36"
-            android:tint="#A2E654"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/revier_spin" />
+                android:id="@+id/refresh_Btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:contentDescription="@string/refresh_Btn"
+                android:contextClickable="true"
+                android:focusable="true"
+                android:src="@drawable/outline_refresh_white_36"
+                android:tint="#A2E654"
+                app:layout_constraintStart_toEndOf="@id/add_Revier"
+                app:layout_constraintTop_toTopOf="@id/revier_menu"
+                android:layout_marginStart="10dp"/>
+
+        <TextView
+                android:id="@+id/legend_text"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/legend"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/revier_spin"
+                app:layout_constraintStart_toStartOf="@id/revier_menu"/>
+
+        <ImageView
+                android:src="@drawable/hochsitz_frei"
+                android:layout_width="20dp"
+                android:layout_height="17dp" android:id="@+id/hs_free"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toBottomOf="@id/legend_text"
+                app:layout_constraintStart_toStartOf="@id/revier_menu"
+                android:contentDescription="@string/free_txt"/>
+
+        <TextView
+                android:id="@+id/hs_free_txt"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/free_txt"
+                android:textColor="#FFFFFF"
+                android:layout_marginTop="10dp"
+                android:textSize="12sp"
+                app:layout_constraintTop_toBottomOf="@id/legend_text"
+                app:layout_constraintStart_toEndOf="@id/hs_free"/>
+
+        <ImageView
+                android:src="@drawable/hochsetz_besetzt"
+                android:layout_width="20dp"
+                android:layout_height="17dp" android:id="@+id/hs_bkd"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toBottomOf="@id/legend_text"
+                app:layout_constraintStart_toEndOf="@id/hs_free_txt"
+                android:contentDescription="@string/bkd_txt"/>
+        <TextView
+                android:id="@+id/hs_bkd_txt"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/bkd_txt"
+                android:textColor="#FFFFFF"
+                android:layout_marginTop="10dp"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@id/hs_bkd"
+                app:layout_constraintTop_toBottomOf="@id/legend_text"/>
+
+        <ImageView
+                android:src="@drawable/baseline_pest_control_white_36"
+                android:layout_width="20dp"
+                android:layout_height="17dp" android:id="@+id/pest"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toBottomOf="@id/hs_free"
+                app:layout_constraintStart_toStartOf="@id/revier_menu"
+                android:contentDescription="@string/pest_txt"/>
+
+        <TextView
+                android:id="@+id/pest_text"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="@string/pest_txt"
+                android:textColor="#FFFFFF"
+                android:layout_marginTop="10dp"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@id/pest"
+                app:layout_constraintTop_toBottomOf="@id/hs_free"/>
+
+        <ImageView
+                android:src="@drawable/baseline_error_white_36"
+                android:layout_width="20dp"
+                android:layout_height="17dp" android:id="@+id/damage"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toBottomOf="@id/hs_free"
+                app:layout_constraintStart_toEndOf="@id/pest_text"
+                android:contentDescription="@string/dmg_txt"/>
+
+        <TextView
+                android:id="@+id/damage_txt"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/hs_free"
+                app:layout_constraintStart_toEndOf="@+id/damage"
+                android:text="@string/dmg_txt"
+                android:textColor="#FFFFFF"
+                android:layout_marginTop="10dp"
+                android:textSize="12sp"/>
+
+        <ImageView
+                android:src="@drawable/baseline_warning_white_36"
+                android:layout_width="20dp"
+                android:layout_height="17dp" android:id="@+id/pest_dmn"
+                app:layout_constraintTop_toBottomOf="@id/hs_free"
+                app:layout_constraintStart_toEndOf="@id/damage_txt"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:contentDescription="@string/pest_dmn_txt"/>
+
+        <TextView
+                android:id="@+id/pest_dmn_txt"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/hs_free"
+                app:layout_constraintStart_toEndOf="@+id/pest_dmn"
+                android:text="@string/pest_dmn_txt"
+                android:textColor="#FFFFFF"
+                android:layout_marginTop="10dp"
+                android:textSize="12sp"/>
+
+        <ImageView
+                android:src="@drawable/hochsetz_besetzt_dmn"
+                android:layout_width="20dp"
+                android:layout_height="17dp" android:id="@+id/hs_dmn"
+                app:layout_constraintTop_toBottomOf="@id/pest"
+                app:layout_constraintStart_toStartOf="@id/revier_menu"
+                android:layout_marginTop="10dp"
+                android:contentDescription="@string/hs_dmn_txt"/>
+
+        <TextView
+                android:id="@+id/hs_dmn_txt"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/pest"
+                app:layout_constraintStart_toEndOf="@+id/hs_dmn"
+                android:text="@string/hs_dmn_txt"
+                android:textColor="#FFFFFF"
+                android:layout_marginTop="10dp"
+                android:textSize="12sp"/>
+
+
+
+        <ImageView
+                android:src="@drawable/hochsetz_besetzt_alert"
+                android:layout_width="20dp"
+                android:layout_height="17dp" android:id="@+id/hs_alert"
+                app:layout_constraintTop_toBottomOf="@id/hs_dmn"
+                app:layout_constraintStart_toStartOf="@id/revier_menu"
+                android:layout_marginTop="10dp"
+                android:contentDescription="@string/hs_alert_txt"/>
+
+        <TextView
+                android:id="@+id/hs_alert_txt"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/hs_dmn"
+                app:layout_constraintStart_toEndOf="@+id/hs_alert"
+                android:text="@string/hs_alert_txt"
+                android:textColor="#FFFFFF"
+                android:layout_marginTop="10dp"
+                android:textSize="12sp"/>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
