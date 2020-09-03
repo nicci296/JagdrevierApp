@@ -150,7 +150,7 @@
     <string name="btnToSchussjrnl">Schussjournal</string>
     <string name="btnStatToJaEinr">zurück zu Revier</string>
     <string name="RegisterMsg">Registrierung</string>
-    <string name="btnToJagdEinr">Jagdeinrichtungen</string>
+    <string name="btnToJagdEinr">Home</string>
     <string name="todo">TODO</string>
     <string name="addJagdEinr">Add Jagdeinrichtung</string>
     <string name="radio_sitz">Hochsitz</string>
