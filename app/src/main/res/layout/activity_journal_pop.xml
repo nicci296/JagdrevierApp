@@ -150,7 +150,7 @@
             android:id="@+id/bang_Jrnl_Head"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="12dp"
             android:layout_marginBottom="32dp"
             android:text="@string/titleSchussjournal"
             android:textAlignment="center"
@@ -159,28 +159,29 @@
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.01"
             app:layout_constraintStart_toEndOf="@+id/user_Name_Jrnl" />
 
         <TextView
             android:id="@+id/user_Name_Jrnl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="124dp"
             android:layout_marginBottom="32dp"
             android:text="@string/randomUser"
             android:textColor="#DCD1D1"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/wood_Board" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.307"
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -363,23 +364,24 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <ImageButton
-            android:id="@+id/save_Line_Btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="328dp"
-            android:layout_marginTop="480dp"
-            android:background="@android:color/transparent"
-            android:clickable="true"
-            android:contentDescription="@string/bang_Add_Line"
-            android:focusable="true"
-            android:src="@drawable/outline_note_add_white_48"
-            android:tint="#DCD1D1"
-            app:layout_constraintEnd_toEndOf="parent" />
-
 
     </RelativeLayout>
+
+    <ImageButton
+        android:id="@+id/save_Line_Btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:contentDescription="@string/bang_Add_Line"
+        android:focusable="true"
+        android:src="@drawable/outline_note_add_white_48"
+        android:tint="#DCD1D1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
