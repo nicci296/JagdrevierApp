@@ -44,7 +44,7 @@
                 android:layout_width="50dp"
                 android:layout_height="35dp"
                 android:background="#00354559"
-                android:contentDescription="TODO"
+                android:contentDescription="@string/todo11"
                 android:src="@android:drawable/ic_menu_crop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -59,7 +59,8 @@
                 android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/schussBtn" />
+                app:layout_constraintTop_toBottomOf="@+id/schussBtn"
+                tools:ignore="SmallSp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -81,7 +82,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
                 android:backgroundTint="#00354559"
-                android:contentDescription="TODO"
+                android:contentDescription="@string/toMapBtnImg"
                 android:src="@android:drawable/ic_menu_mapmode"
                 android:text="@string/mapBtn"
                 android:textColor="#354559"
@@ -100,7 +101,8 @@
                 android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/mapBtn" />
+                app:layout_constraintTop_toBottomOf="@+id/mapBtn"
+                tools:ignore="SmallSp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -115,12 +117,12 @@
             app:layout_constraintEnd_toStartOf="@+id/constraintLayout2"
             app:layout_constraintTop_toTopOf="parent">
 
-
             <ImageButton
                 android:id="@+id/logoutBtn"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:background="#00354559"
+                android:contentDescription="@string/logoutBtnImg"
                 android:fontFamily="sans-serif-medium"
                 android:src="@drawable/ic_sports_bar_24px"
                 android:text="@string/logOutBtnText"
@@ -140,7 +142,8 @@
                 android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/logoutBtn" />
+                app:layout_constraintTop_toBottomOf="@+id/logoutBtn"
+                tools:ignore="SmallSp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
@@ -164,7 +167,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="100dp"
             android:layout_marginBottom="32dp"
-            android:text="hall"
+            android:text="@string/randomUser"
             android:textColor="#DCD1D1"
             android:textSize="18sp"
             android:textStyle="bold"

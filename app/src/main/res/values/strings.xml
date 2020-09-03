@@ -147,10 +147,10 @@
     <string name="txtHochsitzname">Hier könnte ihre Werbung stehen</string>
 
     <string name="title_activity_revier_sketch">Map</string>
-    <string name="btnToSchussjrnl">Schussjournal</string>
+    <string name="btnToSchussjrnl">Journal</string>
     <string name="btnStatToJaEinr">zurück zu Revier</string>
     <string name="RegisterMsg">Registrierung</string>
-    <string name="btnToJagdEinr">Jagdeinrichtungen</string>
+    <string name="btnToJagdEinr">Home</string>
     <string name="todo">TODO</string>
     <string name="addJagdEinr">Add Jagdeinrichtung</string>
     <string name="radio_sitz">Hochsitz</string>
@@ -160,5 +160,9 @@
     <string name="JagdEinrBezeichnung">Jagdeinrichtung</string>
     <string name="todo2">TODO</string>
     <string name="todo5">TODO</string>
+    <string name="todo11">TODO</string>
+    <string name="toMapBtnImg">toMapBtnImg</string>
+    <string name="logoutBtnImg">logoutBtnImg</string>
+    <string name="randomUser">User</string>
 
 </resources>
