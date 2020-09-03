@@ -1,10 +1,8 @@
 package com.example.jagdrevierapp;
 
 
-import android.content.Context;
 import android.util.Log;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -13,9 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-
-
 
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,6 +22,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.*;
@@ -170,13 +166,19 @@ public class Schussjournal extends AppCompatActivity  {
         /**
          * **************25.08.20 Nico *****************************************
          * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+         *
          * ItemTouchHelper legt fest was passiert, wenn bestimmte Elemente der
          * RecyclerView vom User berührt werden.
          * Legt in seinen Parametern die möglichen Bewegungsrichtungen für Drag
          * und Swipe fest.
+         *
          * Da Drag/Drop nicht benötigt, wird es 0 gesetzt und die Swipe-Richtungen
          * LEFT und RIGHT festgelegt.
+         *
          * Durch den Swipe werden documents an der Stelle aus der Firebase gelöscht.
+         * Eine Snackbar macht vor dem endgültigen Löschen nochmal eine Check, sodass
+         * das Löschen noch bestätigt werden muss.
+         *
          * ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
          */
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
@@ -189,7 +191,13 @@ public class Schussjournal extends AppCompatActivity  {
             //onSwipe definiert, was ein Swipe auslöst. In diesem Fall die deleteItem-Methode aus dem JournalAdapter
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                    adapter.deleteItem(viewHolder.getAdapterPosition());
+                /*adapter.deleteItem(viewHolder.getAdapterPosition());*/
+
+                View view = findViewById(R.id.first_Lvl_Layout);
+                final int pos = viewHolder.getAdapterPosition();
+                Snackbar mySnackbar = Snackbar.make(view, "Eintrag löschen?" , Snackbar.LENGTH_LONG);
+                mySnackbar.setAction("Löschen", new deleteJournalEntry(pos));
+                mySnackbar.show();
             }
             //abschließend wird der ItemTouchHelper an die RecyclerView gebunden.
         }).attachToRecyclerView(journalView);
@@ -197,15 +205,18 @@ public class Schussjournal extends AppCompatActivity  {
         /**
          * **************27.08.20 Nico *****************************************
          * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+         *
          * Bei Klick auf ein Item der RecyclerView, soll auf die RevierKarte
          * gewechselt werden und ein Marker dort angezeigt werden, wo der Journal-
          * eintrag gemacht wurde.
+         *
          * Dazu ruft der adapter die Interface-Methode setOnItemClick aus dem
          * OnJournalClickListener-Interface (liegt im JournalAdapter) auf und
          * überschreibt deren innere onItemClick-Methode.
          * Das Interface wird über die Parameter-Angabe der setOnJournalClickListener-
          * Methode implementiert. Dadurch muss das Interface nicht über die
          * Klassen-Deklaration Schussjournal-Activity implementiert werden.
+         *
          * Ein DocumentSnapshot holt sich an der Stelle, wo geklickt wurde, das zugehörige
          * Document aus der Firebase und zieht den GeoPoint aus diesem Document.
          * Da ein GeoPoint nicht in einen Intent übergeben werden kann, wird dieser
@@ -213,6 +224,7 @@ public class Schussjournal extends AppCompatActivity  {
          * werden.
          * Durch die Key LATITUDE und LONGITUDE kann die Revierkarte-Activity diese
          * wieder auslesen.
+         *
          * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
          */
         adapter.setOnJournalClickListener(new JournalAdapter.OnJournalClickListener() {
@@ -232,7 +244,6 @@ public class Schussjournal extends AppCompatActivity  {
             }
         });
     }
-
 
     //onStart-Callback legt fest, dass der adapter bei Activity-Start die datenbank auf relevante Einträge überwacht
     @Override
@@ -254,6 +265,23 @@ public class Schussjournal extends AppCompatActivity  {
         Intent changeIntent = new Intent(this,JournalPop.class);
         startActivity(changeIntent);
 
+    }
+
+    //////////////////////
+    // additional classes
+    ////////////////////////
+    public class deleteJournalEntry implements View.OnClickListener {
+        int pos;
+
+        deleteJournalEntry (int pos) {
+            this.pos = pos;
+        }
+
+        @Override
+        public  void onClick(View view) {
+
+            adapter.deleteEntry(pos);
+        }
     }
 
 

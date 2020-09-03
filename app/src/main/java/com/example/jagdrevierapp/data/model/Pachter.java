@@ -2,6 +2,7 @@ package com.example.jagdrevierapp.data.model;
 
 import java.util.ArrayList;
 
+//Modellklasse zum Anlegen einer Pächter-Collection im Firestore
 public class Pachter {
     private String mail;
 

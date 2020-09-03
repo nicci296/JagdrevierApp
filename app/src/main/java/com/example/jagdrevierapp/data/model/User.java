@@ -5,7 +5,10 @@ public class User {
     /**
      * **************23.08.20 Nico *******************************************
      * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+     *
+     * Modelklasse zum Anlegen von Usern der App im Firestore
      * Attribute, Constructor, Getter und Setter implementiert.
+     *
      * +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
      */
 
