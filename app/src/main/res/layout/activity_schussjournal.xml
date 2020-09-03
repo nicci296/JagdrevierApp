@@ -114,12 +114,7 @@
             android:paddingRight="4dp"
             app:layout_constraintEnd_toStartOf="@+id/constraintLayout2"
             app:layout_constraintTop_toTopOf="parent">
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="4dp"
-            android:background="#354559"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingBottom="8dp"
+
 
             <ImageButton
                 android:id="@+id/logoutBtn"
