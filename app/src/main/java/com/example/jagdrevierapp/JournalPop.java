@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.icu.text.SimpleDateFormat;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -14,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.core.app.ActivityCompat;
@@ -138,82 +140,107 @@ public class JournalPop extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    //Speichern der View-Eingaben in der User-bezogenen Schussjournal-Collection
-    public void onClickSaveLine(View v) {
-        final EditText shots = findViewById(R.id.input_Shots);
-        final EditText hits = findViewById(R.id.input_Hits);
-        final EditText caliber = findViewById(R.id.input_Caliber);
-        final EditText target = findViewById(R.id.input_Target);
-        final EditText means = findViewById(R.id.input_Means);
-        final int shotsTaken = Integer.parseInt(shots.getText().toString());
-        final int hitsLanded = Integer.parseInt(hits.getText().toString());
-        final String caliberUsed = caliber.getText().toString();
-        final String aimedTarget = target.getText().toString();
-        final String meansForShot = means.getText().toString();
-        //aktuelles Datum mit Uhrzeit
-        final String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
-
-        //Toast, falls Felder leer, und return, damit keine unvollständigen Einträge angelegt werden.
-        /*if (aimedTarget.isEmpty()|meansForShot.isEmpty()| caliberUsed.isEmpty() ) {
-            if(shotsTaken == 0 | hitsLanded == 0){
-                Toast.makeText(JournalPop.this, R.string.fields_Req, Toast.LENGTH_LONG).show();
-                return;
-            }
-
-        }else{*/
-            //Toast, falls mehr Treffer als Schüsse, weil geht ja nicht...
-            if (hitsLanded > shotsTaken) {
-                Toast.makeText(JournalPop.this, R.string.hits_Over_Shots, Toast.LENGTH_LONG).show();
-                return;
-            }
-       /* }*/
 
 
+        ImageButton btnAddJrnl = findViewById(R.id.save_Line_Btn);
+        btnAddJrnl.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onClick(View view) {
+                final EditText shots = findViewById(R.id.input_Shots);
+                final EditText hits = findViewById(R.id.input_Hits);
+                final EditText caliber = findViewById(R.id.input_Caliber);
+                final EditText target = findViewById(R.id.input_Target);
+                final EditText means = findViewById(R.id.input_Means);
+                final int shotsTaken;
 
-        //Initialisierung eines LocationManagers zur Standortbestimmung für den Geopoint im Journal-Constructor
-        LocationManager locManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        String locationProvider = LocationManager.NETWORK_PROVIDER;
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager
-                .PERMISSION_GRANTED && ActivityCompat
-                .checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager
-                .PERMISSION_GRANTED) {
-            return;
-        }
-        Location lastKnownLocation = locManager.getLastKnownLocation(locationProvider);
-        final GeoPoint current = new GeoPoint(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
 
-        //neues Journal Object zur Übergabe an die Firebase mit View-Eingaben, GeoPoint und Datum
-        Journal journal = new Journal(shotsTaken, hitsLanded, caliberUsed, meansForShot,
-                aimedTarget, date, current);
+                if ((shots.getText().toString()).equals("")) {
+                    shotsTaken =0;
+                } else {
+                    shotsTaken = Integer.parseInt(shots.getText().toString());
+                }
+
+                final int hitsLanded;
+                if ((hits.getText().toString()).equals("")) {
+                    hitsLanded = 0;
+                } else {
+                    hitsLanded = Integer.parseInt(hits.getText().toString());
+                }
+
+                final String caliberUsed = caliber.getText().toString();
+                final String aimedTarget = target.getText().toString();
+                final String meansForShot = means.getText().toString();
+                //aktuelles Datum mit Uhrzeit
+                final String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
+
+
+                //Toast, falls Felder leer, und return, damit keine unvollständigen Einträge angelegt werden.
+                if (aimedTarget.isEmpty() | meansForShot.isEmpty() | caliberUsed.isEmpty()) {
+                    if (shotsTaken == 0 | hitsLanded == 0) {
+                       Toast.makeText(JournalPop.this, R.string.fields_Req, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                } else {
+                    //Toast, falls mehr Treffer als Schüsse, weil geht ja nicht...
+                    if (hitsLanded > shotsTaken) {
+                        Toast.makeText(JournalPop.this, R.string.hits_Over_Shots, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                }
+
+
+                //Initialisierung eines LocationManagers zur Standortbestimmung für den Geopoint im Journal-Constructor
+                LocationManager locManager = (LocationManager) JournalPop.this.getSystemService(Context.LOCATION_SERVICE);
+                String locationProvider = LocationManager.NETWORK_PROVIDER;
+                if (ActivityCompat.checkSelfPermission(JournalPop.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager
+                        .PERMISSION_GRANTED && ActivityCompat
+                        .checkSelfPermission(JournalPop.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager
+                        .PERMISSION_GRANTED) {
+                    return;
+                }
+                Location lastKnownLocation = locManager.getLastKnownLocation(locationProvider);
+                final GeoPoint current = new GeoPoint(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+
+                //neues Journal Object zur Übergabe an die Firebase mit View-Eingaben, GeoPoint und Datum
+                Journal journal = new Journal(shotsTaken, hitsLanded, caliberUsed, meansForShot,
+                        aimedTarget, date, current);
 
         /*
             Speichern des Journal-Documents in der Subcollection "Schussjournal" des angemeldeten Users
             und Rückkehr zum Schussjournal
          */
-        dbJournal.document(journal.getDate()).set(journal)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                dbJournal.document(journal.getDate()).set(journal)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(JournalPop.this, R.string.line_Add_Success, Toast.LENGTH_LONG)
+                                        .show();
+                                shots.getText().clear();
+                                hits.getText().clear();
+                                caliber.getText().clear();
+                                target.getText().clear();
+                                means.getText().clear();
+                                Intent changeIntent = new Intent(JournalPop.this, Schussjournal.class);
+                                startActivity(changeIntent);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
                     @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(JournalPop.this, R.string.line_Add_Success, Toast.LENGTH_LONG)
-                                .show();
-                        shots.getText().clear();
-                        hits.getText().clear();
-                        caliber.getText().clear();
-                        target.getText().clear();
-                        means.getText().clear();
-                        Intent changeIntent = new Intent(JournalPop.this,Schussjournal.class);
-                        startActivity(changeIntent);
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(JournalPop.this, R.string.line_Add_Fail,
+                                Toast.LENGTH_LONG).show();
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(JournalPop.this, R.string.line_Add_Fail,
-                        Toast.LENGTH_LONG).show();
+                });
             }
         });
+/*
+    //Speichern der View-Eingaben in der User-bezogenen Schussjournal-Collection
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void onClickSaveLine(View v) {
+
 
     }
-
+*/
+    }
 }

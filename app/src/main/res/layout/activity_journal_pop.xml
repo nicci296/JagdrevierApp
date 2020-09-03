@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/jrnlPopConst"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
@@ -15,17 +16,6 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/wood_Board"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/wood_Board"
-            android:src="@drawable/hiclipart_com"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="50dp"
@@ -114,18 +104,14 @@
             android:paddingRight="4dp"
             app:layout_constraintEnd_toStartOf="@+id/constraintLayout2"
             app:layout_constraintTop_toTopOf="parent">
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="4dp"
-            android:background="#354559"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingBottom="8dp"
+
 
             <ImageButton
                 android:id="@+id/logoutBtn"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:background="#00354559"
+                android:contentDescription="@string/logoutBtnImg"
                 android:fontFamily="sans-serif-medium"
                 android:src="@drawable/ic_sports_bar_24px"
                 android:text="@string/logOutBtnText"
@@ -145,8 +131,20 @@
                 android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/logoutBtn" />
+                app:layout_constraintTop_toBottomOf="@+id/logoutBtn"
+                tools:ignore="SmallSp" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageView
+            android:id="@+id/wood_Board"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/wood_Board"
+            android:src="@drawable/hiclipart_com"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/bang_Jrnl_Head"
@@ -161,20 +159,22 @@
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.01"
             app:layout_constraintStart_toEndOf="@+id/user_Name_Jrnl" />
 
         <TextView
             android:id="@+id/user_Name_Jrnl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="100dp"
+            android:layout_marginStart="124dp"
             android:layout_marginBottom="32dp"
-            android:text="hall"
+            android:text="@string/randomUser"
             android:textColor="#DCD1D1"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="@+id/wood_Board" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <RelativeLayout
@@ -374,7 +374,6 @@
             android:clickable="true"
             android:contentDescription="@string/bang_Add_Line"
             android:focusable="true"
-            android:onClick="onClickSaveLine"
             android:src="@drawable/outline_note_add_white_48"
             android:tint="#DCD1D1"
             app:layout_constraintEnd_toEndOf="parent" />
